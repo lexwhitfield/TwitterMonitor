@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.DataModel;
+using TwitterMonitor.DataAccess;
+using TwitterMonitor.DataModels;
 
 namespace WebApp.Controllers
 {

@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.DataModel;
-using WebApp.Services;
-using WebApp.ViewModels;
+using TwitterMonitor.Services;
+using TwitterMonitor.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -14,17 +12,19 @@ namespace WebApp.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private readonly MemberService _service;
+        private readonly MemberService _memberService;
+        private readonly TwitterService _twitterService;
 
-        public MembersController(IDataRepository<Member> repo, IDataRepository<TwitterUser> _tweet, IDataRepository<TwitterStats> _stats)
+        public MembersController()
         {
-            _service = new MemberService(repo, _tweet, _stats);
+            _memberService = new MemberService();
+            _twitterService = new TwitterService();
         }
 
         [HttpGet]
         public IEnumerable<MemberViewModel> GetMembers(int? id, string name, int? partyId, string constituency, string twitterName)
         {
-            return _service.GetAllMembers(id, name, partyId, constituency, twitterName);
+            return _memberService.GetAllMembers(id, name, partyId, constituency, twitterName).Result;
         }
 
         [HttpGet("{id}")]
@@ -35,7 +35,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var member = await _service.GetMemberById(id);
+            var member = await _memberService.GetMemberById(id);
 
             if (member == null)
             {
@@ -60,7 +60,8 @@ namespace WebApp.Controllers
 
             try
             {
-                var updatedMember = await _service.UpdateMember(member);
+                _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, member.TwitterId);
+                var updatedMember = await _memberService.UpdateMember(member);
                 return Ok(updatedMember);
             }
             catch (DbUpdateConcurrencyException)
@@ -77,7 +78,8 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var newMember = await _service.AddMember(member);
+            _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, null);
+            var newMember = await _memberService.AddMember(member);
 
             return Ok(newMember);
         }
@@ -90,7 +92,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var deletedMember = await _service.DeleteMember(id);
+            var deletedMember = await _memberService.DeleteMember(id);
 
             return Ok(deletedMember);
         }

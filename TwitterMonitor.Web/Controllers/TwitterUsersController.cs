@@ -2,8 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using Tweetinvi;
-using WebApp.Data;
-using WebApp.DataModel;
+using TwitterMonitor.DataAccess;
+using TwitterMonitor.DataModels;
+using TwitterMonitor.Transform;
 
 namespace WebApp.Controllers
 {
@@ -37,7 +38,7 @@ namespace WebApp.Controllers
             var twitterUser = await _context.TwitterUser.FindAsync(id);
             var twitterStats = await _context.TwitterStats.FindAsync(id);
 
-            var viewModel = Transform.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
+            var viewModel = ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
 
             return Ok(viewModel);
         }
@@ -70,7 +71,7 @@ namespace WebApp.Controllers
                 await _twitterStatRepo.SaveAsync(twitterStats);
             }
 
-            var viewModel = Transform.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
+            var viewModel = ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
 
             return Ok(viewModel);
         }

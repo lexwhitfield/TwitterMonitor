@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApp.DataModel
+namespace TwitterMonitor.DataModels
 {
     public partial class Region
     {

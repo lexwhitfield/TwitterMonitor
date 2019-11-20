@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using WebApp.DataModel;
+using TwitterMonitor.DataModels;
 
-namespace WebApp.Data
+namespace TwitterMonitor.DataAccess
 {
     public class DataRepository<T> : IDataRepository<T> where T : class
     {

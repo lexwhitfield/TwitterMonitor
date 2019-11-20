@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebApp.Data
+namespace TwitterMonitor.DataAccess
 {
     public interface IDataRepository<T> where T : class
     {

@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.DataModel;
-using WebApp.ViewModels;
+using TwitterMonitor.DataAccess;
+using TwitterMonitor.DataModels;
+using TwitterMonitor.ViewModels;
+using TwitterMonitor.Transform;
+
 
 namespace WebApp.Controllers
 {
@@ -31,7 +33,7 @@ namespace WebApp.Controllers
                 .Include(c => c.Authority.Region)
                 .Include(c => c.Authority.Region.Country)
                 .OrderBy(c => c.Name)
-                .Select(Transform.ConstituencyToConstituencyViewModel).ToList();
+                .Select(ModelTransformer.ConstituencyToConstituencyViewModel).ToList();
             return constituencies;
         }
 
@@ -59,7 +61,7 @@ namespace WebApp.Controllers
         {
             var authorities = _context.Authority
                 .OrderBy(a => a.Name)
-                .Select(Transform.AuthorityToKeyValueViewModel).ToList();
+                .Select(ModelTransformer.AuthorityToKeyValueViewModel).ToList();
             return authorities;
         }
 
@@ -69,7 +71,7 @@ namespace WebApp.Controllers
         {
             var regions = _context.Region
                 .OrderBy(r => r.Name)
-                .Select(Transform.RegionToKeyValueViewModel).ToList();
+                .Select(ModelTransformer.RegionToKeyValueViewModel).ToList();
             return regions;
         }
 
@@ -79,7 +81,7 @@ namespace WebApp.Controllers
         {
             var countries = _context.Country
                 .OrderBy(c => c.Id)
-                .Select(Transform.CountryToKeyValueViewModel).ToList();
+                .Select(ModelTransformer.CountryToKeyValueViewModel).ToList();
             return countries;
         }
 

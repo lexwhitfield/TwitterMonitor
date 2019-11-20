@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace WebApp.DataModel
+namespace TwitterMonitor.DataModels
 {
     public partial class MemberDBContext : DbContext
     {

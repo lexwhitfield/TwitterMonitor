@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApp.ViewModels
+namespace TwitterMonitor.ViewModels
 {
     [Serializable]
     public class MemberViewModel

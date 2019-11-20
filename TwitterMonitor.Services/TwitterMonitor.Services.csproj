@@ -4,4 +4,15 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TweetinviAPI" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwitterMonitor.DataAccess\TwitterMonitor.DataAccess.csproj" />
+    <ProjectReference Include="..\TwitterMonitor.DataModels\TwitterMonitor.DataModels.csproj" />
+    <ProjectReference Include="..\TwitterMonitor.Transform\TwitterMonitor.Transform.csproj" />
+    <ProjectReference Include="..\TwitterMonitor.ViewModels\TwitterMonitor.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

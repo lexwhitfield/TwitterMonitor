@@ -1,12 +1,12 @@
 ﻿using System;
-using WebApp.DataModel;
-using WebApp.ViewModels;
+using TwitterMonitor.DataModels;
+using TwitterMonitor.ViewModels;
 
-namespace WebApp
+namespace TwitterMonitor.Transform
 {
-    public class Transform
+    public class ModelTransformer
     {
-        internal static ConstituencyViewModel ConstituencyToConstituencyViewModel(Constituency constituency)
+        public static ConstituencyViewModel ConstituencyToConstituencyViewModel(Constituency constituency)
         {
             return new ConstituencyViewModel
             {
@@ -19,7 +19,7 @@ namespace WebApp
             };
         }
 
-        internal static Constituency ConstituencyViewModelToConstituency(ConstituencyViewModel constituencyViewModel, Constituency original = null)
+        public static Constituency ConstituencyViewModelToConstituency(ConstituencyViewModel constituencyViewModel, Constituency original = null)
         {
             var constituency = original ?? new Constituency();
 
@@ -29,7 +29,7 @@ namespace WebApp
             return constituency;
         }
 
-        internal static PartyViewModel PartyToPartyViewModel(Party party)
+        public static PartyViewModel PartyToPartyViewModel(Party party)
         {
             return new PartyViewModel
             {
@@ -38,7 +38,7 @@ namespace WebApp
             };
         }
 
-        internal static Party PartyViewModelToParty(PartyViewModel partyViewModel, Party original = null)
+        public static Party PartyViewModelToParty(PartyViewModel partyViewModel, Party original = null)
         {
             var party = original ?? new Party();
 
@@ -47,7 +47,7 @@ namespace WebApp
             return party;
         }
 
-        internal static MemberViewModel MemberToMemberViewModel(Member member)
+        public static MemberViewModel MemberToMemberViewModel(Member member)
         {
             return new MemberViewModel
             {
@@ -65,7 +65,7 @@ namespace WebApp
             };
         }
 
-        internal static Member MemberViewModelToMember(MemberViewModel memberViewModel, Member original = null)
+        public static Member MemberViewModelToMember(MemberViewModel memberViewModel, Member original = null)
         {
             var member = original ?? new Member();
 
@@ -79,7 +79,7 @@ namespace WebApp
             return member;
         }
 
-        internal static AuthorityViewModel AuthorityToAuthorityViewModel(Authority authority)
+        public static AuthorityViewModel AuthorityToAuthorityViewModel(Authority authority)
         {
             return new AuthorityViewModel
             {
@@ -91,7 +91,7 @@ namespace WebApp
             };
         }
 
-        internal static Authority AuthorityViewModelToAuthority(AuthorityViewModel authorityViewModel, Authority original = null)
+        public static Authority AuthorityViewModelToAuthority(AuthorityViewModel authorityViewModel, Authority original = null)
         {
             var authority = original ?? new Authority();
 
@@ -101,7 +101,7 @@ namespace WebApp
             return authority;
         }
 
-        internal static KeyValueViewModel AuthorityToKeyValueViewModel(Authority authority)
+        public static KeyValueViewModel AuthorityToKeyValueViewModel(Authority authority)
         {
             return new KeyValueViewModel
             {
@@ -110,7 +110,7 @@ namespace WebApp
             };
         }
 
-        internal static KeyValueViewModel RegionToKeyValueViewModel(Region region)
+        public static KeyValueViewModel RegionToKeyValueViewModel(Region region)
         {
             return new KeyValueViewModel
             {
@@ -119,7 +119,7 @@ namespace WebApp
             };
         }
 
-        internal static KeyValueViewModel CountryToKeyValueViewModel(Country country)
+        public static KeyValueViewModel CountryToKeyValueViewModel(Country country)
         {
             return new KeyValueViewModel
             {
@@ -128,7 +128,7 @@ namespace WebApp
             };
         }
 
-        internal static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser user, TwitterStats stats)
+        public static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser user, TwitterStats stats)
         {
             return new TwitterUserViewModel
             {

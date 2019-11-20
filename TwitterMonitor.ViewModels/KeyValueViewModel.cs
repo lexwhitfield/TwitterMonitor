@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels
+﻿namespace TwitterMonitor.ViewModels
 {
     public class KeyValueViewModel
     {
