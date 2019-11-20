@@ -1,0 +1,53 @@
+<h3>Members<a [routerLink]="['/member/add']" class="btn btn-primary float-right mb-3">Add Member</a></h3>
+
+<table class="table table-sm table-hover table-members">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Party</th>
+      <th>Constituency</th>
+      <th>Twitter Id</th>
+      <th>Twitter Name</th>
+      <th>Started</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input id="member-id-filter" class="form-control" [(ngModel)]="idFilter" (keyup)="loadMembers()" style="width: 60px;" /></td>
+      <td><input id="member-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadMembers()" /></td>
+      <td>
+        <select id="member-party-filter" class="form-control" [(ngModel)]="partyFilter" (change)="loadMembers()">
+          <option value="">-- Filter --</option>
+          <option *ngFor="let party of (parties$ | async)" value="{{ party.id }}">{{ party.name }}</option>
+        </select>
+      </td>
+      <td><input id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
+      <td><!-- twitterId --></td>
+      <td><input id="member-twitter-name-filter" class="form-control" [(ngModel)]="twitterNameFilter" (keyup)="loadMembers()" /></td>
+      <td><!-- startYear --></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let member of pageOfMembers" class="party-{{ member.partyId }}">
+      <td style="text-align:center;">{{ member.id }}</td>
+      <td><a [routerLink]="['/member/', member.id]">{{ member.name }}</a></td>
+      <td>{{ member.partyName }}</td>
+      <td>{{ member.constituencyName }}</td>
+      <td>{{ member.twitterId }}</td>
+      <td>{{ member.twitterScreenName }}</td>
+      <td>{{ member.startYear }}</td>
+      <td><a [routerLink]="['/member/edit/', member.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
+      <td><a [routerLink]="" (click)="delete(member.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="9">
+        <jw-pagination [items]="members" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+      </td>
+    </tr>    
+  </tfoot>
+</table>

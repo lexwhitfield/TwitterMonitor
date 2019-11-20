@@ -1,0 +1,71 @@
+<h3>Member</h3>
+
+<form [formGroup]="form" #formDir="ngForm">
+  <h4>Details</h4>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="name">Name</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="name" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="party">Party</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="party" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="constituency">Constituency</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="constituency" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="startyear">Start Year</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="number" formControlName="startyear" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="endyear">End Year</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="number" formControlName="endyear" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="whipsuspended">Whip Suspended</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="checkbox" formControlName="whipsuspended" readonly />
+    </div>
+  </div>
+  <h4>Twitter</h4>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="twittername">Screen Name</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="twittername" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="twittercreated">Created At</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="twittercreated" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="twitterfollowercount">Follower Count</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="twitterfollowercount" readonly />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="twitterfriendcount">Friend Count</label>
+    <div class="col-md-8">
+      <input class="form-control-plaintext" type="text" formControlName="twitterfriendcount" readonly />
+    </div>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-success float-right" (click)="edit()">Edit</button>
+    <button class="btn btn-info float-right" (click)="update()" style="margin-right: 10px;">Update Twitter Info</button>
+    <button class="btn btn-secondary float-left" (click)="back()">Back</button>
+  </div>
+</form>

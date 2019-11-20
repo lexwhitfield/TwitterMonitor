@@ -1,0 +1,48 @@
+<h3>Constituencies<a [routerLink]="['/constituencies/add/']" class="btn btn-primary float-right mb-3">Add Constituency</a></h3>
+
+<table class="table table-sm table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Authority</th>
+      <th>Region</th>
+      <th>Country</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>
+        <select id="constituency-authority-filter" class="form-control" [(ngModel)]="authorityFilter" (change)="loadConstituencies()">
+          <option value="">-- Filter --</option>
+          <option *ngFor="let authority of (authorities$ | async)" value="{{ party.id }}">{{ party.name }}</option>
+        </select>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let constituency of pageOfConstituencies">
+      <td>{{ constituency.id }}</td>
+      <td><a [routerLink]="['/constituencies/', constituency.id]">{{ constituency.name }}</a></td>
+      <td>{{ constituency.authorityName }}</td>
+      <td>{{ constituency.regionName }}</td>
+      <td>{{ constituency.countryName }}</td>
+      <td><a [routerLink]="['/constituencies/edit/', constituency.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
+      <td><a [routerLink]="" (click)="delete(constituency.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="7">
+        <jw-pagination [items]="constituencies" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+

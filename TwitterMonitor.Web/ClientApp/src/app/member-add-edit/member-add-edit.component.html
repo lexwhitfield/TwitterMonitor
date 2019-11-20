@@ -1,0 +1,69 @@
+<h3>{{ actionType }} member</h3>
+
+<form [formGroup]="form" (ngSubmit)="save()" #formDir="ngForm" novalidate>
+  <div class="form-group row">
+    <label class="control-label col-md-4">Id</label>
+    <div class="col-md-8">
+      <input class="form-control" type="text" readonly="readonly" formControlName="memberId" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="name">Name</label>
+    <div class="col-md-8">
+      <input class="form-control" type="text" formControlName="name" autofocus />
+    </div>
+    <span class="text-danger m1-3" *ngIf="name.invalid && formDir.submitted">
+      Name is required.
+    </span>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="party">Party</label>
+    <div class="col-md-8">
+      <select class="form-control" formControlName="party">
+        <option value="">-- Select --</option>
+        <option *ngFor="let party of (parties$ | async)" value="{{ party.id }}">
+          {{ party.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="constituency">Constituency</label>
+    <div class="col-md-8">
+      <select class="form-control" formControlName="constituency">
+        <option value="">-- Select --</option>
+        <option *ngFor="let constituency of (constituencies$ | async)" value="{{ constituency.id }}">
+          {{ constituency.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="twittername">Twitter Screen Name</label>
+    <div class="col-md-8">
+      <input class="form-control" type="text" formControlName="twittername" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="startyear">Start Year</label>
+    <div class="col-md-8">
+      <input class="form-control" type="number" formControlName="startyear" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="endyear">End Year</label>
+    <div class="col-md-8">
+      <input class="form-control" type="number" formControlName="endyear" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="control-label col-md-4" for="whipsuspended">Whip Suspended</label>
+    <div class="col-md-8">
+      <input class="form-control" type="checkbox" formControlName="whipsuspended" />
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-success float-right">Save</button>
+    <button class="btn btn-secondary float-left" (click)="cancel()">Cancel</button>
+  </div>
+</form>

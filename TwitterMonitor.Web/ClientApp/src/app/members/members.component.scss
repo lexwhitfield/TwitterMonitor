@@ -1,0 +1,54 @@
+.party-1 td:first-child {
+  background-color: #DC241F; /* Tory */
+}
+
+.party-2 td:first-child {
+  background-color: #0087DC; /* Labour */
+}
+
+.party-3 td:first-child {
+  background-color: #FAA61A; /* Lib Dem */
+}
+
+.party-4 td:first-child {
+  background-color: #DDDDDD; /* Independent */
+}
+
+.party-5 td:first-child {
+  background-color: #222221; /* Change UK */
+  color: #FFF;
+}
+
+.party-6 td:first-child {
+  background-color: #008142; /* Plaid Cymru */
+}
+
+.party-7 td:first-child {
+  background-color: #D46A4C; /* DUP */
+}
+
+.party-8 td:first-child {
+  background-color: #326760; /* Sinn Féin */
+}
+
+.party-9 td:first-child {
+  background-color: #FDF38E /* SNP */
+}
+
+.party-10 td:first-child {
+  background-color: #6AB023; /* Green */
+}
+
+.party-11 td:first-child {
+  background-color: #000000; /* Birkenhead */
+  color: #FFF;
+}
+
+.table-members td {
+  padding: 0.5em 0.5em;
+  vertical-align: middle;
+}
+
+.table-members td a {
+  font-weight: bold;
+}
