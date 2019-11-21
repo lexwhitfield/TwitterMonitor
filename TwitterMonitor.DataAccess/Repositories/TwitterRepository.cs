@@ -9,11 +9,11 @@ namespace TwitterMonitor.DataAccess.Repositories
 {
     public class TwitterRepository: ITwitterRepository
     {
-        private readonly MemberDBContext _context;
+        private readonly MemberSqlServerDBContext _context;
 
         public TwitterRepository()
         {
-            _context = new MemberDBContext();
+            _context = new MemberSqlServerDBContext();
         }
 
         public async Task<TwitterUser> GetUser(long id)

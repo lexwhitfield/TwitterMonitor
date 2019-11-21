@@ -10,11 +10,11 @@ namespace TwitterMonitor.DataAccess.Repositories
 {
     public class LookupRepository : ILookupRepository
     {
-        private readonly MemberDBContext _context;
+        private readonly MemberSqlServerDBContext _context;
 
         public LookupRepository()
         {
-            _context = new MemberDBContext();
+            _context = new MemberSqlServerDBContext();
         }
 
         public async Task<IEnumerable<Authority>> GetAuthorities()

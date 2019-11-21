@@ -4,13 +4,13 @@ using TwitterMonitor.DataModels.SqlServer.Models;
 
 namespace TwitterMonitor.DataModels.SqlServer
 {
-    public partial class MemberDBContext : DbContext
+    public partial class MemberSqlServerDBContext : DbContext
     {
-        public MemberDBContext()
+        public MemberSqlServerDBContext()
         {
         }
 
-        public MemberDBContext(DbContextOptions<MemberDBContext> options)
+        public MemberSqlServerDBContext(DbContextOptions<MemberSqlServerDBContext> options)
             : base(options)
         {
         }

@@ -13,11 +13,11 @@ namespace TwitterMonitor.DataAccess.Repositories
 {
     public class PartyRepository : IPartyRepository
     {
-        private readonly MemberDBContext _context;
+        private readonly MemberSqlServerDBContext _context;
 
         public PartyRepository()
         {
-            _context = new MemberDBContext();
+            _context = new MemberSqlServerDBContext();
         }
 
         public async Task<Party> GetById(int id)

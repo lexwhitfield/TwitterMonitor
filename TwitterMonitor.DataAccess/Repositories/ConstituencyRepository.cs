@@ -10,11 +10,11 @@ namespace TwitterMonitor.DataAccess.Repositories
 {
     public class ConstituencyRepository : IConstituencyRepository
     {
-        private readonly MemberDBContext _context;
+        private readonly MemberSqlServerDBContext _context;
 
         public ConstituencyRepository()
         {
-            _context = new MemberDBContext();
+            _context = new MemberSqlServerDBContext();
         }
 
         public async Task<IEnumerable<Constituency>> GetAll()
