@@ -60,7 +60,7 @@ namespace WebApp.Controllers
 
             try
             {
-                _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, member.TwitterId);
+                await _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, member.TwitterId);
                 var updatedMember = await _memberService.UpdateMember(member);
                 return Ok(updatedMember);
             }
@@ -78,7 +78,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, null);
+            await _twitterService.NewOrUpdatedTwitterDetails(member.TwitterScreenName, null);
             var newMember = await _memberService.AddMember(member);
 
             return Ok(newMember);
