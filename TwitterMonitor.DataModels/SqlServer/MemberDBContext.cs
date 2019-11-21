@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using TwitterMonitor.DataModels.SqlServer.Models;
 
-namespace TwitterMonitor.DataModels
+namespace TwitterMonitor.DataModels.SqlServer
 {
     public partial class MemberDBContext : DbContext
     {

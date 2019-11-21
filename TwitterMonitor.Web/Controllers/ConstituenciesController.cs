@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TwitterMonitor.DataAccess;
-using TwitterMonitor.DataModels;
 using TwitterMonitor.ViewModels;
-using TwitterMonitor.Transform;
-
+using TwitterMonitor.Services.Interfaces;
+using TwitterMonitor.Services.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Controllers
 {
@@ -16,24 +13,19 @@ namespace WebApp.Controllers
     [Produces("application/json")]
     public class ConstituenciesController : ControllerBase
     {
-        private readonly MemberDBContext _context;
-        private readonly IDataRepository<Constituency> _repo;
+        private readonly IConstituencyService _constituencyService;
+        private readonly ILookupService _lookupService;
 
-        public ConstituenciesController(IDataRepository<Constituency> repo)
+        public ConstituenciesController()
         {
-            _context = new MemberDBContext();
-            _repo = repo;
+            _constituencyService = new ConstituencyService();
+            _lookupService = new LookupService();
         }
 
         [HttpGet]
         public IEnumerable<ConstituencyViewModel> GetConstituencies()
         {
-            var constituencies = _context.Constituency
-                .Include(c => c.Authority)
-                .Include(c => c.Authority.Region)
-                .Include(c => c.Authority.Region.Country)
-                .OrderBy(c => c.Name)
-                .Select(ModelTransformer.ConstituencyToConstituencyViewModel).ToList();
+            var constituencies = _constituencyService.GetAll().Result;
             return constituencies;
         }
 
@@ -45,7 +37,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var constituency = await _context.Constituency.FindAsync(id);
+            var constituency = await _constituencyService.GetById(id);
 
             if (constituency == null)
             {
@@ -59,9 +51,7 @@ namespace WebApp.Controllers
         [Route("getauthorities")]
         public IEnumerable<KeyValueViewModel> GetAuthorities()
         {
-            var authorities = _context.Authority
-                .OrderBy(a => a.Name)
-                .Select(ModelTransformer.AuthorityToKeyValueViewModel).ToList();
+            var authorities = _lookupService.GetAuthorities().Result;
             return authorities;
         }
 
@@ -69,9 +59,7 @@ namespace WebApp.Controllers
         [Route("getregions")]
         public IEnumerable<KeyValueViewModel> GetRegions()
         {
-            var regions = _context.Region
-                .OrderBy(r => r.Name)
-                .Select(ModelTransformer.RegionToKeyValueViewModel).ToList();
+            var regions = _lookupService.GetRegions().Result;
             return regions;
         }
 
@@ -79,14 +67,12 @@ namespace WebApp.Controllers
         [Route("getcountries")]
         public IEnumerable<KeyValueViewModel> GetCountries()
         {
-            var countries = _context.Country
-                .OrderBy(c => c.Id)
-                .Select(ModelTransformer.CountryToKeyValueViewModel).ToList();
+            var countries = _lookupService.GetCountries().Result;
             return countries;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConstituency([FromRoute] int id, [FromBody] Constituency constituency)
+        public async Task<IActionResult> PutConstituency([FromRoute] int id, [FromBody] ConstituencyViewModel constituency)
         {
             if (!ModelState.IsValid)
             {
@@ -98,38 +84,27 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(constituency).State = EntityState.Modified;
-
             try
             {
-                _repo.Update(constituency);
-                var save = await _repo.SaveAsync(constituency);
+                var save = await _constituencyService.Update(constituency);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ConstituencyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostConstituency([FromBody] Constituency constituency)
+        public async Task<IActionResult> PostConstituency([FromBody] ConstituencyViewModel constituency)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _repo.Add(constituency);
-            var save = await _repo.SaveAsync(constituency);
+            var save = await _constituencyService.Add(constituency);
 
             return CreatedAtAction("GetConstituency", new { id = save.Id }, save);
         }
@@ -142,21 +117,9 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var constituency = await _context.Constituency.FindAsync(id);
-            if (constituency == null)
-            {
-                return NotFound();
-            }
-
-            _repo.Delete(constituency);
-            var save = await _repo.SaveAsync(constituency);
+            var save = await _constituencyService.Delete(id);
 
             return Ok(save);
-        }
-
-        private bool ConstituencyExists(int id)
-        {
-            return _context.Constituency.Any(e => e.Id == id);
         }
     }
 }

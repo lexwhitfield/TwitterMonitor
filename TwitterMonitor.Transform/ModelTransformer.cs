@@ -1,5 +1,6 @@
 ﻿using System;
 using TwitterMonitor.DataModels;
+using TwitterMonitor.DataModels.SqlServer.Models;
 using TwitterMonitor.ViewModels;
 
 namespace TwitterMonitor.Transform

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels;
+using TwitterMonitor.DataModels.SqlServer;
+using TwitterMonitor.DataModels.SqlServer.Models;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {

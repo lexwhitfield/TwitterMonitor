@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TwitterMonitor.DataModels;
+using TwitterMonitor.DataModels.SqlServer;
 
 namespace TwitterMonitor.DataAccess
 {

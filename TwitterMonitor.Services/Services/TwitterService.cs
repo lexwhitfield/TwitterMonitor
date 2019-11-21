@@ -1,12 +1,15 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Tweetinvi;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
-using TwitterMonitor.DataModels;
+using TwitterMonitor.DataModels.SqlServer.Models;
+using TwitterMonitor.Services.Interfaces;
+using TwitterMonitor.Transform;
+using TwitterMonitor.ViewModels;
 
 namespace TwitterMonitor.Services
 {
-    public class TwitterService
+    public class TwitterService : ITwitterService
     {
         private const string consumerKey = "RDaLBut56yuG3lloMC2yjZIGv";
         private const string consumerSecret = "EsLEBBcQJppNFWbLfHx3Auh5F032OCpCEsQAVMQfckJeQsoDdw";
@@ -20,7 +23,15 @@ namespace TwitterMonitor.Services
             _twitterRepository = new TwitterRepository();
         }
 
-        public async void NewOrUpdatedTwitterDetails(string screenName, long? id, bool forceUpdate = false)
+        public async Task<TwitterUserViewModel> GetById(long id)
+        {
+            var twitterUser = await _twitterRepository.GetUser(id);
+            var twitterStats = await _twitterRepository.GetStats(id);
+
+            return ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
+        }
+
+        public async Task<TwitterUserViewModel> NewOrUpdatedTwitterDetails(string screenName, long? id, bool forceUpdate = false)
         {
             if (id.HasValue)
             {
@@ -31,7 +42,7 @@ namespace TwitterMonitor.Services
                     var twitterStats = await _twitterRepository.GetStats(id.Value);
 
                     Auth.SetUserCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-                    var user = User.GetUserFromScreenName(screenName);
+                    var user = User.GetUserFromId(id.Value);
 
                     if (user == null)
                     {
@@ -46,7 +57,13 @@ namespace TwitterMonitor.Services
 
                     await _twitterRepository.UpdateUser(twitterUser);
                     await _twitterRepository.UpdateStats(twitterStats);
-                }                
+
+                    return ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
@@ -74,6 +91,8 @@ namespace TwitterMonitor.Services
 
                 await _twitterRepository.AddUser(twitterUser);
                 await _twitterRepository.AddStats(twitterStats);
+
+                return ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
             }
         }
     }

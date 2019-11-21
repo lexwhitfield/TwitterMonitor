@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using TwitterMonitor.DataModels;
+﻿using System.Threading.Tasks;
+using TwitterMonitor.DataModels.SqlServer.Models;
 
 namespace TwitterMonitor.DataAccess.Interfaces
 {

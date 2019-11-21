@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TwitterMonitor.DataModels
+namespace TwitterMonitor.DataModels.SqlServer.Models
 {
     public partial class Country
     {

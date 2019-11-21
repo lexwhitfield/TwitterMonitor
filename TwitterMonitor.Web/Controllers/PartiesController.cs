@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TwitterMonitor.DataAccess;
-using TwitterMonitor.DataModels;
 using TwitterMonitor.Services;
 using TwitterMonitor.ViewModels;
 
@@ -16,16 +14,10 @@ namespace WebApp.Controllers
     [Produces("application/json")]
     public class PartiesController : ControllerBase
     {
-        private readonly MemberDBContext _context;
-        private readonly IDataRepository<Party> _repo;
-
         private readonly PartyService _partyService;
 
-        public PartiesController(IDataRepository<Party> repo)
+        public PartiesController()
         {
-            _context = new MemberDBContext();
-            _repo = repo;
-
             _partyService = new PartyService();
         }
 

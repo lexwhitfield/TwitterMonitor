@@ -1,7 +1,11 @@
-﻿namespace TwitterMonitor.Services.Interfaces
+﻿using System.Threading.Tasks;
+using TwitterMonitor.ViewModels;
+
+namespace TwitterMonitor.Services.Interfaces
 {
     public interface ITwitterService
     {
-        void NewOrUpdatedTwitterDetails(string screenName, long? id, bool forceUpdate = false);
+        Task<TwitterUserViewModel> GetById(long id);
+        Task<TwitterUserViewModel> NewOrUpdatedTwitterDetails(string screenName, long? id, bool forceUpdate = false);
     }
 }
