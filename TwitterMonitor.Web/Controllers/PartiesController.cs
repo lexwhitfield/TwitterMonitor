@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterMonitor.DataAccess;
 using TwitterMonitor.DataModels;
+using TwitterMonitor.Services;
+using TwitterMonitor.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -18,18 +19,20 @@ namespace WebApp.Controllers
         private readonly MemberDBContext _context;
         private readonly IDataRepository<Party> _repo;
 
+        private readonly PartyService _partyService;
+
         public PartiesController(IDataRepository<Party> repo)
         {
             _context = new MemberDBContext();
             _repo = repo;
+
+            _partyService = new PartyService();
         }
 
         [HttpGet]
-        [Route("")]
-        [EnableCors("CorsPolicy")]
-        public IEnumerable<Party> GetParties()
+        public IEnumerable<PartyViewModel> GetParties()
         {
-            var parties = _context.Party.OrderBy(p => p.Name).ToList();
+            var parties = _partyService.GetAll().Result.ToList();
             return parties;
         }
 
@@ -41,7 +44,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var party = await _context.Party.FindAsync(id);
+            var party = await _partyService.GetById(id);
 
             if (party == null)
             {
@@ -52,7 +55,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutParty([FromRoute] int id, [FromBody] Party party)
+        public async Task<IActionResult> PutParty([FromRoute] int id, [FromBody] PartyViewModel party)
         {
             if (!ModelState.IsValid)
             {
@@ -64,30 +67,20 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(party).State = EntityState.Modified;
-
             try
             {
-                _repo.Update(party);
-                var save = await _repo.SaveAsync(party);
+                var save = await _partyService.Update(party);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PartyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostParty([FromBody] Party party)
+        public async Task<IActionResult> PostParty([FromBody] PartyViewModel party)
         {
             if (!ModelState.IsValid)
             {
@@ -96,9 +89,7 @@ namespace WebApp.Controllers
 
             try
             {
-                _repo.Add(party);
-                var save = await _repo.SaveAsync(party);
-
+                var save = await _partyService.Add(party);
                 return CreatedAtAction("GetParty", new { id = save.Id }, save);
             }
             catch (Exception ex)
@@ -115,21 +106,9 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var party = await _context.Party.FindAsync(id);
-            if (party == null)
-            {
-                return NotFound();
-            }
-
-            _repo.Delete(party);
-            var save = await _repo.SaveAsync(party);
+            var save = await _partyService.Delete(id);
 
             return Ok(save);
-        }
-
-        private bool PartyExists(int id)
-        {
-            return _context.Party.Any(e => e.Id == id);
         }
     }
 }
