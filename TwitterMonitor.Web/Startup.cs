@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using TwitterMonitor.DataAccess;
 
 namespace WebApp
 {
@@ -35,8 +34,6 @@ namespace WebApp
             });
 
             services.AddMvc(m => m.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
-            services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
 
             services.AddSpaStaticFiles(config =>
             {
