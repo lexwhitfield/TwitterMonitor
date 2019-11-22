@@ -32,11 +32,11 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Member>> GetAll(int? id, string name, int? partyId, string constituency, string twitterName)
         {
-            var members = _context.Member
+            var members = await _context.Member
                 .Include(m => m.Constituency)
                 .Include(m => m.Party)
                 .Include(m => m.Twitter)
-                .ToList();
+                .ToListAsync();
 
             if (id.HasValue)
                 members = members.Where(m => m.Id == id.Value).ToList();

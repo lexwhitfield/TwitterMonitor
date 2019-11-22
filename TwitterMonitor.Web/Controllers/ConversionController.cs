@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TwitterMonitor.Services.Services;
 
 namespace TwitterMonitor.Web.Controllers
 {
     [Route("api/conversion")]
     [ApiController]
+    [Produces("application/json")]
     public class ConversionController : ControllerBase
     {
         private readonly DataConvertService service;
@@ -22,21 +18,21 @@ namespace TwitterMonitor.Web.Controllers
         [HttpGet]
         public void ConvertData()
         {
-            service.ConvertCountriesSqlServerToSqlite();
+            //service.ConvertCountriesSqlServerToSqlite();
 
-            service.ConvertRegionsSqlServerToSqlite();
+            //service.ConvertRegionsSqlServerToSqlite();
 
-            service.ConvertAuthoritiesSqlServerToSqlite();
+            //service.ConvertAuthoritiesSqlServerToSqlite();
 
-            service.ConvertConstituenciesSqlServerToSqlite();
+            //service.ConvertConstituenciesSqlServerToSqlite();
 
-            service.ConvertPartiesSqlServerToSqlite();
+            //service.ConvertPartiesSqlServerToSqlite();
 
-            service.ConvertEventsSqlServerToSqlite();
+            //service.ConvertEventsSqlServerToSqlite();
 
-            service.ConvertTwitterUsersSqlServerToSqlite();
+            //service.ConvertTwitterUsersSqlServerToSqlite();
 
-            service.ConvertMembersSqlServerToSqlite();
+            //service.ConvertMembersSqlServerToSqlite();
         }
     }
 }

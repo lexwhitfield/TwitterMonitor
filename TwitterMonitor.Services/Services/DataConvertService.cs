@@ -193,6 +193,9 @@ namespace TwitterMonitor.Services.Services
             {
                 using (var sqlite = new MemberSqliteDBContext())
                 {
+                    sqlite.Member.RemoveRange(sqlite.Member);
+                    sqlite.SaveChanges();
+
                     var members = sqlServer.Member;
 
                     foreach (var member in members)
@@ -203,16 +206,15 @@ namespace TwitterMonitor.Services.Services
                             Name = member.Name,
                             ConstituencyId = member.ConstituencyId,
                             PartyId = member.PartyId,
-                            TwitterId = member.TwitterId,
+                            TwitterId = (member.TwitterId != -1) ? member.TwitterId : null,
                             StartYear = member.StartYear,
                             EndYear = member.EndYear,
                             WhipSuspended = member.WhipSuspended
                         };
 
                         sqlite.Member.Add(sqliteMember);
-                    }
-
-                    sqlite.SaveChanges();
+                        sqlite.SaveChanges();
+                    }                    
                 }
             }
         }
