@@ -17,16 +17,43 @@ namespace TwitterMonitor.DataAccess.Repositories
             _context = new MemberSqliteDBContext();
         }
 
-        public async Task<IEnumerable<Constituency>> GetAll()
+        public async Task<IEnumerable<Constituency>> GetAll(string name, int? authorityId, int? regionId, int? countryId)
         {
             var constituencies = await _context.Constituency
                 .Include(c => c.Authority)
                 .Include(c => c.Authority.Region)
                 .Include(c => c.Authority.Region.Country)
-                .OrderBy(c => c.Name)
                 .ToListAsync();
 
-            return constituencies;
+            if (!string.IsNullOrEmpty(name))
+            {
+                constituencies = constituencies
+                    .Where(c => c.Name.Contains(name))
+                    .ToList();
+            }
+
+            if (authorityId.HasValue)
+            {
+                constituencies = constituencies
+                    .Where(c => c.AuthorityId == authorityId.Value)
+                    .ToList();
+            }
+
+            if (regionId.HasValue)
+            {
+                constituencies = constituencies
+                    .Where(c => c.Authority != null && c.Authority.RegionId == regionId.Value)
+                    .ToList();
+            }
+
+            if (countryId.HasValue)
+            {
+                constituencies = constituencies
+                    .Where(c => c.Authority != null && c.Authority.Region != null && c.Authority.Region.CountryId == countryId.Value)
+                    .ToList();
+            }
+
+            return constituencies.OrderBy(c => c.Name);
         }
 
         public async Task<Constituency> GetById(int id)

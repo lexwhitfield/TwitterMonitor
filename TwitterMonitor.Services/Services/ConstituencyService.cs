@@ -18,9 +18,9 @@ namespace TwitterMonitor.Services.Services
             _constituencyRepository = new ConstituencyRepository();
         }
 
-        public async Task<IEnumerable<ConstituencyViewModel>> GetAll()
+        public async Task<IEnumerable<ConstituencyViewModel>> GetAll(string name, int? authorityId, int? regionId, int? countryId)
         {
-            var constituencies = await _constituencyRepository.GetAll();
+            var constituencies = await _constituencyRepository.GetAll(name, authorityId, regionId, countryId);
             return constituencies.Select(ModelTransformer.ConstituencyToConstituencyViewModel);
         }
 

@@ -25,7 +25,7 @@ namespace WebApp.Controllers
         [HttpGet]
         public IEnumerable<ConstituencyViewModel> GetConstituencies(string name, int? authorityId, int? regionId, int? countryId)
         {
-            var constituencies = _constituencyService.GetAll().Result;
+            var constituencies = _constituencyService.GetAll(name, authorityId, regionId, countryId).Result;
             return constituencies;
         }
 
