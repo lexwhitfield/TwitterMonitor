@@ -21,6 +21,5 @@ namespace TwitterMonitor.Web.Controllers
         {
             _eventService = new EventService();
         }
-
     }
 }

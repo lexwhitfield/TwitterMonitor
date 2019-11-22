@@ -24,7 +24,7 @@ export class MemberService {
     }
 
     getMembers(id?: number, name?: string, partyId?: number, constituencyName?: string, twitterName?: string): Observable<Member[]> {
-        let params = new HttpParams()
+        let params = new HttpParams();
         if (id !== undefined)
             params = params.set('id', String(id))
         if (name !== undefined)

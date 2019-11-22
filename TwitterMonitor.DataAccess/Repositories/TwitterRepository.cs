@@ -2,18 +2,18 @@
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels;
-using TwitterMonitor.DataModels.SqlServer;
-using TwitterMonitor.DataModels.SqlServer.Models;
+using TwitterMonitor.DataModels.Sqlite;
+using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {
     public class TwitterRepository: ITwitterRepository
     {
-        private readonly MemberSqlServerDBContext _context;
+        private readonly MemberSqliteDBContext _context;
 
         public TwitterRepository()
         {
-            _context = new MemberSqlServerDBContext();
+            _context = new MemberSqliteDBContext();
         }
 
         public async Task<TwitterUser> GetUser(long id)

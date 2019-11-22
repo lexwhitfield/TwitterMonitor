@@ -15,15 +15,25 @@
   <tbody>
     <tr>
       <td></td>
-      <td></td>
+      <td><input id="constituency-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadConstituencies()" /></td>
       <td>
         <select id="constituency-authority-filter" class="form-control" [(ngModel)]="authorityFilter" (change)="loadConstituencies()">
           <option value="">-- Filter --</option>
-          <option *ngFor="let authority of (authorities$ | async)" value="{{ party.id }}">{{ party.name }}</option>
+          <option *ngFor="let authority of (authorities$ | async)" value="{{ authority.id }}">{{ authority.name }}</option>
         </select>
       </td>
-      <td></td>
-      <td></td>
+      <td>
+        <select id="constituency-region-filter" class="form-control" [(ngModel)]="regionFilter" (change)="loadConstituencies()">
+          <option value="">-- Filter --</option>
+          <option *ngFor="let region of (regions$ | async)" value="{{ region.id }}">{{ region.name }}</option>
+        </select>
+      </td>
+      <td>
+        <select id="constituency-country-filter" class="form-control" [(ngModel)]="countryFilter" (change)="loadConstituencies()">
+          <option value="">-- Filter --</option>
+          <option *ngFor="let country of (countries$ | async)" value="{{ country.id }}">{{ country.name }}</option>
+        </select>
+      </td>
       <td></td>
       <td></td>
     </tr>

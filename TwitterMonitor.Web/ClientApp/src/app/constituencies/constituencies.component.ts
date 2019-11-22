@@ -27,10 +27,14 @@ export class ConstituenciesComponent implements OnInit {
 
     ngOnInit() {
         this.loadConstituencies();
+
+        this.authorities$ = this.constituencyService.getAuthorities();
+        this.regions$ = this.constituencyService.getRegions();
+        this.countries$ = this.constituencyService.getCountries();
     }
 
     loadConstituencies() {
-        this.constituencyService.getConstituencies()
+        this.constituencyService.getConstituencies(this.nameFilter, this.authorityFilter, this.regionFilter, this.countryFilter)
             .subscribe(c => { this.constituencies = c as [] });
     }
 

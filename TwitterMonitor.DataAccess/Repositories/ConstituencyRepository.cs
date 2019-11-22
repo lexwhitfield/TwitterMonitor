@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
-using TwitterMonitor.DataModels.SqlServer;
-using TwitterMonitor.DataModels.SqlServer.Models;
+using TwitterMonitor.DataModels.Sqlite;
+using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {
     public class ConstituencyRepository : IConstituencyRepository
     {
-        private readonly MemberSqlServerDBContext _context;
+        private readonly MemberSqliteDBContext _context;
 
         public ConstituencyRepository()
         {
-            _context = new MemberSqlServerDBContext();
+            _context = new MemberSqliteDBContext();
         }
 
         public async Task<IEnumerable<Constituency>> GetAll()

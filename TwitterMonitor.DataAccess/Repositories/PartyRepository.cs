@@ -6,18 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels;
-using TwitterMonitor.DataModels.SqlServer;
-using TwitterMonitor.DataModels.SqlServer.Models;
+using TwitterMonitor.DataModels.Sqlite;
+using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {
     public class PartyRepository : IPartyRepository
     {
-        private readonly MemberSqlServerDBContext _context;
+        private readonly MemberSqliteDBContext _context;
 
         public PartyRepository()
         {
-            _context = new MemberSqlServerDBContext();
+            _context = new MemberSqliteDBContext();
         }
 
         public async Task<Party> GetById(int id)

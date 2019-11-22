@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -24,8 +24,18 @@ export class ConstituencyService {
         this.myApiUrl = 'api/constituencies/';
     }
 
-    getConstituencies(): Observable<Constituency[]> {
-        return this.http.get<Constituency[]>(this.myAppUrl + this.myApiUrl)
+    getConstituencies(name?: string, authorityId?: number, regionId?: number, countryId?: number): Observable<Constituency[]> {
+        let params = new HttpParams();
+        if (name !== undefined)
+            params = params.set('name', name);
+        if (authorityId !== undefined)
+            params = params.set('authorityId', String(authorityId));
+        if (regionId !== undefined)
+            params = params.set('regionId', String(regionId));
+        if (countryId !== undefined)
+            params = params.set('countryId', String(countryId));
+
+        return this.http.get<Constituency[]>(this.myAppUrl + this.myApiUrl, { params: params })
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

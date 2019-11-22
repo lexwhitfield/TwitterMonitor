@@ -2,7 +2,7 @@
 using Tweetinvi;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
-using TwitterMonitor.DataModels.SqlServer.Models;
+using TwitterMonitor.DataModels.Sqlite.Models;
 using TwitterMonitor.Services.Interfaces;
 using TwitterMonitor.Transform;
 using TwitterMonitor.ViewModels;
