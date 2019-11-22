@@ -59,7 +59,7 @@ namespace TwitterMonitor.Transform
                 ConstituencyId = member.ConstituencyId,
                 ConstituencyName = member?.Constituency != null ? member.Constituency.Name : string.Empty,
                 TwitterId = member.TwitterId,
-                TwitterScreenName = (member.TwitterId.HasValue) ? member.Twitter.ScreenName : string.Empty,
+                TwitterScreenName = (member.Twitter != null) ? member.Twitter.ScreenName : string.Empty,
                 StartYear = member.StartYear,
                 EndYear = member.EndYear,
                 WhipSuspended = member.WhipSuspended

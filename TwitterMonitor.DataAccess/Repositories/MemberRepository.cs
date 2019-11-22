@@ -32,28 +32,29 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Member>> GetAll(int? id, string name, int? partyId, string constituency, string twitterName)
         {
-            IQueryable<Member> members = _context.Member
+            var members = _context.Member
                 .Include(m => m.Constituency)
                 .Include(m => m.Party)
-                .Include(m => m.Twitter);
+                .Include(m => m.Twitter)
+                .ToList();
 
             if (id.HasValue)
-                members = members.Where(m => m.Id == id.Value);
+                members = members.Where(m => m.Id == id.Value).ToList();
 
             if (!string.IsNullOrEmpty(name))
-                members = members.Where(m => m.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase));
+                members = members.Where(m => m.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             if (partyId.HasValue)
-                members = members.Where(m => m.PartyId == partyId.Value);
+                members = members.Where(m => m.PartyId == partyId.Value).ToList();
 
             if (!string.IsNullOrEmpty(constituency))
-                members = members.Where(m => m.Constituency.Name.Contains(constituency, StringComparison.InvariantCultureIgnoreCase));
+                members = members.Where(m => m.Constituency.Name.Contains(constituency, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             if (!string.IsNullOrEmpty(twitterName))
                 members = members.Where(m => m.TwitterId.HasValue)
-                    .Where(m => m.Twitter.ScreenName.Contains(twitterName, StringComparison.InvariantCultureIgnoreCase));
+                    .Where(m => m.Twitter.ScreenName.Contains(twitterName, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-            return await members.OrderBy(m => m.Name).ToListAsync();
+            return members.OrderBy(m => m.Name);
         }
 
         public async Task<Member> Add(Member member)
