@@ -1,0 +1,27 @@
+<h3>Events<a [routerLink]="['/event/add']" class="btn btn-primary float-right mb-3">Add Event</a></h3>
+
+<table class="table table-sm table-hover table-events">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let event of pageOfEvents">
+      <td><a [routerLink]="['/event/', event.id]">{{ event.title }}</a></td>
+      <td>{{ event.happened }}</td>
+      <td><a [routerLink]="['/event/edit/', event.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
+      <td><a [routerLink]="" (click)="delete(event.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="4">
+        <jw-pagination [items]="events" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+      </td>
+    </tr>
+  </tfoot>
+</table>

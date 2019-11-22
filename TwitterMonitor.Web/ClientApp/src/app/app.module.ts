@@ -17,6 +17,7 @@ import { MemberAddEditComponent } from './member-add-edit/member-add-edit.compon
 import { ConstituencyService } from './services/constituency.service';
 import { PartyService } from './services/party.service';
 import { MemberService } from './services/member.service';
+import { EventsComponent } from './events/events.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { MemberService } from './services/member.service';
         MembersComponent,
         MemberComponent,
         MemberAddEditComponent,
-        JwPaginationComponent
+        JwPaginationComponent,
+        EventsComponent
     ],
     imports: [
         BrowserModule,

@@ -140,5 +140,27 @@ namespace TwitterMonitor.Transform
                 MostRecentFriendCount = stats?.FriendCount ?? 0
             };
         }
+
+        public static EventViewModel EventToEventViewModel(Events events)
+        {
+            return new EventViewModel
+            {
+                Id = events.Id,
+                Title = events.Title,
+                Body = events.Body,
+                Happened = events.Happened
+            };
+        }
+
+        public static Events EventViewModelToEvent(EventViewModel eventViewModel, Events original = null)
+        {
+            var events = original ?? new Events();
+
+            events.Title = eventViewModel.Title;
+            events.Body = eventViewModel.Body;
+            events.Happened = eventViewModel.Happened;
+
+            return events;
+        }
     }
 }
