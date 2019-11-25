@@ -18,5 +18,9 @@ namespace TwitterMonitor.ViewModels
         public string RegionName { get; set; }
 
         public string CountryName { get; set; }
+
+        public int? ConstituencyTypeId { get; set; }
+
+        public string ConstituencyType { get; set; }
     }
 }

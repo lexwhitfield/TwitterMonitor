@@ -12,6 +12,8 @@ namespace TwitterMonitor.Transform
             {
                 Id = constituency.Id,
                 Name = constituency.Name,
+                ConstituencyTypeId = constituency.ConstituencyTypeId,
+                ConstituencyType = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : string.Empty,
                 AuthorityId = constituency.AuthorityId,
                 AuthorityName = constituency.Authority != null ? constituency.Authority.Name : string.Empty,
                 RegionName = constituency.Authority != null ? constituency.Authority.Region.Name : string.Empty,
@@ -24,6 +26,7 @@ namespace TwitterMonitor.Transform
             var constituency = original ?? new Constituency();
 
             constituency.Name = constituencyViewModel.Name;
+            constituency.ConstituencyTypeId = constituencyViewModel.ConstituencyTypeId;
             constituency.AuthorityId = constituencyViewModel.AuthorityId;
 
             return constituency;
@@ -52,6 +55,8 @@ namespace TwitterMonitor.Transform
             return new MemberViewModel
             {
                 Id = member.Id,
+                TitleId = member.TitleId,
+                Title = (member.TitleId.HasValue) ? member.Title.Name : string.Empty,
                 Name = member.Name,
                 PartyId = member.PartyId,
                 PartyName = member.Party != null ? member.Party.Name : string.Empty,
@@ -70,6 +75,7 @@ namespace TwitterMonitor.Transform
             var member = original ?? new Member();
 
             member.Name = memberViewModel.Name;
+            member.TitleId = memberViewModel.TitleId;
             member.PartyId = memberViewModel.PartyId;
             member.ConstituencyId = memberViewModel.ConstituencyId;
             member.StartYear = memberViewModel.StartYear ?? 0;
@@ -128,6 +134,24 @@ namespace TwitterMonitor.Transform
             };
         }
 
+        public static KeyValueViewModel AreaTypeToKeyValueViewModel(AreaType areaType)
+        {
+            return new KeyValueViewModel
+            {
+                Id = areaType.Id,
+                Name = areaType.Name
+            };
+        }
+
+        public static KeyValueViewModel ConstituencyTypeToKeyValueViewModel(ConstituencyType constituencyType)
+        {
+            return new KeyValueViewModel
+            {
+                Id = constituencyType.Id,
+                Name = constituencyType.Name
+            };
+        }
+
         public static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser user, TwitterStats stats)
         {
             return new TwitterUserViewModel
@@ -160,6 +184,27 @@ namespace TwitterMonitor.Transform
             events.Happened = eventViewModel.Happened;
 
             return events;
+        }
+
+        public static AreaViewModel AreaToAreaViewModel(Area area)
+        {
+            return new AreaViewModel
+            {
+                Id = area.Id,
+                Name = area.Name,
+                AreaTypeId = area.AreaTypeId,
+                AreaType = area.AreaType.Name
+            };
+        }
+
+        public static Area AreaViewModelToArea(AreaViewModel areaViewModel, Area original)
+        {
+            var area = original ?? new Area();
+
+            area.Name = areaViewModel.Name;
+            area.AreaTypeId = areaViewModel.AreaTypeId;
+
+            return area;
         }
     }
 }
