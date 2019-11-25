@@ -2,55 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitterMonitor.DataModels.Sqlite;
 
 namespace TwitterMonitor.DataModels.Migrations
 {
     [DbContext(typeof(MemberSqliteDBContext))]
-    partial class MemberSqliteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191125134349_Update1")]
+    partial class Update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.1");
-
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.Area", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AreaTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("OnsId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaTypeId");
-
-                    b.ToTable("Area");
-                });
-
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.AreaType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AreaType");
-                });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.Authority", b =>
                 {
@@ -279,15 +245,6 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TwitterUser");
-                });
-
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.Area", b =>
-                {
-                    b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.AreaType", "AreaType")
-                        .WithMany()
-                        .HasForeignKey("AreaTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.Authority", b =>

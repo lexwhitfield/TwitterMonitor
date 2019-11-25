@@ -7,6 +7,7 @@ namespace TwitterMonitor.DataModels.Sqlite
     {
         public DbSet<Authority> Authority { get; set; }
         public DbSet<Constituency> Constituency { get; set; }
+        public DbSet<ConstituencyType> ConstituencyType { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<Events> Events { get; set; }
         public DbSet<Member> Member { get; set; }
@@ -15,6 +16,9 @@ namespace TwitterMonitor.DataModels.Sqlite
         public DbSet<TwitterUser> TwitterUser { get; set; }
         public DbSet<TwitterStats> TwitterStats { get; set; }
         public DbSet<TwitterFriends> TwitterFriends { get; set; }    
+        public DbSet<Title> Title { get; set; }
+        public DbSet<AreaType> AreaType { get; set; }
+        public DbSet<Area> Area { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
