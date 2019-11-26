@@ -1,10 +1,15 @@
-﻿namespace TwitterMonitor.DataModels.Sqlite.Models
+﻿using System;
+
+namespace TwitterMonitor.DataModels.Sqlite.Models
 {
     public class Member
     {
         public int Id { get; set; }
         public int? TitleId { get; set; }
         public string Name { get; set; }
+        public string Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfDeath { get; set; }
         public int ConstituencyId { get; set; }
         public int PartyId { get; set; }
         public long? TwitterId { get; set; }

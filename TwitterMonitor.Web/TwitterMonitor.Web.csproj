@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\models\Area.ts" />
     <None Remove="ClientApp\src\app\models\Authority.ts" />
     <None Remove="ClientApp\src\app\models\Constituency.ts" />
     <None Remove="ClientApp\src\app\models\Event.ts" />
