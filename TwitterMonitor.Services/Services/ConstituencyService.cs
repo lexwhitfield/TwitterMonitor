@@ -128,7 +128,17 @@ namespace TwitterMonitor.Services.Services
 
             foreach (XmlNode constituencyAreaElement in constituencyAreaElements)
             {
+                var constituencyIdNode = constituencyAreaElement.SelectSingleNode("Constituency_Id");
+                var areaIdNode = constituencyAreaElement.SelectSingleNode("Area_Id");
+                var startDateNode = constituencyAreaElement.SelectSingleNode("StartDate");
+                var endDateNode = constituencyAreaElement.SelectSingleNode("EndDate");
 
+                int constituencyId = Convert.ToInt32(constituencyIdNode.InnerText);
+                int areaId = Convert.ToInt32(areaIdNode.InnerText);
+                DateTime startDate = DateTime.Parse(startDateNode.InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(endDateNode.InnerText))
+                    endDate = DateTime.Parse(endDateNode.InnerText);
             }
         }
 
