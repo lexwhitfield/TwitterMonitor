@@ -8,6 +8,7 @@ namespace TwitterMonitor.DataAccess.Interfaces
     {
         Task<IEnumerable<Area>> GetAll();
         Task<Area> GetById(int id);
+        void AddMany(List<Area> areas);
         Task<IEnumerable<AreaType>> GetAreaTypes();
     }
 }

@@ -75,6 +75,18 @@ namespace TwitterMonitor.DataAccess.Repositories
             return constituency;
         }
 
+        public async void AddMany(List<ConstituencyNew> constituencies)
+        {
+            _context.ConstituencyNew.AddRange(constituencies);
+            await _context.SaveChangesAsync();
+        }
+
+        public async void AddMany(List<ConstituencyArea> constituencyAreas)
+        {
+            _context.ConstituencyArea.AddRange(constituencyAreas);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Constituency> Update(Constituency constituency)
         {
             _context.Entry(constituency).State = EntityState.Modified;

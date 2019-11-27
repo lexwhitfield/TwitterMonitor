@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitterMonitor.DataModels.Sqlite;
 
 namespace TwitterMonitor.DataModels.Migrations
 {
     [DbContext(typeof(MemberSqliteDBContext))]
-    partial class MemberSqliteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191127143208_Update4")]
+    partial class Update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,33 +95,6 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.HasIndex("ConstituencyTypeId");
 
                     b.ToTable("Constituency");
-                });
-
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyArea", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AreaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ConstituencyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("ConstituencyId");
-
-                    b.ToTable("ConstituencyArea");
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyNew", b =>
@@ -399,21 +374,6 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyType", "ConstituencyType")
                         .WithMany()
                         .HasForeignKey("ConstituencyTypeId");
-                });
-
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyArea", b =>
-                {
-                    b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.Area", "Area")
-                        .WithMany("ConstituencyAreas")
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyNew", "Constituency")
-                        .WithMany("ConstituencyAreas")
-                        .HasForeignKey("ConstituencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyNew", b =>

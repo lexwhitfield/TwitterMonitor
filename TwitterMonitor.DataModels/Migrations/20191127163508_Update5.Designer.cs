@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwitterMonitor.DataModels.Sqlite;
 
 namespace TwitterMonitor.DataModels.Migrations
 {
     [DbContext(typeof(MemberSqliteDBContext))]
-    partial class MemberSqliteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191127163508_Update5")]
+    partial class Update5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,12 +108,6 @@ namespace TwitterMonitor.DataModels.Migrations
 
                     b.Property<int>("ConstituencyId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

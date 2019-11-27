@@ -121,5 +121,12 @@ namespace WebApp.Controllers
 
             return Ok(save);
         }
+
+        [HttpGet]
+        [Route("importconstituencies")]
+        public void ImportConstituencies()
+        {
+            _constituencyService.ImportConstituencies();
+        }
     }
 }

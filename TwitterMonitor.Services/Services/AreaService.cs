@@ -8,6 +8,8 @@ using TwitterMonitor.ViewModels;
 using TwitterMonitor.Transform;
 using System.Net.Http;
 using System.Xml;
+using System;
+using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.Services.Services
 {
@@ -44,10 +46,30 @@ namespace TwitterMonitor.Services.Services
 
             var areaElements = xml.GetElementsByTagName("Area");
 
-            foreach (var areaElement in areaElements)
-            {
+            List<Area> areasToAdd = new List<Area>();
 
+            foreach (XmlNode areaElement in areaElements)
+            {
+                var idNode = areaElement.SelectSingleNode("Area_Id");
+                var nameNode = areaElement.SelectSingleNode("Name");
+                var onsIdNode = areaElement.SelectSingleNode("OnsAreaId");
+                var areaTypeIdNode = areaElement.SelectSingleNode("AreaType_Id");
+
+                int id = Convert.ToInt32(idNode.InnerText);
+                string name = nameNode.InnerText;
+                string onsId = onsIdNode.InnerText;
+                int areaTypeId = Convert.ToInt32(areaTypeIdNode.InnerText);
+
+                areasToAdd.Add(new Area
+                {
+                    Id = id,
+                    Name = name,
+                    OnsId = onsId,
+                    AreaTypeId = areaTypeId
+                });
             }
+
+            _areaRepository.AddMany(areasToAdd);
 
             return true;
         }

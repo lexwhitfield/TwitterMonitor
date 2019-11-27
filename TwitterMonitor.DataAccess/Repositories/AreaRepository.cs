@@ -34,6 +34,12 @@ namespace TwitterMonitor.DataAccess.Repositories
             return area;
         }
 
+        public async void AddMany(List<Area> areas)
+        {
+            await _context.AddRangeAsync(areas);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<AreaType>> GetAreaTypes()
         {
             var areaTypes = await _context.AreaType.ToListAsync();

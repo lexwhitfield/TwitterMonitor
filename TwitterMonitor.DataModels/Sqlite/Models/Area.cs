@@ -12,5 +12,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public int AreaTypeId { get; set; }
         
         public AreaType AreaType { get; set; }
+        public ICollection<ConstituencyArea> ConstituencyAreas { get; set; }
     }
 }
