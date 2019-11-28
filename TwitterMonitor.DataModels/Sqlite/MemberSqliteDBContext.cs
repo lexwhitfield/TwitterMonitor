@@ -5,22 +5,50 @@ namespace TwitterMonitor.DataModels.Sqlite
 {
     public class MemberSqliteDBContext : DbContext
     {
-        public DbSet<Authority> Authority { get; set; }
-        public DbSet<Constituency> Constituency { get; set; }
-        public DbSet<ConstituencyNew> ConstituencyNew { get; set; }
-        public DbSet<ConstituencyType> ConstituencyType { get; set; }
-        public DbSet<Country> Country { get; set; }
+        // Lookups
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<House> Houses { get; set; }
+        public DbSet<AreaType> AreaTypes { get; set; }
+        public DbSet<ConstituencyType> ConstituencyTypes { get; set; }
+        public DbSet<Title> Titles { get; set; }
+        public DbSet<ElectionType> ElectionTypes { get; set; }
+        public DbSet<CommitteeType> CommitteeTypes { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<GovernmentRank> GovernmentRanks { get; set; }
+        public DbSet<GovernmentPost> GovernmentPosts { get; set; }
+        public DbSet<OppositionRank> OppositionRanks { get; set; }
+        public DbSet<OppositionPost> OppositionPosts { get; set; }
+        public DbSet<ParliamentaryRank> ParliamentaryRanks { get; set; }
+        public DbSet<ParliamentaryPost> ParliamentaryPosts { get; set; }
+
+
+        // Data
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Constituency> Constituencies { get; set; }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<Election> Elections { get; set; }
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<Committee> Committees { get; set; }
+
+
+        // Joins
+        public DbSet<ConstituencyArea> ConstituencyAreas { get; set; }
+        public DbSet<ConstituencyMembers> ConstituencyMembers { get; set; }
+        public DbSet<HouseMembers> HouseMembers { get; set; }
+        public DbSet<CommitteeMember> CommitteeMembers { get; set; }
+        public DbSet<GovernmentPostMember> GovernmentPostMembers { get; set; }
+        public DbSet<GovernmentPostDepartment> GovernmentPostDepartments { get; set; }
+        public DbSet<OppositionPostMember> OppositionPostMembers { get; set; }
+        public DbSet<OppositionPostDepartment> OppositionPostDepartments { get; set; }
+        public DbSet<ParliamentaryPostMember> ParliamentaryPostMembers { get; set; }
+
+
+
         public DbSet<Events> Events { get; set; }
-        public DbSet<Member> Member { get; set; }
-        public DbSet<Party> Party { get; set; }
-        public DbSet<Region> Region { get; set; }
-        public DbSet<TwitterUser> TwitterUser { get; set; }
+
+        public DbSet<TwitterUser> TwitterUsers { get; set; }
         public DbSet<TwitterStats> TwitterStats { get; set; }
-        public DbSet<TwitterFriends> TwitterFriends { get; set; }    
-        public DbSet<Title> Title { get; set; }
-        public DbSet<AreaType> AreaType { get; set; }
-        public DbSet<Area> Area { get; set; }
-        public DbSet<ConstituencyArea> ConstituencyArea { get; set; }
+        public DbSet<TwitterFriends> TwitterFriends { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

@@ -1,18 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TwitterMonitor.DataModels;
-using TwitterMonitor.DataAccess;
-using TwitterMonitor.ViewModels;
-using TwitterMonitor.Transform;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
 using TwitterMonitor.Services.Interfaces;
+using TwitterMonitor.Transform;
+using TwitterMonitor.ViewModels;
 
 namespace TwitterMonitor.Services
 {
-    public class MemberService: IMemberService
+    public class MemberService : IMemberService
     {
         private readonly IMemberRepository _memberRepository;
 
@@ -56,6 +53,6 @@ namespace TwitterMonitor.Services
         {
             var success = await _memberRepository.Delete(id);
             return success;
-        }        
+        }
     }
 }

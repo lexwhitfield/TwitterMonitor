@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TwitterMonitor.DataModels.Sqlite.Models
+﻿namespace TwitterMonitor.DataModels.Sqlite.Models
 {
     public class TwitterStats
     {

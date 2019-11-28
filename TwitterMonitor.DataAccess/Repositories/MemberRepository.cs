@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,10 +19,8 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<Member> GetById(int id)
         {
-            var member = await _context.Member
-                .Include(m => m.Constituency)
-                .Include(m => m.Party)
-                .Include(m => m.Twitter)
+            var member = await _context.Members
+                .Include(m => m.Constituencies)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             return member;
@@ -31,29 +28,14 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Member>> GetAll(int? id, string name, int? partyId, string constituency, string twitterName)
         {
-            var members = await _context.Member
-                .Include(m => m.Constituency)
-                .Include(m => m.Party)
-                .Include(m => m.Twitter)
+            var members = await _context.Members
+                .Include(m => m.Constituencies)
                 .ToListAsync();
 
             if (id.HasValue)
                 members = members.Where(m => m.Id == id.Value).ToList();
 
-            if (!string.IsNullOrEmpty(name))
-                members = members.Where(m => m.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-            if (partyId.HasValue)
-                members = members.Where(m => m.PartyId == partyId.Value).ToList();
-
-            if (!string.IsNullOrEmpty(constituency))
-                members = members.Where(m => m.Constituency.Name.Contains(constituency, StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-            if (!string.IsNullOrEmpty(twitterName))
-                members = members.Where(m => m.TwitterId.HasValue)
-                    .Where(m => m.Twitter.ScreenName.Contains(twitterName, StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-            return members.OrderBy(m => m.Name);
+            return members.OrderBy(m => m.Surname).ThenBy(m => m.Forename);
         }
 
         public async Task<Member> Add(Member member)
@@ -75,7 +57,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            var member = await _context.Member.FindAsync(id);
+            var member = await _context.Members.FindAsync(id);
 
             if (member == null)
             {
@@ -85,7 +67,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             // clean up any tables with member as a foreign key
 
-            _context.Member.Remove(member);
+            _context.Members.Remove(member);
             await _context.SaveChangesAsync();
 
             return true;

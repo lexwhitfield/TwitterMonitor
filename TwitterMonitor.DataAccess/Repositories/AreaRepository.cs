@@ -18,7 +18,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Area>> GetAll()
         {
-            var areas = await _context.Area
+            var areas = await _context.Areas
                 .Include(a => a.AreaType)
                 .ToListAsync();
 
@@ -27,22 +27,16 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<Area> GetById(int id)
         {
-            var area = await _context.Area
+            var area = await _context.Areas
                 .Include(a => a.AreaType)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             return area;
         }
 
-        public async void AddMany(List<Area> areas)
-        {
-            await _context.AddRangeAsync(areas);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<IEnumerable<AreaType>> GetAreaTypes()
         {
-            var areaTypes = await _context.AreaType.ToListAsync();
+            var areaTypes = await _context.AreaTypes.ToListAsync();
             return areaTypes;
         }
     }

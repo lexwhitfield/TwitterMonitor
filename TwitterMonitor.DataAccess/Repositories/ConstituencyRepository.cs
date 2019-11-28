@@ -19,10 +19,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Constituency>> GetAll(string name, int? authorityId, int? regionId, int? countryId)
         {
-            var constituencies = await _context.Constituency
-                .Include(c => c.Authority)
-                .Include(c => c.Authority.Region)
-                .Include(c => c.Authority.Region.Country)
+            var constituencies = await _context.Constituencies
                 .ToListAsync();
 
             if (!string.IsNullOrEmpty(name))
@@ -32,36 +29,12 @@ namespace TwitterMonitor.DataAccess.Repositories
                     .ToList();
             }
 
-            if (authorityId.HasValue)
-            {
-                constituencies = constituencies
-                    .Where(c => c.AuthorityId == authorityId.Value)
-                    .ToList();
-            }
-
-            if (regionId.HasValue)
-            {
-                constituencies = constituencies
-                    .Where(c => c.Authority != null && c.Authority.RegionId == regionId.Value)
-                    .ToList();
-            }
-
-            if (countryId.HasValue)
-            {
-                constituencies = constituencies
-                    .Where(c => c.Authority != null && c.Authority.Region != null && c.Authority.Region.CountryId == countryId.Value)
-                    .ToList();
-            }
-
             return constituencies.OrderBy(c => c.Name);
         }
 
         public async Task<Constituency> GetById(int id)
         {
-            var constituency = await _context.Constituency
-                .Include(c => c.Authority)
-                .Include(c => c.Authority.Region)
-                .Include(c => c.Authority.Region.Country)
+            var constituency = await _context.Constituencies
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return constituency;
@@ -75,18 +48,6 @@ namespace TwitterMonitor.DataAccess.Repositories
             return constituency;
         }
 
-        public async void AddMany(List<ConstituencyNew> constituencies)
-        {
-            _context.ConstituencyNew.AddRange(constituencies);
-            await _context.SaveChangesAsync();
-        }
-
-        public async void AddMany(List<ConstituencyArea> constituencyAreas)
-        {
-            _context.ConstituencyArea.AddRange(constituencyAreas);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Constituency> Update(Constituency constituency)
         {
             _context.Entry(constituency).State = EntityState.Modified;
@@ -98,13 +59,13 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            var constituency = await _context.Constituency.FindAsync(id);
+            var constituency = await _context.Constituencies.FindAsync(id);
             if (constituency == null)
             {
                 return false;
             }
 
-            _context.Constituency.Remove(constituency);
+            _context.Constituencies.Remove(constituency);
             await _context.SaveChangesAsync();
 
             return true;

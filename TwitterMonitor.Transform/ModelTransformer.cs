@@ -13,11 +13,7 @@ namespace TwitterMonitor.Transform
                 Id = constituency.Id,
                 Name = constituency.Name,
                 ConstituencyTypeId = constituency.ConstituencyTypeId,
-                ConstituencyType = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : string.Empty,
-                AuthorityId = constituency.AuthorityId,
-                AuthorityName = constituency.Authority != null ? constituency.Authority.Name : string.Empty,
-                RegionName = constituency.Authority != null ? constituency.Authority.Region.Name : string.Empty,
-                CountryName = constituency.Authority != null ? constituency.Authority.Region.Country.Name : string.Empty,
+                ConstituencyType = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : string.Empty
             };
         }
 
@@ -27,7 +23,6 @@ namespace TwitterMonitor.Transform
 
             constituency.Name = constituencyViewModel.Name;
             constituency.ConstituencyTypeId = constituencyViewModel.ConstituencyTypeId;
-            constituency.AuthorityId = constituencyViewModel.AuthorityId;
 
             return constituency;
         }
@@ -52,86 +47,39 @@ namespace TwitterMonitor.Transform
 
         public static MemberViewModel MemberToMemberViewModel(Member member)
         {
-            return new MemberViewModel
-            {
-                Id = member.Id,
-                TitleId = member.TitleId,
-                Title = (member.TitleId.HasValue) ? member.Title.Name : string.Empty,
-                Name = member.Name,
-                PartyId = member.PartyId,
-                PartyName = member.Party != null ? member.Party.Name : string.Empty,
-                ConstituencyId = member.ConstituencyId,
-                ConstituencyName = member?.Constituency != null ? member.Constituency.Name : string.Empty,
-                TwitterId = member.TwitterId,
-                TwitterScreenName = (member.Twitter != null) ? member.Twitter.ScreenName : string.Empty,
-                StartYear = member.StartYear,
-                EndYear = member.EndYear,
-                WhipSuspended = member.WhipSuspended
-            };
+            //return new MemberViewModel
+            //{
+            //    Id = member.Id,
+            //    TitleId = member.TitleId,
+            //    Title = (member.TitleId.HasValue) ? member.Title.Name : string.Empty,
+            //    Name = member.Name,
+            //    PartyId = member.PartyId,
+            //    PartyName = member.Party != null ? member.Party.Name : string.Empty,
+            //    ConstituencyId = member.ConstituencyId,
+            //    ConstituencyName = member?.Constituency != null ? member.Constituency.Name : string.Empty,
+            //    TwitterId = member.TwitterId,
+            //    TwitterScreenName = (member.Twitter != null) ? member.Twitter.ScreenName : string.Empty,
+            //    StartYear = member.StartYear,
+            //    EndYear = member.EndYear,
+            //    WhipSuspended = member.WhipSuspended
+            //};
+
+            return null;
         }
 
         public static Member MemberViewModelToMember(MemberViewModel memberViewModel, Member original = null)
         {
             var member = original ?? new Member();
 
-            member.Name = memberViewModel.Name;
-            member.TitleId = memberViewModel.TitleId;
-            member.PartyId = memberViewModel.PartyId;
-            member.ConstituencyId = memberViewModel.ConstituencyId;
-            member.StartYear = memberViewModel.StartYear ?? 0;
-            member.EndYear = memberViewModel.EndYear;
-            member.WhipSuspended = memberViewModel.WhipSuspended;
+            //member.Name = memberViewModel.Name;
+            //member.TitleId = memberViewModel.TitleId;
+            //member.PartyId = memberViewModel.PartyId;
+            //member.ConstituencyId = memberViewModel.ConstituencyId;
+            //member.StartYear = memberViewModel.StartYear ?? 0;
+            //member.EndYear = memberViewModel.EndYear;
+            //member.WhipSuspended = memberViewModel.WhipSuspended;
 
             return member;
-        }
-
-        public static AuthorityViewModel AuthorityToAuthorityViewModel(Authority authority)
-        {
-            return new AuthorityViewModel
-            {
-                Id = authority.Id,
-                Name = authority.Name,
-                RegionId = authority.RegionId,
-                RegionName = authority.Region.Name,
-                CountryName = authority.Region.Country.Name
-            };
-        }
-
-        public static Authority AuthorityViewModelToAuthority(AuthorityViewModel authorityViewModel, Authority original = null)
-        {
-            var authority = original ?? new Authority();
-
-            authority.Name = authorityViewModel.Name;
-            authority.RegionId = authorityViewModel.RegionId;
-
-            return authority;
-        }
-
-        public static KeyValueViewModel AuthorityToKeyValueViewModel(Authority authority)
-        {
-            return new KeyValueViewModel
-            {
-                Id = authority.Id,
-                Name = authority.Name
-            };
-        }
-
-        public static KeyValueViewModel RegionToKeyValueViewModel(Region region)
-        {
-            return new KeyValueViewModel
-            {
-                Id = region.Id,
-                Name = region.Name
-            };
-        }
-
-        public static KeyValueViewModel CountryToKeyValueViewModel(Country country)
-        {
-            return new KeyValueViewModel
-            {
-                Id = country.Id,
-                Name = country.Name
-            };
         }
 
         public static KeyValueViewModel AreaTypeToKeyValueViewModel(AreaType areaType)

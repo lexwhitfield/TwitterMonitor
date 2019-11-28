@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TwitterMonitor.DataModels.Sqlite.Models
 {
@@ -13,7 +11,7 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public DateTime? EndDate { get; set; }
 
 
-        public ConstituencyNew Constituency { get; set; }
+        public Constituency Constituency { get; set; }
         public Area Area { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TwitterMonitor.DataModels.Sqlite.Models
 {
@@ -8,5 +6,8 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+
+        public ICollection<Member> Members { get; set; }
     }
 }

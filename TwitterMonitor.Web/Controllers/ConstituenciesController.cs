@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using TwitterMonitor.ViewModels;
 using TwitterMonitor.Services.Interfaces;
 using TwitterMonitor.Services.Services;
-using Microsoft.EntityFrameworkCore;
+using TwitterMonitor.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -45,30 +45,6 @@ namespace WebApp.Controllers
             }
 
             return Ok(constituency);
-        }
-
-        [HttpGet]
-        [Route("getauthorities")]
-        public IEnumerable<KeyValueViewModel> GetAuthorities()
-        {
-            var authorities = _lookupService.GetAuthorities().Result;
-            return authorities;
-        }
-
-        [HttpGet]
-        [Route("getregions")]
-        public IEnumerable<KeyValueViewModel> GetRegions()
-        {
-            var regions = _lookupService.GetRegions().Result;
-            return regions;
-        }
-
-        [HttpGet]
-        [Route("getcountries")]
-        public IEnumerable<KeyValueViewModel> GetCountries()
-        {
-            var countries = _lookupService.GetCountries().Result;
-            return countries;
         }
 
         [HttpPut("{id}")]
@@ -120,13 +96,6 @@ namespace WebApp.Controllers
             var save = await _constituencyService.Delete(id);
 
             return Ok(save);
-        }
-
-        [HttpGet]
-        [Route("importconstituencies")]
-        public void ImportConstituencies()
-        {
-            _constituencyService.ImportConstituencies();
         }
     }
 }

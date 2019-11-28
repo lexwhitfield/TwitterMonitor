@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using TwitterMonitor.Services.Interfaces;
 using TwitterMonitor.Services.Services;
 using TwitterMonitor.ViewModels;
@@ -29,13 +29,6 @@ namespace TwitterMonitor.Web.Controllers
         public async Task<IActionResult> GetArea([FromRoute] int id)
         {
             return Ok(await _areaService.GetById(id));
-        }
-
-        [HttpGet]
-        [Route("importareas")]
-        public bool ImportAreas()
-        {
-            return _areaService.ImportAreas().Result;
         }
 
         [HttpGet]

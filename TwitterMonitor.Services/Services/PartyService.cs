@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
@@ -11,7 +9,7 @@ using TwitterMonitor.ViewModels;
 
 namespace TwitterMonitor.Services
 {
-    public class PartyService: IPartyService
+    public class PartyService : IPartyService
     {
         private readonly IPartyRepository _partyRepository;
 

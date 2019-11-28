@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
-using TwitterMonitor.DataModels;
 using TwitterMonitor.DataModels.Sqlite;
 using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {
-    public class TwitterRepository: ITwitterRepository
+    public class TwitterRepository : ITwitterRepository
     {
         private readonly MemberSqliteDBContext _context;
 
@@ -18,7 +17,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<TwitterUser> GetUser(long id)
         {
-            var twitterUser = await _context.TwitterUser.FindAsync(id);
+            var twitterUser = await _context.TwitterUsers.FindAsync(id);
 
             return twitterUser;
         }
@@ -32,7 +31,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<TwitterUser> AddUser(TwitterUser twitterUser)
         {
-            _context.TwitterUser.Add(twitterUser);
+            _context.TwitterUsers.Add(twitterUser);
             await _context.SaveChangesAsync();
 
             return twitterUser;
@@ -45,7 +44,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             return twitterStats;
         }
-        
+
         public async Task<TwitterUser> UpdateUser(TwitterUser twitterUser)
         {
             _context.Entry(twitterUser).State = EntityState.Modified;

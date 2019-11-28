@@ -8,7 +8,6 @@ namespace TwitterMonitor.Services.Interfaces
     {
         Task<IEnumerable<AreaViewModel>> GetAll();
         Task<AreaViewModel> GetById(int id);
-        Task<bool> ImportAreas();
         Task<IEnumerable<KeyValueViewModel>> GetAreaTypes();
     }
 }
