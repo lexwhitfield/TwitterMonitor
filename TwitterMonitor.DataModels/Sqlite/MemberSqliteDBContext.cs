@@ -33,8 +33,8 @@ namespace TwitterMonitor.DataModels.Sqlite
 
         // Joins
         public DbSet<ConstituencyArea> ConstituencyAreas { get; set; }
-        public DbSet<ConstituencyMembers> ConstituencyMembers { get; set; }
-        public DbSet<HouseMembers> HouseMembers { get; set; }
+        public DbSet<ConstituencyMember> ConstituencyMembers { get; set; }
+        public DbSet<HouseMember> HouseMembers { get; set; }
         public DbSet<CommitteeMember> CommitteeMembers { get; set; }
         public DbSet<GovernmentPostMember> GovernmentPostMembers { get; set; }
         public DbSet<GovernmentPostDepartment> GovernmentPostDepartments { get; set; }

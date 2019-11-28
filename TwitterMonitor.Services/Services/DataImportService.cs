@@ -13,6 +13,47 @@ namespace TwitterMonitor.Services.Services
             _dataImportRepository = new DataImportRepository();
         }
 
+        public async void ImportReferences()
+        {
+            // gender
+            // houses
+            // area types
+            // constituency types
+            // titles
+            // election types
+            // committee types
+            // departments
+            // government ranks
+            // government posts
+            // opposition ranks
+            // opposition posts
+            // parliamentary ranks
+            // parliamentary posts
+        }
+
+        public async void ImportData()
+        {
+            // areas
+            // constituencies
+            // elections
+            // parties
+            // committees
+            // members
+        }
+
+        public async void ImportJoins()
+        {
+            // constituency areas
+            // constituency members
+            // house members
+            // committee members
+            // government post members
+            // government post departments
+            // opposition post members
+            // opposition post departments
+            // parliamentary post members
+        }
+
         public async void ImportAreas()
         {
             //// http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Areas/

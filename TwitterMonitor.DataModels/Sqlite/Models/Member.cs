@@ -19,8 +19,8 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
 
         public Title Title { get; set; }
         public Gender Gender { get; set; }
-        public ICollection<HouseMembers> Houses { get; set; }
-        public ICollection<ConstituencyMembers> Constituencies { get; set; }
+        public ICollection<HouseMember> Houses { get; set; }
+        public ICollection<ConstituencyMember> Constituencies { get; set; }
         public ICollection<GovernmentPostMember> GovernmentPosts { get; set; }
         public ICollection<OppositionPostMember> OppositionPosts { get; set; }
         public ICollection<ParliamentaryPostMember> ParliamentaryPosts { get; set; }

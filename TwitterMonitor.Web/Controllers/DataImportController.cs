@@ -17,71 +17,22 @@ namespace TwitterMonitor.Web.Controllers
         }
 
         [HttpGet]
-        [Route("importareas")]
-        public void ImportAreas()
-        {
-            _dataImportService.ImportAreas();
-        }
-
-        [HttpGet]
-        [Route("importconstituencies")]
-        public void ImportConstituencies()
-        {
-            _dataImportService.ImportConstituencies();
-        }
-
-        [HttpGet]
-        [Route("importconstituencyareas")]
-        public void ImportConstituencyAreas()
-        {
-            _dataImportService.ImportConstituencyAreas();
-        }
-
-        [HttpGet]
-        [Route("importparties")]
-        public void ImportParties()
-        {
-            _dataImportService.ImportParties();
-        }
-
-        [HttpGet]
-        [Route("importmembers")]
-        public void ImportMembers()
+        [Route("importreferences")]
+        public void ImportReferences()
         {
 
         }
 
         [HttpGet]
-        [Route("importcommittees")]
-        public void ImportCommittees()
+        [Route("importdata")]
+        public void ImportData()
         {
 
         }
 
         [HttpGet]
-        [Route("importgovernmentpositions")]
-        public void ImportGovernmentPositions()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("importoppositionpositions")]
-        public void ImportOppositionPositions()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("importparliamentaryposts")]
-        public void ImportParliamentaryPosts()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("importhonours")]
-        public void ImportHonours()
+        [Route("importjoins")]
+        public void ImportJoins()
         {
 
         }

@@ -2,9 +2,8 @@
 {
     public interface IDataImportService
     {
-        void ImportAreas();
-        void ImportConstituencies();
-        void ImportConstituencyAreas();
-        void ImportParties();
+        void ImportReferences();
+        void ImportData();
+        void ImportJoins();
     }
 }
