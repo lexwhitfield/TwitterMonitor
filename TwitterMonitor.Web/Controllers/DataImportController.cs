@@ -20,7 +20,7 @@ namespace TwitterMonitor.Web.Controllers
         [Route("importreferences")]
         public void ImportReferences()
         {
-
+            _dataImportService.ImportReferences();
         }
 
         [HttpGet]

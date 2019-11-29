@@ -1,5 +1,11 @@
-﻿using TwitterMonitor.DataAccess.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Xml;
+using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
+using TwitterMonitor.DataModels.Sqlite.Models;
 using TwitterMonitor.Services.Interfaces;
 
 namespace TwitterMonitor.Services.Services
@@ -13,22 +19,333 @@ namespace TwitterMonitor.Services.Services
             _dataImportRepository = new DataImportRepository();
         }
 
+        private async Task<XmlNodeList> GetXmlElements(string uri, string elementName)
+        {
+            using HttpClient client = new HttpClient();
+            var data = await client.GetStringAsync(uri);
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(data);
+
+            return xml.GetElementsByTagName(elementName);
+        }
+
         public async void ImportReferences()
         {
             // gender
+            List<Gender> genders = new List<Gender>()
+            {
+                new Gender{ Name = "Male" },
+                new Gender{ Name = "Female" },
+                new Gender{ Name = "Other" }
+            };
+
+            _dataImportRepository.AddGenders(genders);
+
             // houses
-            // area types
-            // constituency types
-            // titles
-            // election types
-            // committee types
-            // departments
-            // government ranks
-            // government posts
-            // opposition ranks
-            // opposition posts
-            // parliamentary ranks
-            // parliamentary posts
+            List<House> houses = new List<House>()
+            {
+                new House{ Name = "Commons" },
+                new House{ Name = "Lords" }
+            };
+
+            _dataImportRepository.AddHouses(houses);
+
+            // area types -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/AreaTypes/
+
+            var areaTypeElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/AreaTypes/", "AreaType");
+            List<AreaType> areaTypes = new List<AreaType>();
+
+            foreach (XmlNode node in areaTypeElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("AreaType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                areaTypes.Add(new AreaType
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddAreaTypes(areaTypes);
+
+            // constituency types -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyTypes/
+
+            var constituencyTypeElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyTypes/", "ConstituencyType");
+            List<ConstituencyType> constituencyTypes = new List<ConstituencyType>();
+
+            foreach (XmlNode node in constituencyTypeElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("ConstituencyType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                constituencyTypes.Add(new ConstituencyType
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddConstituencyTypes(constituencyTypes);
+
+            // titles -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Titles/
+
+            var titleElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Titles/", "Title");
+            List<Title> titles = new List<Title>();
+
+            foreach (XmlNode node in titleElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Title_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                titles.Add(new Title
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddTitles(titles);
+
+            // election types -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ElectionTypes/
+
+            var electionTypeElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ElectionTypes/", "ElectionType");
+            List<ElectionType> electionTypes = new List<ElectionType>();
+
+            foreach (XmlNode node in electionTypeElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("ElectionType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                electionTypes.Add(new ElectionType
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddElectionTypes(electionTypes);
+
+            // committee types -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/CommitteeTypes/
+
+            var committeeTypeElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/CommitteeTypes/", "CommitteeType");
+            List<CommitteeType> committeeTypes = new List<CommitteeType>();
+
+            foreach (XmlNode node in committeeTypeElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("CommitteeType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                committeeTypes.Add(new CommitteeType
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddCommitteeTypes(committeeTypes);
+
+            // departments -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Departments/
+
+            var departmentsElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Departments/", "Department");
+            List<Department> departments = new List<Department>();
+
+            foreach (XmlNode node in departmentsElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Department_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var acronym = node.SelectSingleNode("Acronym").InnerText;
+                var minister = Convert.ToBoolean(node.SelectSingleNode("Minister").InnerText);
+                var secretary = Convert.ToBoolean(node.SelectSingleNode("Secretary").InnerText);
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+
+                departments.Add(new Department
+                {
+                    Id = id,
+                    Name = name,
+                    Acronym = acronym,
+                    Minister = minister,
+                    Secretary = secretary,
+                    StartDate = startDate,
+                    EndDate = endDate
+                });
+            }
+
+            _dataImportRepository.AddDepartments(departments);
+
+            // government ranks -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentRanks/
+
+            var governmentRankElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentRanks/", "GovernmentRank");
+            List<GovernmentRank> governmentRanks = new List<GovernmentRank>();
+
+            foreach (XmlNode node in governmentRankElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("GovernmentRank_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var ministerialRank = ToNullableInt(node.SelectSingleNode("MinisterialRank").InnerText);
+                var statsRank = node.SelectSingleNode("StatsRank").InnerText;
+                var clerksRank = node.SelectSingleNode("ClerksRank").InnerText;
+                var orderRank = ToNullableInt(node.SelectSingleNode("OrderRank").InnerText);
+
+                governmentRanks.Add(new GovernmentRank
+                {
+                    Id = id,
+                    Name = name,
+                    MinisterialRank = ministerialRank,
+                    StatsRank = statsRank,
+                    ClerksRank = clerksRank,
+                    OrderRank = orderRank
+                });
+            }
+
+            _dataImportRepository.AddGovernmentRanks(governmentRanks);
+
+            // government posts -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentPosts/
+
+            var governmentPostElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentPosts/", "GovernmentPost");
+            List<GovernmentPost> governmentPosts = new List<GovernmentPost>();
+
+            foreach (XmlNode node in governmentPostElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("GovernmentPost_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var governmentRankId = Convert.ToInt32(node.SelectSingleNode("GovernmentRank_Id").InnerText);
+                var promoted = Convert.ToBoolean(node.SelectSingleNode("Promoted").InnerText);
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                var hansardName = node.SelectSingleNode("HansardName").InnerText;
+
+                governmentPosts.Add(new GovernmentPost
+                {
+                    Id = id,
+                    Name = name,
+                    GovernmentRankId = governmentRankId,
+                    Promoted = promoted,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    HansardName = hansardName
+                });
+            }
+
+            _dataImportRepository.AddGovernmentPosts(governmentPosts);
+
+            // opposition ranks -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionRanks/
+
+            var oppositionRankElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionRanks/", "OppositionRank");
+            List<OppositionRank> oppositionRanks = new List<OppositionRank>();
+
+            foreach (XmlNode node in oppositionRankElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("OppositionRank_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var ministerialRank = ToNullableInt(node.SelectSingleNode("MinisterialRank").InnerText);
+                var statsRank = node.SelectSingleNode("StatsRank").InnerText;
+                var clerksRank = node.SelectSingleNode("ClerksRank").InnerText;
+                var orderRank = ToNullableInt(node.SelectSingleNode("OrderRank").InnerText);
+
+                oppositionRanks.Add(new OppositionRank
+                {
+                    Id = id,
+                    Name = name,
+                    MinisterialRank = ministerialRank,
+                    StatsRank = statsRank,
+                    ClerksRank = clerksRank,
+                    OrderRank = orderRank
+                });
+            }
+
+            _dataImportRepository.AddOppositionRanks(oppositionRanks);
+
+            // opposition posts -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionPosts/
+
+            var oppositionPostElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionPosts/", "OppositionPost");
+            List<OppositionPost> oppositionPosts = new List<OppositionPost>();
+
+            foreach (XmlNode node in oppositionPostElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("OppositionPost_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var oppositionRankId = Convert.ToInt32(node.SelectSingleNode("OppositionRank_Id").InnerText);
+                var promoted = Convert.ToBoolean(node.SelectSingleNode("Promoted").InnerText);
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                var hansardName = node.SelectSingleNode("HansardName").InnerText;
+
+                oppositionPosts.Add(new OppositionPost
+                {
+                    Id = id,
+                    Name = name,
+                    OppositionRankId = oppositionRankId,
+                    Promoted = promoted,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    HansardName = hansardName
+                });
+            }
+
+            _dataImportRepository.AddOppositionPosts(oppositionPosts);
+
+            // parliamentary ranks -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ParliamentaryRanks/
+
+            var parliamentaryRankElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ParliamentaryRanks/", "ParliamentaryRank");
+            List<ParliamentaryRank> parliamentaryRanks = new List<ParliamentaryRank>();
+
+            foreach (XmlNode node in parliamentaryRankElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("ParliamentaryRank_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+
+                parliamentaryRanks.Add(new ParliamentaryRank
+                {
+                    Id = id,
+                    Name = name
+                });
+            }
+
+            _dataImportRepository.AddParliamentaryRanks(parliamentaryRanks);
+
+            // parliamentary posts -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ParliamentaryPosts/
+
+            var parliamentaryPostElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ParliamentaryPosts/", "ParliamentaryPost");
+            List<ParliamentaryPost> parliamentaryPosts = new List<ParliamentaryPost>();
+
+            foreach (XmlNode node in parliamentaryPostElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("ParliamentaryPost_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var parliamentaryRankId = Convert.ToInt32(node.SelectSingleNode("ParliamentaryRank_Id").InnerText);
+                var promoted = Convert.ToBoolean(node.SelectSingleNode("Promoted").InnerText);
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                var isCommons = Convert.ToBoolean(node.SelectSingleNode("IsCommons").InnerText);
+                var isLords = Convert.ToBoolean(node.SelectSingleNode("IsLords").InnerText);
+                var hansardName = node.SelectSingleNode("HansardName").InnerText;
+
+                parliamentaryPosts.Add(new ParliamentaryPost
+                {
+                    Id = id,
+                    Name = name,
+                    ParliamentaryRankId = parliamentaryRankId,
+                    Promoted = promoted,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    IsCommons = isCommons,
+                    IsLords = isLords,
+                    HansardName = hansardName
+                });
+            }
+
+            _dataImportRepository.AddParliamentaryPosts(parliamentaryPosts);
         }
 
         public async void ImportData()

@@ -70,121 +70,121 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async void AddDepartments(List<Department> departments)
         {
-            _context.Departments.AddRange(areas);
+            _context.Departments.AddRange(departments);
             await _context.SaveChangesAsync();
         }
 
         public async void AddElections(List<Election> elections)
         {
-            _context.Areas.AddRange(areas);
+            _context.Elections.AddRange(elections);
             await _context.SaveChangesAsync();
         }
 
         public async void AddElectionTypes(List<ElectionType> electionTypes)
         {
-            _context.Areas.AddRange(areas);
+            _context.ElectionTypes.AddRange(electionTypes);
             await _context.SaveChangesAsync();
         }
 
         public async void AddGenders(List<Gender> genders)
         {
-            _context.Areas.AddRange(areas);
+            _context.Genders.AddRange(genders);
             await _context.SaveChangesAsync();
         }
 
         public async void AddGovernmentPostDepartments(List<GovernmentPostDepartment> governmentPostDepartments)
         {
-            _context.Areas.AddRange(areas);
+            _context.GovernmentPostDepartments.AddRange(governmentPostDepartments);
             await _context.SaveChangesAsync();
         }
 
         public async void AddGovernmentPostMembers(List<GovernmentPostMember> governmentPostMembers)
         {
-            _context.Areas.AddRange(areas);
+            _context.GovernmentPostMembers.AddRange(governmentPostMembers);
             await _context.SaveChangesAsync();
         }
 
         public async void AddGovernmentPosts(List<GovernmentPost> governmentPosts)
         {
-            _context.Areas.AddRange(areas);
+            _context.GovernmentPosts.AddRange(governmentPosts);
             await _context.SaveChangesAsync();
         }
 
         public async void AddGovernmentRanks(List<GovernmentRank> governmentRanks)
         {
-            _context.Areas.AddRange(areas);
+            _context.GovernmentRanks.AddRange(governmentRanks);
             await _context.SaveChangesAsync();
         }
 
         public async void AddHouseMembers(List<HouseMember> houseMembers)
         {
-            _context.Areas.AddRange(areas);
+            _context.HouseMembers.AddRange(houseMembers);
             await _context.SaveChangesAsync();
         }
 
         public async void AddHouses(List<House> houses)
         {
-            _context.Areas.AddRange(areas);
+            _context.Houses.AddRange(houses);
             await _context.SaveChangesAsync();
         }
 
         public async void AddMembers(List<Member> members)
         {
-            _context.Areas.AddRange(areas);
+            _context.Members.AddRange(members);
             await _context.SaveChangesAsync();
         }
 
         public async void AddOppositionPostDepartments(List<OppositionPostDepartment> oppositionPostDepartments)
         {
-            _context.Areas.AddRange(areas);
+            _context.OppositionPostDepartments.AddRange(oppositionPostDepartments);
             await _context.SaveChangesAsync();
         }
 
         public async void AddOppositionPostMembers(List<OppositionPostMember> oppositionPostMembers)
         {
-            _context.Areas.AddRange(areas);
+            _context.OppositionPostMembers.AddRange(oppositionPostMembers);
             await _context.SaveChangesAsync();
         }
 
         public async void AddOppositionPosts(List<OppositionPost> oppositionPosts)
         {
-            _context.Areas.AddRange(areas);
+            _context.OppositionPosts.AddRange(oppositionPosts);
             await _context.SaveChangesAsync();
         }
 
         public async void AddOppositionRanks(List<OppositionRank> oppositionRanks)
         {
-            _context.Areas.AddRange(areas);
+            _context.OppositionRanks.AddRange(oppositionRanks);
             await _context.SaveChangesAsync();
         }
 
         public async void AddParliamentaryPostMembers(List<ParliamentaryPostMember> parliamentaryPostMembers)
         {
-            _context.Areas.AddRange(areas);
+            _context.ParliamentaryPostMembers.AddRange(parliamentaryPostMembers);
             await _context.SaveChangesAsync();
         }
 
         public async void AddParliamentaryPosts(List<ParliamentaryPost> parliamentaryPosts)
         {
-            _context.Areas.AddRange(areas);
+            _context.ParliamentaryPosts.AddRange(parliamentaryPosts);
             await _context.SaveChangesAsync();
         }
 
         public async void AddParliamentaryRanks(List<ParliamentaryRank> parliamentaryRanks)
         {
-            _context.Areas.AddRange(areas);
+            _context.ParliamentaryRanks.AddRange(parliamentaryRanks);
             await _context.SaveChangesAsync();
         }
 
         public async void AddParties(List<Party> parties)
         {
-            _context.Areas.AddRange(areas);
+            _context.Parties.AddRange(parties);
             await _context.SaveChangesAsync();
         }
 
         public async void AddTitles(List<Title> titles)
         {
-            _context.Areas.AddRange(areas);
+            _context.Titles.AddRange(titles);
             await _context.SaveChangesAsync();
         }
     }
