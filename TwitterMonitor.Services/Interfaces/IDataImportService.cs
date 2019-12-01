@@ -5,5 +5,6 @@
         void ImportReferences();
         void ImportData();
         void ImportJoins();
+        void ImportMembers();
     }
 }

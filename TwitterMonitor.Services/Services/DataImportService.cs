@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
@@ -35,9 +36,9 @@ namespace TwitterMonitor.Services.Services
             // gender
             List<Gender> genders = new List<Gender>()
             {
-                new Gender{ Name = "Male" },
-                new Gender{ Name = "Female" },
-                new Gender{ Name = "Other" }
+                new Gender{ Id = 1, Name = "Male" },
+                new Gender{ Id = 2, Name = "Female" },
+                new Gender{ Id = 3, Name = "Other" }
             };
 
             _dataImportRepository.AddGenders(genders);
@@ -45,8 +46,8 @@ namespace TwitterMonitor.Services.Services
             // houses
             List<House> houses = new List<House>()
             {
-                new House{ Name = "Commons" },
-                new House{ Name = "Lords" }
+                new House{ Id = 1, Name = "Commons" },
+                new House{ Id = 2, Name = "Lords" }
             };
 
             _dataImportRepository.AddHouses(houses);
@@ -271,7 +272,7 @@ namespace TwitterMonitor.Services.Services
             {
                 var id = Convert.ToInt32(node.SelectSingleNode("OppositionPost_Id").InnerText);
                 var name = node.SelectSingleNode("Name").InnerText;
-                var oppositionRankId = Convert.ToInt32(node.SelectSingleNode("OppositionRank_Id").InnerText);
+                var oppositionRankId = ToNullableInt(node.SelectSingleNode("OppositionRank_Id").InnerText);
                 var promoted = Convert.ToBoolean(node.SelectSingleNode("Promoted").InnerText);
                 var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
                 DateTime? endDate = null;
@@ -321,7 +322,7 @@ namespace TwitterMonitor.Services.Services
             {
                 var id = Convert.ToInt32(node.SelectSingleNode("ParliamentaryPost_Id").InnerText);
                 var name = node.SelectSingleNode("Name").InnerText;
-                var parliamentaryRankId = Convert.ToInt32(node.SelectSingleNode("ParliamentaryRank_Id").InnerText);
+                var parliamentaryRankId = ToNullableInt(node.SelectSingleNode("ParliamentaryRank_Id").InnerText);
                 var promoted = Convert.ToBoolean(node.SelectSingleNode("Promoted").InnerText);
                 var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
                 DateTime? endDate = null;
@@ -350,238 +351,488 @@ namespace TwitterMonitor.Services.Services
 
         public async void ImportData()
         {
-            // areas
-            // constituencies
-            // elections
-            // parties
-            // committees
-            // members
+            // areas -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Areas/
+
+            var areaElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Areas/", "Area");
+            List<Area> areas = new List<Area>();
+
+            foreach (XmlNode node in areaElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Area_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var onsAreaId = node.SelectSingleNode("OnsAreaId").InnerText;
+                var areaTypeId = Convert.ToInt32(node.SelectSingleNode("AreaType_Id").InnerText);
+
+                areas.Add(new Area
+                {
+                    Id = id,
+                    Name = name,
+                    OnsId = onsAreaId,
+                    AreaTypeId = areaTypeId
+                });
+            }
+
+            _dataImportRepository.AddAreas(areas);
+
+            // constituencies -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Constituencies/
+
+            var constituencyElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Constituencies/", "Constituency");
+            List<Constituency> constituencies = new List<Constituency>();
+
+            foreach (XmlNode node in constituencyElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Constituency_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var constituencyTypeId = ToNullableInt(node.SelectSingleNode("ConstituencyType_Id").InnerText);
+                var prevConstituencyId = node.SelectSingleNode("PrevConstituencyId").InnerText;
+                var oldDodsId = ToNullableInt(node.SelectSingleNode("OldDodsId").InnerText);
+                var oldDisId = ToNullableInt(node.SelectSingleNode("OldDisId").InnerText);
+                var clerksConstituencyId = ToNullableInt(node.SelectSingleNode("ClerksConstituencyId").InnerText);
+                var gisId = ToNullableInt(node.SelectSingleNode("GisId").InnerText);
+                var pcaCode = ToNullableInt(node.SelectSingleNode("PcaCode").InnerText);
+                var pconName = node.SelectSingleNode("PconName").InnerText;
+                var osName = node.SelectSingleNode("OsName").InnerText;
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                var onsCode = node.SelectSingleNode("ONSCode").InnerText;
+                var schoolSubsidyBand = node.SelectSingleNode("SchoolsSubsidyBand").InnerText;
+
+                constituencies.Add(new Constituency
+                {
+                    Id = id,
+                    Name = name,
+                    ConstituencyTypeId = constituencyTypeId,
+                    PrevConstituencyId = prevConstituencyId,
+                    OldDodsId = oldDodsId,
+                    OldDisId = oldDisId,
+                    ClerksConstituencyId = clerksConstituencyId,
+                    GisId = gisId,
+                    PcaCode = pcaCode,
+                    PconName = pconName,
+                    OsName = osName,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    OnsCode = onsCode,
+                    SchoolsSubsidyBand = schoolSubsidyBand
+                });
+            }
+
+            _dataImportRepository.AddConstituencies(constituencies);
+
+            // elections -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Elections/
+
+            var electionElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Elections/", "Election");
+            List<Election> elections = new List<Election>();
+
+            foreach (XmlNode node in electionElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Election_Id").InnerText);
+                var electionTypeId = Convert.ToInt32(node.SelectSingleNode("ElectionType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var electionDate = Convert.ToDateTime(node.SelectSingleNode("ElectionDate").InnerText);
+
+                elections.Add(new Election
+                {
+                    Id = id,
+                    Name = name,
+                    ElectionTypeId = electionTypeId,
+                    ElectionDate = electionDate
+                });
+            }
+
+            _dataImportRepository.AddElections(elections);
+
+            // parties -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Parties/
+
+            var partyElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Parties/", "Party");
+            List<Party> parties = new List<Party>();
+
+            foreach (XmlNode node in partyElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Party_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var abbr = node.SelectSingleNode("Abbreviation").InnerText;
+                var initials = node.SelectSingleNode("Initials").InnerText;
+                var colour = node.SelectSingleNode("Colour").InnerText;
+                var textColour = node.SelectSingleNode("TextColour").InnerText;
+                var isCommons = Convert.ToBoolean(node.SelectSingleNode("IsCommons").InnerText);
+                var isLords = Convert.ToBoolean(node.SelectSingleNode("IsLords").InnerText);
+                var oldDisId = ToNullableInt(node.SelectSingleNode("OldDISId").InnerText);
+                var holMainParty = Convert.ToBoolean(node.SelectSingleNode("HoLMainParty").InnerText);
+                var holOrder = ToNullableInt(node.SelectSingleNode("HoLOrder").InnerText);
+                var holIsSpiritualSide = Convert.ToBoolean(node.SelectSingleNode("HoL_IsSpiritualSide").InnerText);
+
+                parties.Add(new Party
+                {
+                    Id = id,
+                    Name = name,
+                    Abbr = abbr,
+                    Initials = initials,
+                    Colour = colour,
+                    TextColour = textColour,
+                    IsCommons = isCommons,
+                    IsLords = isLords,
+                    OldDisId = oldDisId,
+                    HoLMainParty = holMainParty,
+                    HoLOrder = holOrder,
+                    HoLIsSpiritualSide = holIsSpiritualSide
+                });
+            }
+
+            _dataImportRepository.AddParties(parties);
+
+            // committees -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Committees/
+
+            var committeeElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Committees/", "Committee");
+            List<Committee> committees = new List<Committee>();
+
+            foreach (XmlNode node in committeeElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("Committee_Id").InnerText);
+                var committeeTypeId = Convert.ToInt32(node.SelectSingleNode("CommitteeType_Id").InnerText);
+                var name = node.SelectSingleNode("Name").InnerText;
+                var parentCommitteeId = ToNullableInt(node.SelectSingleNode("ParentCommittee_Id").InnerText);
+                DateTime? dateLordsAppointed = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("DateLordsAppointed").InnerText))
+                    dateLordsAppointed = Convert.ToDateTime(node.SelectSingleNode("DateLordsAppointed").InnerText);
+                DateTime? dateCommonsAppointed = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("DateCommonsAppointed").InnerText))
+                    dateCommonsAppointed = Convert.ToDateTime(node.SelectSingleNode("DateCommonsAppointed").InnerText);
+                DateTime startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                var createdFromCommitteeId = ToNullableInt(node.SelectSingleNode("CreatedFromCommittee_Id").InnerText);
+                var isCommons = Convert.ToBoolean(node.SelectSingleNode("IsCommons").InnerText);
+                var isLords = Convert.ToBoolean(node.SelectSingleNode("IsLords").InnerText);
+
+                committees.Add(new Committee
+                {
+                    Id = id,
+                    Name = name,
+                    CommitteeTypeId = committeeTypeId,
+                    ParentCommitteeId = parentCommitteeId,
+                    DateLordsAppointed = dateLordsAppointed,
+                    DateCommonsAppointed = dateCommonsAppointed,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    CreatedFromCommitteeId = createdFromCommitteeId,
+                    IsCommons = isCommons,
+                    IsLords = isLords
+                });
+            }
+
+            _dataImportRepository.AddCommittees(committees);
         }
 
         public async void ImportJoins()
         {
-            // constituency areas
-            // constituency members
-            // house members
-            // committee members
-            // government post members
-            // government post departments
-            // opposition post members
-            // opposition post departments
-            // parliamentary post members
+            // constituency areas -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyAreas/
+
+            var constituencyAreaElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyAreas/", "ConstituencyArea");
+            List<ConstituencyArea> constituencyAreas = new List<ConstituencyArea>();
+
+            foreach (XmlNode node in constituencyAreaElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("ConstituencyAreas_Id").InnerText);
+                var constituencyId = Convert.ToInt32(node.SelectSingleNode("Constituency_Id").InnerText);
+                var areaId = Convert.ToInt32(node.SelectSingleNode("Area_Id").InnerText);
+                var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                DateTime? endDate = null;
+                if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                    endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+
+                constituencyAreas.Add(new ConstituencyArea
+                {
+                    Id = id,
+                    ConstituencyId = constituencyId,
+                    AreaId = areaId,
+                    StartDate = startDate,
+                    EndDate = endDate
+                });
+            }
+
+            _dataImportRepository.AddConstituencyAreas(constituencyAreas);
+
+            // government post departments -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentPostDepartments/    
+
+            var governmentPostDepartmentElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/GovernmentPostDepartments/", "GovernmentPostDepartment");
+            List<GovernmentPostDepartment> governmentPostDepartments = new List<GovernmentPostDepartment>();
+
+            foreach (XmlNode node in governmentPostDepartmentElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("GovernmentPostDepartment_Id").InnerText);
+                var governmentPostId = Convert.ToInt32(node.SelectSingleNode("GovernmentPost_Id").InnerText);
+                var departmentId = Convert.ToInt32(node.SelectSingleNode("Department_Id").InnerText);
+
+                governmentPostDepartments.Add(new GovernmentPostDepartment
+                {
+                    Id = id,
+                    GovernmentPostId = governmentPostId,
+                    DepartmentId = departmentId
+                });
+            }
+
+            _dataImportRepository.AddGovernmentPostDepartments(governmentPostDepartments);
+
+            // opposition post departments -- http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionPostDepartments/
+
+            var oppositionPostDepartmentElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/OppositionPostDepartments/", "OppositionPostDepartment");
+            List<OppositionPostDepartment> oppositionPostDepartments = new List<OppositionPostDepartment>();
+
+            foreach (XmlNode node in oppositionPostDepartmentElements)
+            {
+                var id = Convert.ToInt32(node.SelectSingleNode("OppositionPostDepartment_Id").InnerText);
+                var oppositionPostId = Convert.ToInt32(node.SelectSingleNode("OppositionPost_Id").InnerText);
+                var departmentId = Convert.ToInt32(node.SelectSingleNode("Department_Id").InnerText);
+
+                oppositionPostDepartments.Add(new OppositionPostDepartment
+                {
+                    Id = id,
+                    OppositionPostId = oppositionPostId,
+                    DepartmentId = departmentId
+                });
+            }
+
+            _dataImportRepository.AddOppositionPostDepartments(oppositionPostDepartments);
         }
 
-        public async void ImportAreas()
+        public async void ImportMembers()
         {
-            //// http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Areas/
+            // members -- http://data.parliament.uk/membersdataplatform/services/mnis/members/query/House=Commons|Membership=all/
 
-            //HttpClient client = new HttpClient();
-            //var areaData = await client.GetStringAsync("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Areas/");
+            var memberIdElements = await GetXmlElements("http://data.parliament.uk/membersdataplatform/services/mnis/members/query/House=Commons|Membership=all/", "Member");
+            List<int> memberids = new List<int>();
 
-            //XmlDocument xml = new XmlDocument();
-            //xml.LoadXml(areaData);
+            foreach (XmlNode node in memberIdElements)
+            {
+                memberids.Add(Convert.ToInt32(node.Attributes["Member_Id"].InnerText));
+            }
 
-            //var areaElements = xml.GetElementsByTagName("Area");
+            List<Member> members = new List<Member>();
+            List<ConstituencyMember> constituencies = new List<ConstituencyMember>();
+            List<HouseMember> houseMembers = new List<HouseMember>();
+            List<CommitteeMember> committees = new List<CommitteeMember>();
+            List<GovernmentPostMember> governmentPostMembers = new List<GovernmentPostMember>();
+            List<OppositionPostMember> oppositionPostMembers = new List<OppositionPostMember>();
+            List<ParliamentaryPostMember> parliamentaryPostMembers = new List<ParliamentaryPostMember>();
+            List<PartyMember> parties = new List<PartyMember>();
+            List<TwitterUser> twitterUsers = new List<TwitterUser>();
 
-            //List<Area> areasToAdd = new List<Area>();
+            var titles = _dataImportRepository.GetTitles().Result;
 
-            //foreach (XmlNode areaElement in areaElements)
-            //{
-            //    var idNode = areaElement.SelectSingleNode("Area_Id");
-            //    var nameNode = areaElement.SelectSingleNode("Name");
-            //    var onsIdNode = areaElement.SelectSingleNode("OnsAreaId");
-            //    var areaTypeIdNode = areaElement.SelectSingleNode("AreaType_Id");
+            foreach (int memberId in memberids)
+            {
+                var memberElement = (await GetXmlElements($"http://data.parliament.uk/membersdataplatform/services/mnis/members/query/id={memberId}/FullBiog", "Member")).Item(0);
 
-            //    int id = Convert.ToInt32(idNode.InnerText);
-            //    string name = nameNode.InnerText;
-            //    string onsId = onsIdNode.InnerText;
-            //    int areaTypeId = Convert.ToInt32(areaTypeIdNode.InnerText);
+                XmlNode preferredNameNode = memberElement.SelectSingleNode("PreferredNames").ChildNodes.Item(0);
+                XmlNodeList houseMembershipsNodes = memberElement.SelectSingleNode("HouseMemberships").ChildNodes;
+                XmlNodeList constituencyNodes = memberElement.SelectSingleNode("Constituencies").ChildNodes;
+                XmlNodeList committeeNodes = memberElement.SelectSingleNode("Committees").ChildNodes;
+                XmlNodeList governmentPostNodes = memberElement.SelectSingleNode("GovernmentPosts").ChildNodes;
+                XmlNodeList oppositionPostNodes = memberElement.SelectSingleNode("OppositionPosts").ChildNodes;
+                XmlNodeList parliamentaryPostNodes = memberElement.SelectSingleNode("ParliamentaryPosts").ChildNodes;
+                XmlNodeList partyNodes = memberElement.SelectSingleNode("Parties").ChildNodes;
+                XmlNodeList addressNodes = memberElement.SelectSingleNode("Addresses").ChildNodes;
 
-            //    areasToAdd.Add(new Area
-            //    {
-            //        Id = id,
-            //        Name = name,
-            //        OnsId = onsId,
-            //        AreaTypeId = areaTypeId
-            //    });
-            //}
+                var dodsId = ToNullableInt(memberElement.Attributes["Dods_Id"].InnerText);
+                var pimsId = ToNullableInt(memberElement.Attributes["Pims_Id"].InnerText);
+                var clerksId = ToNullableInt(memberElement.Attributes["Clerks_Id"].InnerText);
+                var title = preferredNameNode.SelectSingleNode("Title").InnerText;
+                var titleId = titles.FirstOrDefault(t => t.Name.ToLower() == title.ToLower())?.Id;
+                var forename = preferredNameNode.SelectSingleNode("Forename").InnerText;
+                var surname = preferredNameNode.SelectSingleNode("Surname").InnerText;
+                var gender = memberElement.SelectSingleNode("Gender").InnerText;
+                var genderId = (gender == "M") ? 1 : 2;
+                DateTime? dateOfBirth = null;
+                if (!string.IsNullOrEmpty(memberElement.SelectSingleNode("DateOfBirth ").InnerText))
+                    dateOfBirth = Convert.ToDateTime(memberElement.SelectSingleNode("DateOfBirth").InnerText);
+                DateTime? dateOfDeath = null;
+                if (!string.IsNullOrEmpty(memberElement.SelectSingleNode("DateOfDeath ").InnerText))
+                    dateOfDeath = Convert.ToDateTime(memberElement.SelectSingleNode("DateOfDeath").InnerText);
 
-            //_dataImportRepository.AddAreas(areasToAdd);
-        }
+                members.Add(new Member
+                {
+                    Id = memberId,
+                    DodsId = dodsId,
+                    PimsId = pimsId,
+                    ClerksId = clerksId,
+                    TitleId = titleId,
+                    Forename = forename,
+                    Surname = surname,
+                    GenderId = genderId,
+                    DateOfBirth = dateOfBirth,
+                    DateOfDeath = dateOfDeath
+                });
 
-        public async void ImportConstituencies()
-        {
-            //// http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Constituencies/
+                // house members
+                foreach (XmlNode node in houseMembershipsNodes)
+                {
+                    var house = node.SelectSingleNode("House").InnerText;
+                    var houseId = (house == "Commons") ? 1 : 2;
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                    var endReason = node.SelectSingleNode("EndReason").InnerText;
+                    var endNotes = node.SelectSingleNode("EndNotes").InnerText;
 
-            //using HttpClient client = new HttpClient();
-            //var constituencyData = await client.GetStringAsync("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Constituencies/");
+                    houseMembers.Add(new HouseMember
+                    {
+                        HouseId = houseId,
+                        MemberId = memberId,
+                        StartDate = startDate,
+                        EndDate = endDate,
+                        EndReason = endReason,
+                        EndNotes = endNotes
+                    });
+                }
 
-            //XmlDocument xml = new XmlDocument();
-            //xml.LoadXml(constituencyData);
+                // constituency members
+                foreach (XmlNode node in constituencyNodes)
+                {
+                    var constituencyId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
 
-            //var constituencyElements = xml.GetElementsByTagName("Constituency");
+                    XmlNode electionNode = node.SelectSingleNode("Election");
+                    var electionId = Convert.ToInt32(electionNode.Attributes["Id"].InnerText);
 
-            //List<ConstituencyNew> constituenciesToAdd = new List<ConstituencyNew>();
+                    var endReason = node.SelectSingleNode("EndReason").InnerText;
+                    var entryType = node.SelectSingleNode("EntryType").InnerText;
 
-            //foreach (XmlNode constituencyElement in constituencyElements)
-            //{
-            //    var idNode = constituencyElement.SelectSingleNode("Constituency_Id");
-            //    var nameNode = constituencyElement.SelectSingleNode("Name");
-            //    var constituencyTypeNode = constituencyElement.SelectSingleNode("ConstituencyType_Id");
-            //    var prevConstituencyIdNode = constituencyElement.SelectSingleNode("PrevConstituencyId");
-            //    var oldDodsIdNode = constituencyElement.SelectSingleNode("OldDodsId");
-            //    var oldDisIdNode = constituencyElement.SelectSingleNode("OldDisId");
-            //    var clerksConstituencyIdNode = constituencyElement.SelectSingleNode("ClerksConstituencyId");
-            //    var gisIdNode = constituencyElement.SelectSingleNode("GisId");
-            //    var pcaCodeNode = constituencyElement.SelectSingleNode("PcaCode");
-            //    var pconNameNode = constituencyElement.SelectSingleNode("PconName");
-            //    var osNameNode = constituencyElement.SelectSingleNode("OsName");
-            //    var startDateNode = constituencyElement.SelectSingleNode("StartDate");
-            //    var endDateNode = constituencyElement.SelectSingleNode("EndDate");
-            //    var onsCodeNode = constituencyElement.SelectSingleNode("ONSCode");
-            //    var schoolsSubsidyBandNode = constituencyElement.SelectSingleNode("SchoolsSubsidyBand");
+                    constituencies.Add(new ConstituencyMember
+                    {
+                        MemberId = memberId,
+                        ConstituencyId = constituencyId,
+                        StartDate = startDate,
+                        EndDate = endDate,
+                        ElectionId = electionId,
+                        EndReason = endReason,
+                        EntryType = entryType
+                    });
+                }
 
-            //    int id = Convert.ToInt32(idNode.InnerText);
-            //    string name = nameNode.InnerText;
-            //    int? constituencyTypeId = ToNullableInt(constituencyTypeNode.InnerText);
-            //    string prevConstituencyId = prevConstituencyIdNode.InnerText;
-            //    int? oldDodsId = ToNullableInt(oldDodsIdNode.InnerText);
-            //    int? oldDisId = ToNullableInt(oldDisIdNode.InnerText);
-            //    int? clerksConstituencyId = ToNullableInt(clerksConstituencyIdNode.InnerText);
-            //    int? gisId = ToNullableInt(gisIdNode.InnerText);
-            //    int? pcaCode = ToNullableInt(pcaCodeNode.InnerText);
-            //    string pconName = pconNameNode.InnerText;
-            //    string osName = osNameNode.InnerText;
-            //    DateTime startDate = DateTime.Parse(startDateNode.InnerText);
-            //    DateTime? endDate = null;
-            //    if (!string.IsNullOrEmpty(endDateNode.InnerText))
-            //        endDate = DateTime.Parse(endDateNode.InnerText);
-            //    string onsCode = onsCodeNode.InnerText;
-            //    string schoolsSubsidyBand = schoolsSubsidyBandNode.InnerText;
+                // committee members
+                foreach (XmlNode node in committeeNodes)
+                {
+                    var committeeId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
+                    var endNote = node.SelectSingleNode("EndNote").InnerText;
+                    var isExOfficio = Convert.ToBoolean(node.SelectSingleNode("IsExOfficio").InnerText);
+                    var isAlternate = Convert.ToBoolean(node.SelectSingleNode("IsAlternate").InnerText);
+                    var isCoOpted = Convert.ToBoolean(node.SelectSingleNode("IsCoOpted").InnerText);
 
-            //    constituenciesToAdd.Add(new ConstituencyNew
-            //    {
-            //        Id = id,
-            //        Name = name,
-            //        ConstituencyTypeId = constituencyTypeId,
-            //        PrevConstituencyId = prevConstituencyId,
-            //        OldDodsId = oldDodsId,
-            //        OldDisId = oldDisId,
-            //        ClerksConstituencyId = clerksConstituencyId,
-            //        GisId = gisId,
-            //        PcaCode = pcaCode,
-            //        PconName = pconName,
-            //        OsName = osName,
-            //        StartDate = startDate,
-            //        EndDate = endDate,
-            //        OnsCode = onsCode,
-            //        SchoolsSubsidyBand = schoolsSubsidyBand
-            //    });
-            //}
+                    committees.Add(new CommitteeMember
+                    {
+                        MemberId = memberId,
+                        CommitteeId = committeeId,
+                        StartDate = startDate,
+                        EndDate = endDate,
+                        EndNote = endNote,
+                        IsExOfficio = isExOfficio,
+                        IsAlternate = isAlternate,
+                        IsCoOpted = isCoOpted
+                    });
+                }
 
-            //_dataImportRepository.AddConstituencies(constituenciesToAdd);
-        }
+                // government post members
+                foreach (XmlNode node in governmentPostNodes)
+                {
+                    var governmentPostId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
 
-        public async void ImportConstituencyAreas()
-        {
-            //// http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyAreas/
+                    governmentPostMembers.Add(new GovernmentPostMember
+                    {
+                        MemberId = memberId,
+                        GovernmentPostId = governmentPostId,
+                        StartDate = startDate,
+                        EndDate = endDate
+                    });
+                }
 
-            //using HttpClient client = new HttpClient();
-            //var constituencyAreaData = await client.GetStringAsync("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/ConstituencyAreas/");
+                // opposition post members
+                foreach (XmlNode node in oppositionPostNodes)
+                {
+                    var oppositionPostId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
 
-            //XmlDocument xml = new XmlDocument();
-            //xml.LoadXml(constituencyAreaData);
+                    oppositionPostMembers.Add(new OppositionPostMember
+                    {
+                        MemberId = memberId,
+                        OppositionPostId = oppositionPostId,
+                        StartDate = startDate,
+                        EndDate = endDate
+                    });
+                }
 
-            //var constituencyAreaElements = xml.GetElementsByTagName("ConstituencyArea");
+                // parliamentary post members
+                foreach (XmlNode node in parliamentaryPostNodes)
+                {
+                    var parliamentaryPostId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
 
-            //List<ConstituencyArea> constituencyAreasToAdd = new List<ConstituencyArea>();
+                    parliamentaryPostMembers.Add(new ParliamentaryPostMember
+                    {
+                        MemberId = memberId,
+                        ParliamentaryPostId = parliamentaryPostId,
+                        StartDate = startDate,
+                        EndDate = endDate
+                    });
+                }
 
-            //foreach (XmlNode constituencyAreaElement in constituencyAreaElements)
-            //{
-            //    var constituencyIdNode = constituencyAreaElement.SelectSingleNode("Constituency_Id");
-            //    var areaIdNode = constituencyAreaElement.SelectSingleNode("Area_Id");
-            //    var startDateNode = constituencyAreaElement.SelectSingleNode("StartDate");
-            //    var endDateNode = constituencyAreaElement.SelectSingleNode("EndDate");
+                // party members
+                foreach (XmlNode node in partyNodes)
+                {
+                    var partyId = Convert.ToInt32(node.Attributes["Id"].InnerText);
+                    var startDate = Convert.ToDateTime(node.SelectSingleNode("StartDate").InnerText);
+                    DateTime? endDate = null;
+                    if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
+                        endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
 
-            //    int constituencyId = Convert.ToInt32(constituencyIdNode.InnerText);
-            //    int areaId = Convert.ToInt32(areaIdNode.InnerText);
-            //    DateTime startDate = DateTime.Parse(startDateNode.InnerText);
-            //    DateTime? endDate = null;
-            //    if (!string.IsNullOrEmpty(endDateNode.InnerText))
-            //        endDate = DateTime.Parse(endDateNode.InnerText);
+                    parties.Add(new PartyMember
+                    {
+                        MemberId = memberId,
+                        PartyId = partyId,
+                        StartDate = startDate,
+                        EndDate = endDate
+                    });
+                }
 
-            //    constituencyAreasToAdd.Add(new ConstituencyArea
-            //    {
-            //        ConstituencyId = constituencyId,
-            //        AreaId = areaId,
-            //        StartDate = startDate,
-            //        EndDate = endDate
-            //    });
-            //}
+                // twitter names
+                //var temp = memberElement.SelectNodes("/Addresses/Address[@Type_Id=7]");
+                //var twitterNode = temp.Count > 0 ? temp.Item(0) : null;
 
-            //_dataImportRepository.AddConstituencyAreas(constituencyAreasToAdd);
-        }
+                //if (twitterNode != null)
+                //{
 
-        public async void ImportParties()
-        {
-            //// http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Parties/
+                //}
+            }
 
-            //using HttpClient client = new HttpClient();
-            //var partyData = await client.GetStringAsync("http://data.parliament.uk/membersdataplatform/services/mnis/ReferenceData/Parties/");
-
-            //XmlDocument xml = new XmlDocument();
-            //xml.LoadXml(partyData);
-
-            //var partyElements = xml.GetElementsByTagName("Party");
-
-            //List<Party> partiesToAdd = new List<Party>();
-
-            //foreach (XmlNode partyElement in partyElements)
-            //{
-            //    var idNode = partyElement.SelectSingleNode("Party_Id");
-            //    var nameNode = partyElement.SelectSingleNode("Name");
-            //    var abbrNode = partyElement.SelectSingleNode("Abbreviation");
-            //    var initialsNode = partyElement.SelectSingleNode("Initials");
-            //    var colourNode = partyElement.SelectSingleNode("Colour");
-            //    var textColourNode = partyElement.SelectSingleNode("TextColour");
-            //    var isCommonsNode = partyElement.SelectSingleNode("IsCommons");
-            //    var isLordsNode = partyElement.SelectSingleNode("IsLords");
-            //    var oldDisIdNode = partyElement.SelectSingleNode("OldDISId");
-            //    var holMainPartyNode = partyElement.SelectSingleNode("HoLMainParty");
-            //    var holOrderNode = partyElement.SelectSingleNode("HoLOrder");
-            //    var holIsSpiritualNode = partyElement.SelectSingleNode("HoL_IsSpiritualSide");
-
-            //    int id = Convert.ToInt32(idNode.InnerText);
-            //    string name = nameNode.InnerText;
-            //    string abbr = abbrNode.InnerText;
-            //    string initials = initialsNode.InnerText;
-            //    string colour = colourNode.InnerText;
-            //    string textColour = textColourNode.InnerText;
-            //    bool isCommons = Convert.ToBoolean(isCommonsNode.InnerText);
-            //    bool isLords = Convert.ToBoolean(isLordsNode.InnerText);
-            //    int? oldDIsId = ToNullableInt(oldDisIdNode.InnerText);
-            //    bool holMainParty = Convert.ToBoolean(holMainPartyNode.InnerText);
-            //    int? holOrder = ToNullableInt(holOrderNode.InnerText);
-            //    bool holIsSpiritualSide = Convert.ToBoolean(holIsSpiritualNode.InnerText);
-
-            //    partiesToAdd.Add(new Party
-            //    {
-            //        Id = id,
-            //        Name = name,
-            //        Abbr = abbr,
-            //        Initials = initials,
-            //        Colour = colour,
-            //        TextColour = textColour,
-            //        IsCommons = isCommons,
-            //        IsLords = isLords,
-            //        OldDisId = oldDIsId,
-            //        HoLMainParty = holMainParty,
-            //        HoLOrder = holOrder,
-            //        HoLIsSpiritualSide = holIsSpiritualSide
-            //    });
-            //}
-
-            //_dataImportRepository.AddParties(partiesToAdd);
+            _dataImportRepository.AddMembers(members);
+            _dataImportRepository.AddConstituencyMembers(constituencies);
+            _dataImportRepository.AddHouseMembers(houseMembers);
+            _dataImportRepository.AddCommitteeMembers(committees);
+            _dataImportRepository.AddGovernmentPostMembers(governmentPostMembers);
+            _dataImportRepository.AddOppositionPostMembers(oppositionPostMembers);
+            _dataImportRepository.AddParliamentaryPostMembers(parliamentaryPostMembers);
+            _dataImportRepository.AddPartyMembers(parties);
         }
 
         public static int? ToNullableInt(string s)

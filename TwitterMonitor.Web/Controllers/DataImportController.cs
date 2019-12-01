@@ -27,14 +27,21 @@ namespace TwitterMonitor.Web.Controllers
         [Route("importdata")]
         public void ImportData()
         {
-
+            _dataImportService.ImportData();
         }
 
         [HttpGet]
         [Route("importjoins")]
         public void ImportJoins()
         {
+            _dataImportService.ImportJoins();
+        }
 
+        [HttpGet]
+        [Route("importmembers")]
+        public void ImportMembers()
+        {
+            _dataImportService.ImportMembers();
         }
     }
 }

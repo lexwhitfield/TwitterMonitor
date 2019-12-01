@@ -230,7 +230,7 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.ToTable("ConstituencyAreas");
                 });
 
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyMembers", b =>
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -500,7 +500,7 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.ToTable("Houses");
                 });
 
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.HouseMembers", b =>
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.HouseMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -542,7 +542,7 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.Property<int?>("ClerksId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("DateOfDeath")
@@ -600,7 +600,7 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("OppositionRankId")
+                    b.Property<int?>("OppositionRankId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Promoted")
@@ -646,13 +646,10 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("GovernmentPostId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("MemberId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("OppositionPostId")
+                    b.Property<int>("OppositionPostId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartDate")
@@ -818,6 +815,33 @@ namespace TwitterMonitor.DataModels.Migrations
                     b.ToTable("Parties");
                 });
 
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.PartyMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PartyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("PartyMembers");
+                });
+
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.Title", b =>
                 {
                     b.Property<int>("Id")
@@ -935,7 +959,7 @@ namespace TwitterMonitor.DataModels.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyMembers", b =>
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ConstituencyMember", b =>
                 {
                     b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.Constituency", "Constituency")
                         .WithMany()
@@ -1004,7 +1028,7 @@ namespace TwitterMonitor.DataModels.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.HouseMembers", b =>
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.HouseMember", b =>
                 {
                     b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.House", "House")
                         .WithMany()
@@ -1044,9 +1068,7 @@ namespace TwitterMonitor.DataModels.Migrations
                 {
                     b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.OppositionRank", "OppositionRank")
                         .WithMany()
-                        .HasForeignKey("OppositionRankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OppositionRankId");
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.OppositionPostDepartment", b =>
@@ -1074,7 +1096,9 @@ namespace TwitterMonitor.DataModels.Migrations
 
                     b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.OppositionPost", "OppositionPost")
                         .WithMany()
-                        .HasForeignKey("OppositionPostId");
+                        .HasForeignKey("OppositionPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.ParliamentaryPost", b =>
@@ -1097,6 +1121,17 @@ namespace TwitterMonitor.DataModels.Migrations
                         .HasForeignKey("ParliamentaryPostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.PartyMember", b =>
+                {
+                    b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId");
+
+                    b.HasOne("TwitterMonitor.DataModels.Sqlite.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId");
                 });
 
             modelBuilder.Entity("TwitterMonitor.DataModels.Sqlite.Models.TwitterFriends", b =>

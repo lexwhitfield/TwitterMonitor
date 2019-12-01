@@ -41,7 +41,7 @@ namespace TwitterMonitor.DataModels.Sqlite
         public DbSet<OppositionPostMember> OppositionPostMembers { get; set; }
         public DbSet<OppositionPostDepartment> OppositionPostDepartments { get; set; }
         public DbSet<ParliamentaryPostMember> ParliamentaryPostMembers { get; set; }
-
+        public DbSet<PartyMember> PartyMembers { get; set; }
 
 
         public DbSet<Events> Events { get; set; }

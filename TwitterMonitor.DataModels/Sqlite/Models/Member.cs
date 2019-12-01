@@ -13,7 +13,7 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public string Forename { get; set; }
         public string Surname { get; set; }
         public int GenderId { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfDeath { get; set; }
 
 

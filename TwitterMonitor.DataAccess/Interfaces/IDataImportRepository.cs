@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Interfaces
@@ -39,5 +40,9 @@ namespace TwitterMonitor.DataAccess.Interfaces
         void AddOppositionPostMembers(List<OppositionPostMember> oppositionPostMembers);
         void AddOppositionPostDepartments(List<OppositionPostDepartment> oppositionPostDepartments);
         void AddParliamentaryPostMembers(List<ParliamentaryPostMember> parliamentaryPostMembers);
+        void AddPartyMembers(List<PartyMember> partyMembers);
+
+
+        Task<List<Title>> GetTitles();
     }
 }
