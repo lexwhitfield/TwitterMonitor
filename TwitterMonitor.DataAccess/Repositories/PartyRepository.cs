@@ -25,7 +25,9 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Party>> GetAll()
         {
-            var parties = await _context.Parties.OrderBy(p => p.Name).ToListAsync();
+            var parties = await _context.Parties
+                .Include(p => p.Members)
+                .OrderBy(p => p.Name).ToListAsync();
             return parties;
         }
 

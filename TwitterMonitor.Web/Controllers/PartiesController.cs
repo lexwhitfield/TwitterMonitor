@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwitterMonitor.Services;
 using TwitterMonitor.ViewModels;
+using TwitterMonitor.ViewModels.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -21,5 +22,10 @@ namespace WebApp.Controllers
             _partyService = new PartyService();
         }
 
+        [HttpGet]
+        public IEnumerable<PartyViewModel> GetAll()
+        {
+            return _partyService.GetAll().Result;
+        }
     }
 }

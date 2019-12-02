@@ -19,11 +19,11 @@ namespace TwitterMonitor.Services
             _memberRepository = new MemberRepository();
         }
 
-        public async Task<IEnumerable<MemberViewModel>> GetAll()
+        public async Task<IEnumerable<MemberViewModel>> GetAll(string name, int? partyId, string constituencyName)
         {
             try
             {
-                var members = await _memberRepository.GetAll();
+                var members = await _memberRepository.GetAll(name, partyId, constituencyName);
                 var viewModels = members.Select(ModelTransformer.MemberToMemberViewModel);
                 return viewModels;
             }

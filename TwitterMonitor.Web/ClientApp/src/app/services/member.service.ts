@@ -23,20 +23,20 @@ export class MemberService {
         this.myApiUrl = 'api/members/';
     }
 
-    getMembers(): Observable<Member[]> {
-        //let params = new HttpParams();
+    getMembers(name?: string, partyId?: number, constituencyName?:string): Observable<Member[]> {
+        let params = new HttpParams();
         //if (id !== undefined)
         //    params = params.set('id', String(id))
-        //if (name !== undefined)
-        //    params = params.set('name', name);
-        //if (partyId !== undefined)
-        //    params = params.set('partyId', String(partyId));
-        //if (constituencyName !== undefined)
-        //    params = params.set('constituency', String(constituencyName));
+        if (name !== undefined)
+            params = params.set('name', name);
+        if (partyId !== undefined)
+            params = params.set('partyId', String(partyId));
+        if (constituencyName !== undefined)
+            params = params.set('constituency', String(constituencyName));
         //if (twitterName !== undefined)
         //    params = params.set('twitterName', twitterName);
 
-        return this.http.get<Member[]>(this.myAppUrl + this.myApiUrl)
+        return this.http.get<Member[]>(this.myAppUrl + this.myApiUrl, { params: params })
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

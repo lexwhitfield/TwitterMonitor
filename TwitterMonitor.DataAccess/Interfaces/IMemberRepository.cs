@@ -7,7 +7,7 @@ namespace TwitterMonitor.DataAccess.Interfaces
     public interface IMemberRepository
     {
         Task<Member> GetById(int id);
-        Task<IEnumerable<Member>> GetAll();
+        Task<IEnumerable<Member>> GetAll(string name, int? partyId, string constituencyName);
         Task<bool> Delete(int id);
         Task<Member> Add(Member member);
         Task<Member> Update(int id, Member member);

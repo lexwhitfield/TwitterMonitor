@@ -13,7 +13,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><input id="member-id-filter" class="form-control" [(ngModel)]="idFilter" (keyup)="loadMembers()" style="width: 60px;" /></td>
+      <td></td>
       <td><input id="member-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadMembers()" /></td>
       <td>
         <select id="member-party-filter" class="form-control" [(ngModel)]="partyFilter" (change)="loadMembers()">
@@ -26,7 +26,7 @@
       <td></td>
     </tr>
     <tr *ngFor="let member of pageOfMembers; let i = index">
-      <td *ngStyle="getPartyStyle(i, member)">{{ member.id }}</td>
+      <td>{{ member.id }}</td>
       <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
       <td>{{ member.latestPartyName }}</td>
       <td>{{ member.latestConstituencyName }}</td>

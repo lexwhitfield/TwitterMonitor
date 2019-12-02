@@ -17,9 +17,9 @@ export class MembersComponent implements OnInit {
     pageOfMembers: Array<Member>;
 
     //idFilter?: number;
-    //nameFilter?: string;
-    //partyFilter?: number;
-    //constituencyFilter?: string;
+    nameFilter?: string;
+    partyFilter?: number;
+    constituencyFilter?: string;
     //twitterNameFilter?: string;
 
     parties$: Observable<Party[]>;
@@ -31,13 +31,15 @@ export class MembersComponent implements OnInit {
     ngOnInit() {
         this.loadMembers();
 
-        //this.parties$ = this.partyService.getParties();
+        this.parties$ = this.partyService.getParties();
     }
 
     loadMembers() {
-        this.memberService.getMembers()
+        console.log('Getting members...')
+        this.memberService.getMembers(this.nameFilter, this.partyFilter, this.constituencyFilter)
             .subscribe(m => {
                 this.members = m as [];
+                console.log("members retrieved");
             })
     }
 
@@ -61,7 +63,7 @@ export class MembersComponent implements OnInit {
         var txtColor = member.latestPartyTextColour;
 
         return {
-            'background-color': 'red',
+            'background-color': '#FF0000',
             'color': 'blue'
         };
     }

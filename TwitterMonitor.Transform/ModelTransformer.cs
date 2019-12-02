@@ -50,6 +50,27 @@ namespace TwitterMonitor.Transform
             };
         }
 
+        public static PartyViewModel PartyToPartyViewModel(Party party)
+        {
+            return new PartyViewModel
+            {
+                Id = party.Id,
+                Name = party.Name,
+                Abbr = party.Abbr,
+                Initials = party.Initials,
+                BgColour = party.Colour,
+                TextColour = party.TextColour,
+                IsCommons = party.IsCommons,
+                IsLords = party.IsLords,
+                OldDisId = party.OldDisId,
+                HoLMainParty = party.HoLMainParty,
+                HoLOrder = party.HoLOrder,
+                HoLIsSpiritualSide = party.HoLIsSpiritualSide,
+                TotalMemberCount = party.Members.Count,
+                ActiveMemberCount = party.Members.Where(m => !m.EndDate.HasValue).Count()
+            };
+        }
+
         public static Events EventViewModelToEvent(EventViewModel eventViewModel, Events original = null)
         {
             throw new NotImplementedException();

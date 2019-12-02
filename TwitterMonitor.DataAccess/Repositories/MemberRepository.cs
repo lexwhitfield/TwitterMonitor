@@ -26,7 +26,7 @@ namespace TwitterMonitor.DataAccess.Repositories
             return member;
         }
 
-        public async Task<IEnumerable<Member>> GetAll()
+        public async Task<IEnumerable<Member>> GetAll(string name, int? partyId, string constituencyName)
         {
             var members = await _context.Members
                 .Include(m => m.Title)
@@ -42,7 +42,16 @@ namespace TwitterMonitor.DataAccess.Repositories
                 .ThenInclude(pm => pm.Party)
                 .Include(m => m.Houses)
                 .ThenInclude(hm => hm.House)
-                .ToListAsync();                
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(name))
+                members = members.Where(m => m.Forename.Contains(name) || m.Surname.Contains(name) || (m.Forename + m.Surname).Contains(name)).ToList();
+
+            if (partyId.HasValue)
+                members = members.Where(m => m.Parties.Any(p => p.PartyId == partyId.Value)).ToList();
+
+            if (!string.IsNullOrEmpty(constituencyName))
+                members = members.Where(m => m.Constituencies.Any(c => c.Constituency.Name.Contains(constituencyName))).ToList();
             
             return members.OrderBy(m => m.Surname).ThenBy(m => m.Forename);
         }
