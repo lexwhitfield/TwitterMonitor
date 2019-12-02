@@ -1,158 +1,68 @@
 ﻿using System;
+using System.Linq;
 using TwitterMonitor.DataModels.Sqlite.Models;
 using TwitterMonitor.ViewModels;
+using TwitterMonitor.ViewModels.ViewModels;
 
 namespace TwitterMonitor.Transform
 {
     public class ModelTransformer
     {
-        public static ConstituencyViewModel ConstituencyToConstituencyViewModel(Constituency constituency)
-        {
-            return new ConstituencyViewModel
-            {
-                Id = constituency.Id,
-                Name = constituency.Name,
-                ConstituencyTypeId = constituency.ConstituencyTypeId,
-                ConstituencyType = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : string.Empty
-            };
-        }
-
-        public static Constituency ConstituencyViewModelToConstituency(ConstituencyViewModel constituencyViewModel, Constituency original = null)
-        {
-            var constituency = original ?? new Constituency();
-
-            constituency.Name = constituencyViewModel.Name;
-            constituency.ConstituencyTypeId = constituencyViewModel.ConstituencyTypeId;
-
-            return constituency;
-        }
-
-        public static PartyViewModel PartyToPartyViewModel(Party party)
-        {
-            return new PartyViewModel
-            {
-                Id = party.Id,
-                Name = party.Name
-            };
-        }
-
-        public static Party PartyViewModelToParty(PartyViewModel partyViewModel, Party original = null)
-        {
-            var party = original ?? new Party();
-
-            party.Name = partyViewModel.Name;
-
-            return party;
-        }
-
         public static MemberViewModel MemberToMemberViewModel(Member member)
         {
-            //return new MemberViewModel
-            //{
-            //    Id = member.Id,
-            //    TitleId = member.TitleId,
-            //    Title = (member.TitleId.HasValue) ? member.Title.Name : string.Empty,
-            //    Name = member.Name,
-            //    PartyId = member.PartyId,
-            //    PartyName = member.Party != null ? member.Party.Name : string.Empty,
-            //    ConstituencyId = member.ConstituencyId,
-            //    ConstituencyName = member?.Constituency != null ? member.Constituency.Name : string.Empty,
-            //    TwitterId = member.TwitterId,
-            //    TwitterScreenName = (member.Twitter != null) ? member.Twitter.ScreenName : string.Empty,
-            //    StartYear = member.StartYear,
-            //    EndYear = member.EndYear,
-            //    WhipSuspended = member.WhipSuspended
-            //};
+            var house = member.Houses.FirstOrDefault().House;
+            var party = member.Parties.FirstOrDefault().Party;
+            var constituency = member.Constituencies.FirstOrDefault().Constituency;
 
-            return null;
-        }
-
-        public static Member MemberViewModelToMember(MemberViewModel memberViewModel, Member original = null)
-        {
-            var member = original ?? new Member();
-
-            //member.Name = memberViewModel.Name;
-            //member.TitleId = memberViewModel.TitleId;
-            //member.PartyId = memberViewModel.PartyId;
-            //member.ConstituencyId = memberViewModel.ConstituencyId;
-            //member.StartYear = memberViewModel.StartYear ?? 0;
-            //member.EndYear = memberViewModel.EndYear;
-            //member.WhipSuspended = memberViewModel.WhipSuspended;
-
-            return member;
-        }
-
-        public static KeyValueViewModel AreaTypeToKeyValueViewModel(AreaType areaType)
-        {
-            return new KeyValueViewModel
+            return new MemberViewModel
             {
-                Id = areaType.Id,
-                Name = areaType.Name
-            };
-        }
+                Id = member.Id,
+                DodsId = member.DodsId,
+                PimsId = member.PimsId,
+                ClerksId = member.ClerksId,
 
-        public static KeyValueViewModel ConstituencyTypeToKeyValueViewModel(ConstituencyType constituencyType)
-        {
-            return new KeyValueViewModel
-            {
-                Id = constituencyType.Id,
-                Name = constituencyType.Name
-            };
-        }
+                TitleId = member.TitleId,
+                TitleName = (member.Title != null) ? member.Title.Name : string.Empty,
+                Forename = member.Forename,
+                Surname = member.Surname,
 
-        public static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser user, TwitterStats stats)
-        {
-            return new TwitterUserViewModel
-            {
-                Id = user.Id,
-                ScreenName = user.ScreenName,
-                CreatedAt = user.CreatedAt ?? DateTime.MinValue,
-                MostRecentFollowerCount = stats?.FollowerCount ?? 0,
-                MostRecentFriendCount = stats?.FriendCount ?? 0
-            };
-        }
+                GenderId = member.GenderId,
+                GenderName = member.Gender.Name,
 
-        public static EventViewModel EventToEventViewModel(Events events)
-        {
-            return new EventViewModel
-            {
-                Id = events.Id,
-                Title = events.Title,
-                Body = events.Body,
-                Happened = events.Happened
+                DateOfBirth = member.DateOfBirth,
+                DateOfDeath = member.DateOfDeath,
+
+                LatestHouseId = house.Id,
+                LatestHouseName = house.Name,
+
+                LatestConstituencyId = constituency.Id,
+                LatestConstituencyName = constituency.Name,
+
+                LatestPartyId = party.Id,
+                LatestPartyName = party.Name,
+                LatestPartyBgColour = !string.IsNullOrEmpty(party.Colour) ? party.Colour : "FFFFFF",
+                LatestPartyTextColour = !string.IsNullOrEmpty(party.TextColour) ? party.TextColour : "333333",
+
+                NumberOfGovernmentPosts = member.GovernmentPosts.Count,
+                NumberOfOppositionPosts = member.OppositionPosts.Count,
+                NumberOfParliamentaryPosts = member.ParliamentaryPosts.Count,
+                NumberOfCommittees = member.Committees.Count
             };
         }
 
         public static Events EventViewModelToEvent(EventViewModel eventViewModel, Events original = null)
         {
-            var events = original ?? new Events();
-
-            events.Title = eventViewModel.Title;
-            events.Body = eventViewModel.Body;
-            events.Happened = eventViewModel.Happened;
-
-            return events;
+            throw new NotImplementedException();
         }
 
-        public static AreaViewModel AreaToAreaViewModel(Area area)
+        public static EventViewModel EventToEventViewModel(Events events)
         {
-            return new AreaViewModel
-            {
-                Id = area.Id,
-                Name = area.Name,
-                AreaTypeId = area.AreaTypeId,
-                AreaType = area.AreaType.Name
-            };
+            throw new NotImplementedException();
         }
 
-        public static Area AreaViewModelToArea(AreaViewModel areaViewModel, Area original)
+        public static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser twitterUser, TwitterStats twitterStats)
         {
-            var area = original ?? new Area();
-
-            area.Name = areaViewModel.Name;
-            area.AreaTypeId = areaViewModel.AreaTypeId;
-
-            return area;
+            throw new NotImplementedException();
         }
     }
 }

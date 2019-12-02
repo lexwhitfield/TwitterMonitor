@@ -25,5 +25,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public ICollection<OppositionPostMember> OppositionPosts { get; set; }
         public ICollection<ParliamentaryPostMember> ParliamentaryPosts { get; set; }
         public ICollection<CommitteeMember> Committees { get; set; }
+        public ICollection<PartyMember> Parties { get; set; }
     }
 }

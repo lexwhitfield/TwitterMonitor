@@ -7,9 +7,6 @@
       <th>Name</th>
       <th>Party</th>
       <th>Constituency</th>
-      <th>Twitter Id</th>
-      <th>Twitter Name</th>
-      <th>Started</th>
       <th></th>
       <th></th>
     </tr>
@@ -25,27 +22,21 @@
         </select>
       </td>
       <td><input id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
-      <td><!-- twitterId --></td>
-      <td><input id="member-twitter-name-filter" class="form-control" [(ngModel)]="twitterNameFilter" (keyup)="loadMembers()" /></td>
-      <td><!-- startYear --></td>
       <td></td>
       <td></td>
     </tr>
-    <tr *ngFor="let member of pageOfMembers" class="party-{{ member.partyId }}">
-      <td style="text-align:center;">{{ member.id }}</td>
-      <td><a [routerLink]="['/member/', member.id]">{{ member.name }}</a></td>
-      <td>{{ member.partyName }}</td>
-      <td>{{ member.constituencyName }}</td>
-      <td>{{ member.twitterId }}</td>
-      <td>{{ member.twitterScreenName }}</td>
-      <td>{{ member.startYear }}</td>
+    <tr *ngFor="let member of pageOfMembers; let i = index">
+      <td *ngStyle="getPartyStyle(i, member)">{{ member.id }}</td>
+      <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
+      <td>{{ member.latestPartyName }}</td>
+      <td>{{ member.latestConstituencyName }}</td>
       <td><a [routerLink]="['/member/edit/', member.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
       <td><a [routerLink]="" (click)="delete(member.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="9">
+      <td colspan="6">
         <jw-pagination [items]="members" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
       </td>
     </tr>    

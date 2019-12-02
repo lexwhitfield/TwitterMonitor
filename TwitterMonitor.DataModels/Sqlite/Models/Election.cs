@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TwitterMonitor.DataModels.Sqlite.Models
 {
@@ -10,5 +11,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public DateTime ElectionDate { get; set; }
 
         public ElectionType ElectionType { get; set; }
+        public ICollection<ConstituencyMember> Members { get; set; }
     }
 }

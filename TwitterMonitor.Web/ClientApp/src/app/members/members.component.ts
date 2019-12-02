@@ -16,11 +16,11 @@ export class MembersComponent implements OnInit {
     members: [];
     pageOfMembers: Array<Member>;
 
-    idFilter?: number;
-    nameFilter?: string;
-    partyFilter?: number;
-    constituencyFilter?: string;
-    twitterNameFilter?: string;
+    //idFilter?: number;
+    //nameFilter?: string;
+    //partyFilter?: number;
+    //constituencyFilter?: string;
+    //twitterNameFilter?: string;
 
     parties$: Observable<Party[]>;
 
@@ -31,16 +31,11 @@ export class MembersComponent implements OnInit {
     ngOnInit() {
         this.loadMembers();
 
-        this.parties$ = this.partyService.getParties();
+        //this.parties$ = this.partyService.getParties();
     }
 
     loadMembers() {
-        this.memberService.getMembers(
-            this.idFilter,
-            this.nameFilter,
-            this.partyFilter,
-            this.constituencyFilter,
-            this.twitterNameFilter)
+        this.memberService.getMembers()
             .subscribe(m => {
                 this.members = m as [];
             })
@@ -58,6 +53,17 @@ export class MembersComponent implements OnInit {
 
     onChangePage(pageOfItems: Array<Member>) {
         this.pageOfMembers = pageOfItems;
+    }
+
+    getPartyStyle(i: number, member: Member): any {
+        
+        var bgColor = member.latestPartyBgColour;
+        var txtColor = member.latestPartyTextColour;
+
+        return {
+            'background-color': 'red',
+            'color': 'blue'
+        };
     }
 
 }

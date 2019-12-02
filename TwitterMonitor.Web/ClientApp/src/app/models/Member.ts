@@ -1,13 +1,33 @@
 export class Member {
     id?: number;
-    name: string;
-    constituencyId: number;
-    constituencyName?: string;
-    partyId: number;
-    partyName?: string;
-    twitterId?: number;
-    twitterScreenName: string;
-    startYear?: number;
-    endYear?: number;
-    whipSuspended: boolean;
+    dodsId?: number;
+    pimsId?: number;
+    clerksId?: number;
+
+    titleId?: number;
+    titleName?: string;
+    forename: string;
+    surname: string;
+
+    genderId?: number;
+    genderName?: string;
+
+    dateOfBirth?: Date;
+    dateOfDeath?: Date;
+
+    latestHouseId?: number;
+    latestHouseName?: string;
+
+    latestConstituencyId?: number;
+    latestConstituencyName?: string;
+
+    latestPartyId?: number;
+    latestPartyName?: string;
+    latestPartyBgColour?: string;
+    latestPartyTextColour?: string;
+
+    numberOfGovernmentPosts?: number;
+    numberOfOppositionPosts?: number;
+    numberOfParliamentaryPosts?: number;
+    numberOfCommittees?: number;
 }

@@ -23,20 +23,20 @@ export class MemberService {
         this.myApiUrl = 'api/members/';
     }
 
-    getMembers(id?: number, name?: string, partyId?: number, constituencyName?: string, twitterName?: string): Observable<Member[]> {
-        let params = new HttpParams();
-        if (id !== undefined)
-            params = params.set('id', String(id))
-        if (name !== undefined)
-            params = params.set('name', name);
-        if (partyId !== undefined)
-            params = params.set('partyId', String(partyId));
-        if (constituencyName !== undefined)
-            params = params.set('constituency', String(constituencyName));
-        if (twitterName !== undefined)
-            params = params.set('twitterName', twitterName);
+    getMembers(): Observable<Member[]> {
+        //let params = new HttpParams();
+        //if (id !== undefined)
+        //    params = params.set('id', String(id))
+        //if (name !== undefined)
+        //    params = params.set('name', name);
+        //if (partyId !== undefined)
+        //    params = params.set('partyId', String(partyId));
+        //if (constituencyName !== undefined)
+        //    params = params.set('constituency', String(constituencyName));
+        //if (twitterName !== undefined)
+        //    params = params.set('twitterName', twitterName);
 
-        return this.http.get<Member[]>(this.myAppUrl + this.myApiUrl, { params: params })
+        return this.http.get<Member[]>(this.myAppUrl + this.myApiUrl)
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

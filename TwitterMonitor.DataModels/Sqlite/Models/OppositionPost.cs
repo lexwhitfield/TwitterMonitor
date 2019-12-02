@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TwitterMonitor.DataModels.Sqlite.Models
 {
@@ -14,5 +15,7 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
 
 
         public OppositionRank OppositionRank { get; set; }
+        public ICollection<OppositionPostDepartment> Departments { get; set; }
+        public ICollection<OppositionPostMember> Members { get; set; }
     }
 }

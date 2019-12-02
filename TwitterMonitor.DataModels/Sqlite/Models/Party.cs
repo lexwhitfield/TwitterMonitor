@@ -1,4 +1,6 @@
-﻿namespace TwitterMonitor.DataModels.Sqlite.Models
+﻿using System.Collections.Generic;
+
+namespace TwitterMonitor.DataModels.Sqlite.Models
 {
     public class Party
     {
@@ -14,5 +16,7 @@
         public bool HoLMainParty { get; set; }
         public int? HoLOrder { get; set; }
         public bool HoLIsSpiritualSide { get; set; }
+
+        public ICollection<PartyMember> Members { get; set; }
     }
 }

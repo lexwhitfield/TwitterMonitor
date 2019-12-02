@@ -26,15 +26,24 @@ namespace TwitterMonitor.DataAccess.Repositories
             return member;
         }
 
-        public async Task<IEnumerable<Member>> GetAll(int? id, string name, int? partyId, string constituency, string twitterName)
+        public async Task<IEnumerable<Member>> GetAll()
         {
             var members = await _context.Members
+                .Include(m => m.Title)
+                .Include(m => m.Gender)
                 .Include(m => m.Constituencies)
-                .ToListAsync();
-
-            if (id.HasValue)
-                members = members.Where(m => m.Id == id.Value).ToList();
-
+                .ThenInclude(cm => cm.Constituency)
+                .Include(m => m.Committees)
+                .ThenInclude(cm => cm.Committee)
+                .Include(m => m.GovernmentPosts)
+                .Include(m => m.OppositionPosts)
+                .Include(m => m.ParliamentaryPosts)
+                .Include(m => m.Parties)
+                .ThenInclude(pm => pm.Party)
+                .Include(m => m.Houses)
+                .ThenInclude(hm => hm.House)
+                .ToListAsync();                
+            
             return members.OrderBy(m => m.Surname).ThenBy(m => m.Forename);
         }
 

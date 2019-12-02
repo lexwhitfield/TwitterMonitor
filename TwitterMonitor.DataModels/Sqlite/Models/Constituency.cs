@@ -23,5 +23,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
 
         public ConstituencyType ConstituencyType { get; set; }
         public ICollection<ConstituencyArea> ConstituencyAreas { get; set; }
+        public ICollection<ConstituencyMember> ConstituencyMembers { get; set; }
     }
 }

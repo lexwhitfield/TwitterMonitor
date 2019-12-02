@@ -69,18 +69,18 @@ export class MemberAddEditComponent implements OnInit {
 
     ngOnInit() {
         if (this.memberId > 0) {
-            this.actionType = 'Edit';
-            this.memberService.getMember(this.memberId)
-                .subscribe(data => {
-                    this.existingMember = data;
-                    this.form.controls[this.formName].setValue(data.name);
-                    this.form.controls[this.formParty].setValue(data.partyId);
-                    this.form.controls[this.formConstituency].setValue(data.constituencyId);
-                    this.form.controls[this.formTwitterName].setValue(data.twitterScreenName);
-                    this.form.controls[this.formStartYear].setValue(data.startYear);
-                    this.form.controls[this.formEndYear].setValue(data.endYear);
-                    this.form.controls[this.formWhipSuspended].setValue(data.whipSuspended);
-                });
+            //this.actionType = 'Edit';
+            //this.memberService.getMember(this.memberId)
+            //    .subscribe(data => {
+            //        this.existingMember = data;
+            //        this.form.controls[this.formName].setValue(data.name);
+            //        this.form.controls[this.formParty].setValue(data.partyId);
+            //        this.form.controls[this.formConstituency].setValue(data.constituencyId);
+            //        this.form.controls[this.formTwitterName].setValue(data.twitterScreenName);
+            //        this.form.controls[this.formStartYear].setValue(data.startYear);
+            //        this.form.controls[this.formEndYear].setValue(data.endYear);
+            //        this.form.controls[this.formWhipSuspended].setValue(data.whipSuspended);
+            //    });
         }
 
         this.parties$ = this.partyService.getParties();
@@ -93,34 +93,34 @@ export class MemberAddEditComponent implements OnInit {
         }
 
         if (this.actionType === 'Add') {
-            let member: Member = {
-                name: this.form.get(this.formName).value,
-                partyId: Number(this.form.get(this.formParty).value),
-                constituencyId: Number(this.form.get(this.formConstituency).value),
-                twitterScreenName: this.form.get(this.formTwitterName) ? this.form.get(this.formTwitterName).value : '',
-                startYear: this.form.get(this.formStartYear).value ? Number(this.form.get(this.formStartYear).value) : null,
-                endYear: this.form.get(this.formEndYear).value ? Number(this.form.get(this.formEndYear).value) : null,
-                whipSuspended: this.form.get(this.formWhipSuspended).value
-            };
+            //let member: Member = {
+            //    name: this.form.get(this.formName).value,
+            //    partyId: Number(this.form.get(this.formParty).value),
+            //    constituencyId: Number(this.form.get(this.formConstituency).value),
+            //    twitterScreenName: this.form.get(this.formTwitterName) ? this.form.get(this.formTwitterName).value : '',
+            //    startYear: this.form.get(this.formStartYear).value ? Number(this.form.get(this.formStartYear).value) : null,
+            //    endYear: this.form.get(this.formEndYear).value ? Number(this.form.get(this.formEndYear).value) : null,
+            //    whipSuspended: this.form.get(this.formWhipSuspended).value
+            //};
 
-            this.memberService.saveMember(member)
-                .subscribe(id => this.router.navigate(['/']));
+            //this.memberService.saveMember(member)
+            //    .subscribe(id => this.router.navigate(['/']));
         }
 
         if (this.actionType === 'Edit') {
-            let member: Member = {
-                id: this.existingMember.id,
-                name: this.form.get(this.formName).value,
-                partyId: Number(this.form.get(this.formParty).value),
-                constituencyId: Number(this.form.get(this.formConstituency).value),
-                twitterScreenName: this.form.get(this.formTwitterName) ? this.form.get(this.formTwitterName).value : '',
-                startYear: this.form.get(this.formStartYear).value ? Number(this.form.get(this.formStartYear).value) : null,
-                endYear: this.form.get(this.formEndYear).value ? Number(this.form.get(this.formEndYear).value) : null,
-                whipSuspended: this.form.get(this.formWhipSuspended).value
-            };
+            //let member: Member = {
+            //    id: this.existingMember.id,
+            //    name: this.form.get(this.formName).value,
+            //    partyId: Number(this.form.get(this.formParty).value),
+            //    constituencyId: Number(this.form.get(this.formConstituency).value),
+            //    twitterScreenName: this.form.get(this.formTwitterName) ? this.form.get(this.formTwitterName).value : '',
+            //    startYear: this.form.get(this.formStartYear).value ? Number(this.form.get(this.formStartYear).value) : null,
+            //    endYear: this.form.get(this.formEndYear).value ? Number(this.form.get(this.formEndYear).value) : null,
+            //    whipSuspended: this.form.get(this.formWhipSuspended).value
+            //};
 
-            this.memberService.updateMember(member.id, member)
-                .subscribe(id => this.router.navigate(['/']));
+            //this.memberService.updateMember(member.id, member)
+            //    .subscribe(id => this.router.navigate(['/']));
         }
     }
 

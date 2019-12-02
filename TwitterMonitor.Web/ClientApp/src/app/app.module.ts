@@ -18,8 +18,6 @@ import { ConstituencyService } from './services/constituency.service';
 import { PartyService } from './services/party.service';
 import { MemberService } from './services/member.service';
 import { EventsComponent } from './events/events.component';
-import { AreasComponent } from './areas/areas.component';
-import { AreaAddEditComponent } from './area-add-edit/area-add-edit.component';
 
 @NgModule({
     declarations: [
@@ -32,9 +30,7 @@ import { AreaAddEditComponent } from './area-add-edit/area-add-edit.component';
         MemberComponent,
         MemberAddEditComponent,
         JwPaginationComponent,
-        EventsComponent,
-        AreasComponent,
-        AreaAddEditComponent
+        EventsComponent
     ],
     imports: [
         BrowserModule,

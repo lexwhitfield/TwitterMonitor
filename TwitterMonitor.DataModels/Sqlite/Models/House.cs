@@ -8,6 +8,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public string Name { get; set; }
 
 
-        public ICollection<Member> Members { get; set; }
+        public ICollection<HouseMember> Members { get; set; }
     }
 }
