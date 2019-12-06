@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TwitterMonitor.Services.Interfaces;
 using TwitterMonitor.Services.Services;
-using TwitterMonitor.ViewModels;
+using TwitterMonitor.ViewModels.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -22,5 +20,24 @@ namespace WebApp.Controllers
             _lookupService = new LookupService();
         }
 
+        [HttpGet]
+        public IEnumerable<ConstituencyViewModel> GetAll(string name, int? constituencyTypeId, int? areaId, int? partyId, bool? current)
+        {
+            return _constituencyService.GetAll(name, constituencyTypeId, areaId, partyId, current);
+        }
+
+        [HttpGet]
+        [Route("getareas")]
+        public IEnumerable<KeyValueViewModel> GetAreas()
+        {
+            return _constituencyService.GetAreas();
+        }
+
+        [HttpGet]
+        [Route("getconstituencytypes")]
+        public IEnumerable<KeyValueViewModel> GetConstituencyTypes()
+        {
+            return _constituencyService.GetConstituencyTypes();
+        }
     }
 }

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConstituencyService } from '../services/constituency.service';
+import { PartyService } from '../services/party.service';
+import { AreaService } from '../services/area.service';
 import { Constituency } from '../models/Constituency';
 import { KeyValue } from '../models/KeyValue';
+import { Party } from '../models/Party';
 
 @Component({
     selector: 'app-constituencies',
@@ -15,26 +18,31 @@ export class ConstituenciesComponent implements OnInit {
     pageOfConstituencies: Array<Constituency>;
 
     nameFilter?: string;
-    authorityFilter?: number;
-    regionFilter?: number;
-    countryFilter?: number;
+    areaFilter?: number;
+    partyFilter?: number;
+    typeFilter?: number;
+    currentFilter?: boolean;
 
-    authorities$: Observable<KeyValue[]>;
-    regions$: Observable<KeyValue[]>;
-    countries$: Observable<KeyValue[]>;
+    parties$: Observable<Party[]>;
+    areas$: Observable<KeyValue[]>;
+    constituencyTypes$: Observable<KeyValue[]>;
 
-    constructor(private constituencyService: ConstituencyService) { }
+    constructor(
+        private constituencyService: ConstituencyService,
+        private partyService: PartyService,
+        private areaService: AreaService
+    ) { }
 
     ngOnInit() {
         this.loadConstituencies();
 
-        this.authorities$ = this.constituencyService.getAuthorities();
-        this.regions$ = this.constituencyService.getRegions();
-        this.countries$ = this.constituencyService.getCountries();
+        this.parties$ = this.partyService.getParties();
+        this.areas$ = this.areaService.getAreas();
+        this.constituencyTypes$ = this.constituencyService.getConstituencyTypes();
     }
 
     loadConstituencies() {
-        this.constituencyService.getConstituencies(this.nameFilter, this.authorityFilter, this.regionFilter, this.countryFilter)
+        this.constituencyService.getConstituencies(this.nameFilter, this.typeFilter, this.areaFilter, this.partyFilter, this.currentFilter)
             .subscribe(c => { this.constituencies = c as [] });
     }
 

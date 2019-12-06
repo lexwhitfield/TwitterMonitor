@@ -49,18 +49,18 @@ export class ConstituencyAddEditComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.constituencyId > 0) {
-            this.actionType = 'Edit';
-            this.constituencyService.getConstituency(this.constituencyId)
-                .subscribe(data => {
-                    this.existingConstituency = data;
-                    this.form.controls[this.formId].setValue(data.id);
-                    this.form.controls[this.formName].setValue(data.name);
-                    this.form.controls[this.formAuthority].setValue(data.authorityId);
-                });
-        }
+        //if (this.constituencyId > 0) {
+        //    this.actionType = 'Edit';
+        //    this.constituencyService.getConstituency(this.constituencyId)
+        //        .subscribe(data => {
+        //            this.existingConstituency = data;
+        //            this.form.controls[this.formId].setValue(data.id);
+        //            this.form.controls[this.formName].setValue(data.name);
+        //            this.form.controls[this.formAuthority].setValue(data.authorityId);
+        //        });
+        //}
 
-        this.authorities$ = this.constituencyService.getAuthorities();
+        //this.authorities$ = this.constituencyService.getAuthorities();
     }
 
     save() {
@@ -68,26 +68,26 @@ export class ConstituencyAddEditComponent implements OnInit {
             return;
         }
 
-        if (this.actionType === 'Add') {
-            let constituency: Constituency = {
-                name: this.form.get(this.formName).value,
-                authorityId: Number(this.form.get(this.formAuthority).value)
-            };
+        //if (this.actionType === 'Add') {
+        //    let constituency: Constituency = {
+        //        name: this.form.get(this.formName).value,
+        //        authorityId: Number(this.form.get(this.formAuthority).value)
+        //    };
 
-            this.constituencyService.saveConstituency(constituency)
-                .subscribe(data => this.router.navigate(['/constituencies']));
-        }
+        //    this.constituencyService.saveConstituency(constituency)
+        //        .subscribe(data => this.router.navigate(['/constituencies']));
+        //}
 
-        if (this.actionType === 'Edit') {
-            let constituency: Constituency = {
-                id: this.existingConstituency.id,
-                name: this.form.get(this.formName).value,
-                authorityId: Number(this.form.get(this.formAuthority).value)
-            };
+        //if (this.actionType === 'Edit') {
+        //    let constituency: Constituency = {
+        //        id: this.existingConstituency.id,
+        //        name: this.form.get(this.formName).value,
+        //        authorityId: Number(this.form.get(this.formAuthority).value)
+        //    };
 
-            this.constituencyService.updateConstituency(constituency.id, constituency)
-                .subscribe(data => this.router.navigate(['/constituencies']));
-        }
+        //    this.constituencyService.updateConstituency(constituency.id, constituency)
+        //        .subscribe(data => this.router.navigate(['/constituencies']));
+        //}
     }
 
     cancel() {

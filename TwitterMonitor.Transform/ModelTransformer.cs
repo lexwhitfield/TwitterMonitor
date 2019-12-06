@@ -8,6 +8,15 @@ namespace TwitterMonitor.Transform
 {
     public class ModelTransformer
     {
+        public static KeyValueViewModel AreaToKeyValueViewModel(Area area)
+        {
+            return new KeyValueViewModel
+            {
+                Id = area.Id,
+                Name = area.Name
+            };
+        }
+
         public static MemberViewModel MemberToMemberViewModel(Member member)
         {
             var house = member.Houses.FirstOrDefault().House;
@@ -47,6 +56,44 @@ namespace TwitterMonitor.Transform
                 NumberOfOppositionPosts = member.OppositionPosts.Count,
                 NumberOfParliamentaryPosts = member.ParliamentaryPosts.Count,
                 NumberOfCommittees = member.Committees.Count
+            };
+        }
+
+        public static ConstituencyViewModel ConstituencyToConstituencyViewModel(Constituency constituency)
+        {
+            return new ConstituencyViewModel
+            {
+                Id = constituency.Id,
+                Name = constituency.Name,
+                ConstituencyTypeId = constituency.ConstituencyTypeId,
+                ConstituencyTypeName = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : "Other",
+                //PreviousConstituencyId = constituency.PrevConstituencyId,
+                //PreviousConstituencyName = (prevConstituency != null) ? prevConstituency.Name : "None",
+                OldDodsId = constituency.OldDodsId,
+                OldDisId = constituency.OldDisId,
+                ClerksConstituencyId = constituency.ClerksConstituencyId,
+                GisId = constituency.GisId,
+                PcaCode = constituency.PcaCode,
+                PconName = constituency.PconName,
+                OsName = constituency.OsName,
+                StartDate = constituency.StartDate,
+                EndDate = constituency.EndDate,
+                OnsCode = constituency.OnsCode,
+                SchoolSubsidyBand = constituency.SchoolsSubsidyBand,
+                Areas = String.Join(", ", constituency.ConstituencyAreas
+                    .OrderByDescending(ca => ca.Area.AreaTypeId)
+                    .Select(ca => ca.Area.Name))//,
+                //CurrentMemberId = constituency.ConstituencyMembers.First().MemberId,
+                //CurrentMemberName = constituency.ConstituencyMembers.First().Member.Surname
+            };
+        }
+
+        public static KeyValueViewModel ConstituencyTypeToKeyValueViewModel(ConstituencyType constituencyType)
+        {
+            return new KeyValueViewModel
+            {
+                Id = constituencyType.Id,
+                Name = constituencyType.Name
             };
         }
 

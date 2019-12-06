@@ -12,15 +12,12 @@ import { Party } from '../models/Party';
 })
 export class MembersComponent implements OnInit {
 
-    //members$: Observable<Member[]>;
     members: [];
     pageOfMembers: Array<Member>;
 
-    //idFilter?: number;
     nameFilter?: string;
     partyFilter?: number;
     constituencyFilter?: string;
-    //twitterNameFilter?: string;
 
     parties$: Observable<Party[]>;
 
@@ -31,16 +28,15 @@ export class MembersComponent implements OnInit {
     ngOnInit() {
         this.loadMembers();
 
-        this.parties$ = this.partyService.getParties();
+        this.parties$ = this.partyService.getParties(undefined, true, undefined);
     }
 
     loadMembers() {
-        console.log('Getting members...')
+        console.log("Getting members: " + this.nameFilter + ", " + this.partyFilter + ", " + this.constituencyFilter);
         this.memberService.getMembers(this.nameFilter, this.partyFilter, this.constituencyFilter)
             .subscribe(m => {
                 this.members = m as [];
-                console.log("members retrieved");
-            })
+            });
     }
 
     delete(memberId) {

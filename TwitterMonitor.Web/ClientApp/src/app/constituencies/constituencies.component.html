@@ -3,53 +3,59 @@
 <table class="table table-sm table-hover">
   <thead>
     <tr>
-      <th>#</th>
       <th>Name</th>
-      <th>Authority</th>
-      <th>Region</th>
-      <th>Country</th>
+      <th>Type</th>
+      <th>Areas</th>
+      <th>Started</th>
+      <th>Ended</th>
+      <th>Party</th>
+      <th>Member</th>
       <th></th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td></td>
       <td><input id="constituency-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadConstituencies()" /></td>
       <td>
-        <select id="constituency-authority-filter" class="form-control" [(ngModel)]="authorityFilter" (change)="loadConstituencies()">
+        <select id="constituency-type-filter" class="form-control" [(ngModel)]="typeFilter" (change)="loadConstituencies()">
           <option value="">-- Filter --</option>
-          <option *ngFor="let authority of (authorities$ | async)" value="{{ authority.id }}">{{ authority.name }}</option>
+          <option *ngFor="let type of (constituencyTypes$ | async)" value="{{ type.id }}">{{ type.name }}</option>
         </select>
       </td>
       <td>
-        <select id="constituency-region-filter" class="form-control" [(ngModel)]="regionFilter" (change)="loadConstituencies()">
+        <select id="constituency-area-filter" class="form-control" [(ngModel)]="areaFilter" (change)="loadConstituencies()">
           <option value="">-- Filter --</option>
-          <option *ngFor="let region of (regions$ | async)" value="{{ region.id }}">{{ region.name }}</option>
+          <option *ngFor="let area of (areas$ | async)" value="{{ area.id }}">{{ area.name }}</option>
         </select>
       </td>
+      <td></td>
+      <td><input type="checkbox" [(ngModel)]="currentFilter" (change)="loadConstituencies()" /></td>
       <td>
-        <select id="constituency-country-filter" class="form-control" [(ngModel)]="countryFilter" (change)="loadConstituencies()">
+        <select id="constituency-party-filter" class="form-control" [(ngModel)]="partyFilter" (change)="loadConstituencies()">
           <option value="">-- Filter --</option>
-          <option *ngFor="let country of (countries$ | async)" value="{{ country.id }}">{{ country.name }}</option>
+          <option *ngFor="let party of (parties$ | async)" value="{{ party.id }}">{{ party.name }}</option>
         </select>
       </td>
+      <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr *ngFor="let constituency of pageOfConstituencies">
-      <td>{{ constituency.id }}</td>
       <td><a [routerLink]="['/constituencies/', constituency.id]">{{ constituency.name }}</a></td>
-      <td>{{ constituency.authorityName }}</td>
-      <td>{{ constituency.regionName }}</td>
-      <td>{{ constituency.countryName }}</td>
+      <td>{{ constituency.constituencyTypeName }}</td>
+      <td>{{ constituency.areas }}</td>
+      <td>{{ constituency.startDate | date: 'shortDate' }}</td>
+      <td>{{ constituency.endDate | date: 'shortDate' }}</td>
+      <td>{{ constituency.currentPartyName }}</td>
+      <td>{{ constituency.currentMemberName }}</td>
       <td><a [routerLink]="['/constituencies/edit/', constituency.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
       <td><a [routerLink]="" (click)="delete(constituency.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="7">
+      <td colspan="9">
         <jw-pagination [items]="constituencies" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
       </td>
     </tr>

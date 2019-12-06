@@ -1,22 +1,41 @@
 <h3>Parties<a [routerLink]="['/parties/add/']" class="btn btn-primary float-right mb-3">Add Party</a></h3>
 
-<p *ngIf="!(parties$ | async)"><em>Loading...</em></p>
-
-<table class="table table-sm table-hover" *ngIf="(parties$ | async)?.length > 0">
+<table class="table table-sm table-hover">
   <thead>
     <tr>
-      <th>#</th>
       <th>Name</th>
+      <th>Abbr</th>
+      <th>Members</th>
+      <th>Active</th>
       <th></th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let party of (parties$ | async)">
-      <td>{{ party.id }}</td>
+    <tr>
+      <td><input id="party-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadParties()" /></td>
+      <td></td>
+      <td><input id="party-with-members-filter" type="checkbox" [(ngModel)]="withMembersFilter" (change)="loadParties()" /></td>
+      <td><input id="party-with-active-members-filter" type="checkbox" [(ngModel)]="withActiveMembersFilter" (change)="loadParties()" /></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let party of pageOfParties">
       <td><a [routerLink]="['/parties/', party.id]">{{ party.name }}</a></td>
+      <td>{{ party.abbr }}</td>
+      <td>{{ party.totalMemberCount }}</td>
+      <td>{{ party.activeMemberCount }}</td>
+      <td><a [routerLink]="['/members']" class="btn btn-info btn-sm">Members</a></td>
       <td><a [routerLink]="['/parties/edit/', party.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
       <td><a [routerLink]="" (click)="delete(party.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="7">
+        <jw-pagination [items]="parties" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+      </td>
+    </tr>
+  </tfoot>
 </table>

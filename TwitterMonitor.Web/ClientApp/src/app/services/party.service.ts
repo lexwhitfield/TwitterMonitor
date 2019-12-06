@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -23,8 +23,16 @@ export class PartyService {
         this.myApiUrl = 'api/parties';
     }
 
-    getParties(): Observable<Party[]> {
-        return this.http.get<Party[]>(this.myAppUrl + this.myApiUrl)
+    getParties(name?: string, withMembers?: boolean, withActiveMembers?: boolean): Observable<Party[]> {
+        let params = new HttpParams();
+        if (name !== undefined)
+            params = params.set('name', name);
+        if (withMembers !== undefined)
+            params = params.set('withMembers', String(withMembers));
+        if (withActiveMembers !== undefined)
+            params = params.set('withActiveMembers', String(withActiveMembers));
+
+        return this.http.get<Party[]>(this.myAppUrl + this.myApiUrl, { params: params })
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

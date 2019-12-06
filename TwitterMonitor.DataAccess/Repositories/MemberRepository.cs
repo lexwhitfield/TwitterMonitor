@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,32 +29,29 @@ namespace TwitterMonitor.DataAccess.Repositories
 
         public async Task<IEnumerable<Member>> GetAll(string name, int? partyId, string constituencyName)
         {
-            var members = await _context.Members
-                .Include(m => m.Title)
-                .Include(m => m.Gender)
-                .Include(m => m.Constituencies)
-                .ThenInclude(cm => cm.Constituency)
-                .Include(m => m.Committees)
-                .ThenInclude(cm => cm.Committee)
-                .Include(m => m.GovernmentPosts)
-                .Include(m => m.OppositionPosts)
-                .Include(m => m.ParliamentaryPosts)
-                .Include(m => m.Parties)
-                .ThenInclude(pm => pm.Party)
-                .Include(m => m.Houses)
-                .ThenInclude(hm => hm.House)
-                .ToListAsync();
+            IQueryable<Member> dbQuery = _context.Members.AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
-                members = members.Where(m => m.Forename.Contains(name) || m.Surname.Contains(name) || (m.Forename + m.Surname).Contains(name)).ToList();
+                dbQuery = dbQuery.Where(m => m.Forename.Contains(name) || m.Surname.Contains(name));
+                //|| (m.Forename + m.Surname).Contains(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (partyId.HasValue)
-                members = members.Where(m => m.Parties.Any(p => p.PartyId == partyId.Value)).ToList();
+                dbQuery = dbQuery.Where(m => m.Parties.Any(p => p.PartyId == partyId.Value));
 
             if (!string.IsNullOrEmpty(constituencyName))
-                members = members.Where(m => m.Constituencies.Any(c => c.Constituency.Name.Contains(constituencyName))).ToList();
-            
-            return members.OrderBy(m => m.Surname).ThenBy(m => m.Forename);
+                dbQuery = dbQuery.Where(m => m.Constituencies.Any(c => c.Constituency.Name.Contains(constituencyName)));
+
+            dbQuery = dbQuery.Include(m => m.Title);
+            dbQuery = dbQuery.Include(m => m.Gender);
+            dbQuery = dbQuery.Include(m => m.Constituencies).ThenInclude(cm => cm.Constituency);
+            dbQuery = dbQuery.Include(m => m.Committees).ThenInclude(cm => cm.Committee);
+            dbQuery = dbQuery.Include(m => m.GovernmentPosts);
+            dbQuery = dbQuery.Include(m => m.OppositionPosts);
+            dbQuery = dbQuery.Include(m => m.ParliamentaryPosts);
+            dbQuery = dbQuery.Include(m => m.Parties).ThenInclude(pm => pm.Party);
+            dbQuery = dbQuery.Include(m => m.Houses).ThenInclude(hm => hm.House);
+
+            return dbQuery.OrderBy(m => m.Surname).ThenBy(m => m.Forename).ToList();
         }
 
         public async Task<Member> Add(Member member)

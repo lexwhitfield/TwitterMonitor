@@ -55,24 +55,24 @@ export class PartyAddEditComponent implements OnInit {
             return;
         }
 
-        if (this.actionType === 'Add') {
-            let party: Party = {
-                name: this.form.get(this.formName).value
-            };
+        //if (this.actionType === 'Add') {
+        //    let party: Party = {
+        //        name: this.form.get(this.formName).value
+        //    };
 
-            this.partyService.saveParty(party)
-                .subscribe(data => this.router.navigate(['/parties']));
-        }
+        //    this.partyService.saveParty(party)
+        //        .subscribe(data => this.router.navigate(['/parties']));
+        //}
 
-        if (this.actionType === 'Edit') {
-            let party: Party = {
-                id: this.existingParty.id,
-                name: this.form.get(this.formName).value
-            };
+        //if (this.actionType === 'Edit') {
+        //    let party: Party = {
+        //        id: this.existingParty.id,
+        //        name: this.form.get(this.formName).value
+        //    };
 
-            this.partyService.updateParty(party.id, party)
-                .subscribe(data => this.router.navigate(['/parties']));
-        }
+        //    this.partyService.updateParty(party.id, party)
+        //        .subscribe(data => this.router.navigate(['/parties']));
+        //}
     }
 
     cancel() {

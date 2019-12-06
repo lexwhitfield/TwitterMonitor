@@ -24,16 +24,18 @@ export class ConstituencyService {
         this.myApiUrl = 'api/constituencies/';
     }
 
-    getConstituencies(name?: string, authorityId?: number, regionId?: number, countryId?: number): Observable<Constituency[]> {
+    getConstituencies(name?: string, typeId?: number, areaId?: number, partyId?:number, current?: boolean): Observable<Constituency[]> {
         let params = new HttpParams();
         if (name !== undefined)
             params = params.set('name', name);
-        if (authorityId !== undefined)
-            params = params.set('authorityId', String(authorityId));
-        if (regionId !== undefined)
-            params = params.set('regionId', String(regionId));
-        if (countryId !== undefined)
-            params = params.set('countryId', String(countryId));
+        if (typeId !== undefined)
+            params = params.set('constituencyTypeId', String(typeId));
+        if (areaId !== undefined)
+            params = params.set('areaId', String(areaId));
+        if (partyId !== undefined)
+            params = params.set('partyId', String(partyId));
+        if (current !== undefined)
+            params = params.set('current', String(current));
 
         return this.http.get<Constituency[]>(this.myAppUrl + this.myApiUrl, { params: params })
             .pipe(
@@ -74,24 +76,8 @@ export class ConstituencyService {
             );
     }
 
-    getAuthorities(): Observable<KeyValue[]> {
-        return this.http.get<KeyValue[]>(this.myAppUrl + this.myApiUrl + "getauthorities")
-            .pipe(
-                retry(1),
-                catchError(this.errorHandler)
-            );
-    }
-
-    getRegions(): Observable<KeyValue[]> {
-        return this.http.get<KeyValue[]>(this.myAppUrl + this.myApiUrl + "getregions")
-            .pipe(
-                retry(1),
-                catchError(this.errorHandler)
-            );
-    }
-
-    getCountries(): Observable<KeyValue[]> {
-        return this.http.get<KeyValue[]>(this.myAppUrl + this.myApiUrl + "getcountries")
+    getConstituencyTypes(): Observable<KeyValue[]> {
+        return this.http.get<KeyValue[]>(this.myAppUrl + this.myApiUrl + "getconstituencytypes")
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

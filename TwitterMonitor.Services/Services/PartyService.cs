@@ -19,9 +19,9 @@ namespace TwitterMonitor.Services
             _partyRepository = new PartyRepository();
         }
 
-        public async Task<IEnumerable<PartyViewModel>> GetAll()
+        public async Task<IEnumerable<PartyViewModel>> GetAll(string name, bool withMembers = false, bool withActiveMembers = false)
         {
-            var parties = await _partyRepository.GetAll();
+            var parties = await _partyRepository.GetAll(name, withMembers, withActiveMembers);
             return parties.Select(ModelTransformer.PartyToPartyViewModel);
         }
     }

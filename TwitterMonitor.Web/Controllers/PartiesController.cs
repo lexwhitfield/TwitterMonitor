@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TwitterMonitor.Services;
-using TwitterMonitor.ViewModels;
 using TwitterMonitor.ViewModels.ViewModels;
 
 namespace WebApp.Controllers
@@ -23,9 +18,9 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<PartyViewModel> GetAll()
+        public IEnumerable<PartyViewModel> GetAll(string name, bool withMembers = false, bool withActiveMembers = false)
         {
-            return _partyService.GetAll().Result;
+            return _partyService.GetAll(name, withMembers, withActiveMembers).Result;
         }
     }
 }

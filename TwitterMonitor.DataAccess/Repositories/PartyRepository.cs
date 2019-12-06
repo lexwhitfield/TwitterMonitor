@@ -23,11 +23,21 @@ namespace TwitterMonitor.DataAccess.Repositories
             return party;
         }
 
-        public async Task<IEnumerable<Party>> GetAll()
+        public async Task<IEnumerable<Party>> GetAll(string name, bool withMembers = false, bool withActiveMembers = false)
         {
             var parties = await _context.Parties
                 .Include(p => p.Members)
                 .OrderBy(p => p.Name).ToListAsync();
+
+            if (!string.IsNullOrEmpty(name))
+                parties = parties.Where(p => p.Name.Contains(name, System.StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+            if (withMembers)
+                parties = parties.Where(p => p.Members.Count > 0).ToList();
+
+            if (withActiveMembers)
+                parties = parties.Where(p => p.Members.Where(m => !m.EndDate.HasValue).Count() > 0).ToList();
+
             return parties;
         }
 

@@ -17,19 +17,33 @@ namespace TwitterMonitor.DataAccess.Repositories
             _context = new MemberSqliteDBContext();
         }
 
-        public async Task<IEnumerable<Constituency>> GetAll(string name, int? authorityId, int? regionId, int? countryId)
+        public async Task<IEnumerable<Constituency>> GetAll(string name, int? constituencyTypeId, int? areaId, int? partyId, bool? current)
         {
-            var constituencies = await _context.Constituencies
-                .ToListAsync();
+            IQueryable<Constituency> dbQuery = _context.Constituencies
+                .Include(c => c.ConstituencyType)
+                .Include(c => c.ConstituencyAreas)
+                .ThenInclude(ca => ca.Area)
+                .Include(c => c.ConstituencyMembers)
+                .ThenInclude(cm => cm.Member)
+                .ThenInclude(m => m.Parties)
+                .AsQueryable();
+
+            if (current.HasValue)
+                dbQuery = dbQuery.Where(c => !c.EndDate.HasValue);
 
             if (!string.IsNullOrEmpty(name))
-            {
-                constituencies = constituencies
-                    .Where(c => c.Name.Contains(name))
-                    .ToList();
-            }
+                dbQuery = dbQuery.Where(c => c.Name.Contains(name));
 
-            return constituencies.OrderBy(c => c.Name);
+            if (constituencyTypeId.HasValue)
+                dbQuery = dbQuery.Where(c => c.ConstituencyTypeId == constituencyTypeId);
+
+            if (areaId.HasValue)
+                dbQuery = dbQuery.Where(c => c.ConstituencyAreas.Any(ca => ca.AreaId == areaId));
+
+            if (partyId.HasValue)
+                dbQuery = dbQuery.Where(c => c.ConstituencyMembers.Any(cm => cm.Member.Parties.Any(p => p.PartyId == partyId)));
+
+            return await dbQuery.OrderBy(c => c.Name).ToListAsync();
         }
 
         public async Task<Constituency> GetById(int id)
@@ -69,6 +83,12 @@ namespace TwitterMonitor.DataAccess.Repositories
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<IEnumerable<ConstituencyType>> GetConstituencTypes()
+        {
+            return await _context.ConstituencyTypes.ToListAsync();
+
         }
     }
 }

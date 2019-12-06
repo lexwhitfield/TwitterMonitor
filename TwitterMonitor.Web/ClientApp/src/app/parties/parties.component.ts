@@ -10,7 +10,12 @@ import { Party } from '../models/Party';
 })
 export class PartiesComponent implements OnInit {
 
-    parties$: Observable<Party[]>;
+    parties: [];
+    pageOfParties: Array<Party>;
+
+    nameFilter?: string;
+    withMembersFilter?: boolean;
+    withActiveMembersFilter?: boolean;
 
     constructor(private partyService: PartyService) { }
 
@@ -19,7 +24,10 @@ export class PartiesComponent implements OnInit {
     }
 
     loadParties() {
-        this.parties$ = this.partyService.getParties();
+        this.partyService.getParties(this.nameFilter, this.withMembersFilter, this.withActiveMembersFilter)
+            .subscribe(p => {
+                this.parties = p as [];
+            });
     }
 
     delete(partyId) {
@@ -30,6 +38,10 @@ export class PartiesComponent implements OnInit {
                 this.loadParties();
             });
         }
+    }
+
+    onChangePage(pageOfItems: Array<Party>) {
+        this.pageOfParties = pageOfItems;
     }
 
 }
