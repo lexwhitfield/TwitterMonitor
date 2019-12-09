@@ -18,6 +18,7 @@ import { ConstituencyService } from './services/constituency.service';
 import { PartyService } from './services/party.service';
 import { MemberService } from './services/member.service';
 import { EventsComponent } from './events/events.component';
+import { ElectionsComponent } from './elections/elections.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { EventsComponent } from './events/events.component';
         MemberComponent,
         MemberAddEditComponent,
         JwPaginationComponent,
-        EventsComponent
+        EventsComponent,
+        ElectionsComponent
     ],
     imports: [
         BrowserModule,

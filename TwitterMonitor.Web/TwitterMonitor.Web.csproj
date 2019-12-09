@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\models\Constituency.ts" />
+    <None Remove="ClientApp\src\app\models\Election.ts" />
     <None Remove="ClientApp\src\app\models\Event.ts" />
     <None Remove="ClientApp\src\app\models\KeyValue.ts" />
     <None Remove="ClientApp\src\app\models\Member.ts" />

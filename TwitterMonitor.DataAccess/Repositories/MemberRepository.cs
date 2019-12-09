@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +32,7 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             if (!string.IsNullOrEmpty(name))
                 dbQuery = dbQuery.Where(m => m.Forename.Contains(name) || m.Surname.Contains(name));
-                //|| (m.Forename + m.Surname).Contains(name, StringComparison.InvariantCultureIgnoreCase));
+            //|| (m.Forename + m.Surname).Contains(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (partyId.HasValue)
                 dbQuery = dbQuery.Where(m => m.Parties.Any(p => p.PartyId == partyId.Value));
@@ -51,7 +50,7 @@ namespace TwitterMonitor.DataAccess.Repositories
             dbQuery = dbQuery.Include(m => m.Parties).ThenInclude(pm => pm.Party);
             dbQuery = dbQuery.Include(m => m.Houses).ThenInclude(hm => hm.House);
 
-            return dbQuery.OrderBy(m => m.Surname).ThenBy(m => m.Forename).ToList();
+            return await dbQuery.OrderBy(m => m.Surname).ThenBy(m => m.Forename).ToListAsync();
         }
 
         public async Task<Member> Add(Member member)

@@ -27,7 +27,7 @@ namespace TwitterMonitor.Services
                 var viewModels = members.Select(ModelTransformer.MemberToMemberViewModel);
                 return viewModels;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

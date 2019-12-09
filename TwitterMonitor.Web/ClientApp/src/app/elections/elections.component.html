@@ -1,0 +1,39 @@
+<div class="container-contents">
+  <h3>Elections</h3>
+  <table class="table table-sm table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Members</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td class="filters">
+          <select id="election-type-filter" class="form-control" [(ngModel)]="electionTypeFilter" (change)="loadElections()">
+            <option selected value="">-- Filter --</option>
+            <option *ngFor="let type of (electionTypes$ | async)" value="{{ type.id }}">{{ type.name }}</option>
+          </select>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let election of pageOfElections">
+        <td>{{ election.name }}</td>
+        <td>{{ election.electionTypeName }}</td>
+        <td>{{ election.electionDate | date: 'shortDate' }}</td>
+        <td>{{ election.membersElected }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <jw-pagination [items]="elections" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -1,8 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
-h1, h3 {
-  margin-top: 20px !important;
+
+h3 {
+  padding: 20px 0px;
+}
+
+td {
+  vertical-align: middle !important;
+  padding: 3px 10px !important;
 }
 
 .nav-menu a {
   margin-left: 10px;
+  cursor: pointer !important;
+}
+
+.container-contents {
+  padding: 0px 20px;
+  padding-bottom: 20px;
+  background-color: #333;
+}
+
+.container-contents * {
+  color: #EEE;
+}
+
+.container-contents table a {
+  color: cornflowerblue;
+}
+
+.container-contents table a.btn {
+  color: #FFF;
+}
+
+.btn {
+  border-radius: 0.12em !important;
+  cursor: pointer !important;
+}
+
+.btn-sm {
+  margin-left: 5px;
+}
+
+table {
+  border-color: #444 !important;
+  margin-bottom: 0 !important;
+}
+
+table * {
+  border-color: #444 !important;
+}
+
+.filters {
+  padding: 0 !important;
+  text-align: center;
+}
+
+.filters input[type=text], .filters select {
+  border: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background-color: #555;
+  color: #EEE;
+}
+
+.filters select:focus {
+  background-color: #555;
+  color: #EEE;
+}
+
+.filters input[type=checkbox] {
+  margin: auto;
+}
+
+.pagination {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.pagination li a {
+  background-color: #444 !important;
+}
+
+.pagination li a:hover {
+  background-color: #FFF !important;
+  color: #333 !important;
+  cursor: pointer;
+}
+
+.pagination li.active a {
+  color: aqua !important;
+  background-color: #222 !important;
 }

@@ -61,6 +61,9 @@ namespace TwitterMonitor.Transform
 
         public static ConstituencyViewModel ConstituencyToConstituencyViewModel(Constituency constituency)
         {
+            var latestMember = constituency.ConstituencyMembers.Count > 0 ? constituency.ConstituencyMembers.Last().Member : null;
+            var latestParty = latestMember != null ? latestMember.Parties.Last().Party : null;
+
             return new ConstituencyViewModel
             {
                 Id = constituency.Id,
@@ -82,9 +85,11 @@ namespace TwitterMonitor.Transform
                 SchoolSubsidyBand = constituency.SchoolsSubsidyBand,
                 Areas = String.Join(", ", constituency.ConstituencyAreas
                     .OrderByDescending(ca => ca.Area.AreaTypeId)
-                    .Select(ca => ca.Area.Name))//,
-                //CurrentMemberId = constituency.ConstituencyMembers.First().MemberId,
-                //CurrentMemberName = constituency.ConstituencyMembers.First().Member.Surname
+                    .Select(ca => ca.Area.Name)),
+                CurrentMemberId = latestMember != null ? latestMember.Id : -1,
+                CurrentMemberName = latestMember != null ? latestMember.Forename + " " + latestMember.Surname : string.Empty,
+                CurrentPartyId = latestParty != null ? latestParty.Id : -1,
+                CurrentPartyName = latestParty != null ? latestParty.Name : string.Empty
             };
         }
 
@@ -115,6 +120,28 @@ namespace TwitterMonitor.Transform
                 HoLIsSpiritualSide = party.HoLIsSpiritualSide,
                 TotalMemberCount = party.Members.Count,
                 ActiveMemberCount = party.Members.Where(m => !m.EndDate.HasValue).Count()
+            };
+        }
+
+        public static ElectionViewModel ElectionToElectionViewModel(Election election)
+        {
+            return new ElectionViewModel
+            {
+                Id = election.Id,
+                Name = election.Name,
+                ElectionTypeId = election.ElectionTypeId,
+                ElectionTypeName = election.ElectionType.Name,
+                ElectionDate = election.ElectionDate,
+                MembersElected = election.Members.Count
+            };
+        }
+
+        public static KeyValueViewModel ElectionTypeToKeyValueViewModel(ElectionType electionType)
+        {
+            return new KeyValueViewModel
+            {
+                Id = electionType.Id,
+                Name = electionType.Name
             };
         }
 

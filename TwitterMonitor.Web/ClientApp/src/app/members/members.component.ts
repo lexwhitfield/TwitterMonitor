@@ -32,7 +32,6 @@ export class MembersComponent implements OnInit {
     }
 
     loadMembers() {
-        console.log("Getting members: " + this.nameFilter + ", " + this.partyFilter + ", " + this.constituencyFilter);
         this.memberService.getMembers(this.nameFilter, this.partyFilter, this.constituencyFilter)
             .subscribe(m => {
                 this.members = m as [];

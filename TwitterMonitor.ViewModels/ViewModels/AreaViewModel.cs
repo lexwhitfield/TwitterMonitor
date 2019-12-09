@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TwitterMonitor.ViewModels.ViewModels
+﻿namespace TwitterMonitor.ViewModels.ViewModels
 {
     public class AreaViewModel
     {

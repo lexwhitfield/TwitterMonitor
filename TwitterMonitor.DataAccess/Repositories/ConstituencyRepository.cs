@@ -26,6 +26,7 @@ namespace TwitterMonitor.DataAccess.Repositories
                 .Include(c => c.ConstituencyMembers)
                 .ThenInclude(cm => cm.Member)
                 .ThenInclude(m => m.Parties)
+                .ThenInclude(p => p.Party)
                 .AsQueryable();
 
             if (current.HasValue)
