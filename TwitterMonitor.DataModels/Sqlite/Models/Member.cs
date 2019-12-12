@@ -15,10 +15,12 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public int GenderId { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfDeath { get; set; }
+        public long? TwitterUserId { get; set; }
 
 
         public Title Title { get; set; }
         public Gender Gender { get; set; }
+        public TwitterUser TwitterUser { get; set; }
         public ICollection<HouseMember> Houses { get; set; }
         public ICollection<ConstituencyMember> Constituencies { get; set; }
         public ICollection<GovernmentPostMember> GovernmentPosts { get; set; }

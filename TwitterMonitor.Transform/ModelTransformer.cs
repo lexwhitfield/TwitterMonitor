@@ -41,6 +41,8 @@ namespace TwitterMonitor.Transform
                 DateOfBirth = member.DateOfBirth,
                 DateOfDeath = member.DateOfDeath,
 
+                TwitterUserName = member.TwitterUser != null ? member.TwitterUser.ScreenName : string.Empty,
+
                 LatestHouseId = house.Id,
                 LatestHouseName = house.Name,
 
@@ -70,8 +72,6 @@ namespace TwitterMonitor.Transform
                 Name = constituency.Name,
                 ConstituencyTypeId = constituency.ConstituencyTypeId,
                 ConstituencyTypeName = (constituency.ConstituencyTypeId.HasValue) ? constituency.ConstituencyType.Name : "Other",
-                //PreviousConstituencyId = constituency.PrevConstituencyId,
-                //PreviousConstituencyName = (prevConstituency != null) ? prevConstituency.Name : "None",
                 OldDodsId = constituency.OldDodsId,
                 OldDisId = constituency.OldDisId,
                 ClerksConstituencyId = constituency.ClerksConstituencyId,

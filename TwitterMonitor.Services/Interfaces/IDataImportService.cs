@@ -6,5 +6,6 @@
         void ImportData();
         void ImportJoins();
         void ImportMembers();
+        void ImportTwitter();
     }
 }

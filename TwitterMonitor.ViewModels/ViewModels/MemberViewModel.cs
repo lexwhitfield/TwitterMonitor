@@ -14,6 +14,8 @@ namespace TwitterMonitor.ViewModels.ViewModels
         public string Forename { get; set; }
         public string Surname { get; set; }
 
+        public string TwitterUserName { get; set; }
+
         public int? GenderId { get; set; }
         public string GenderName { get; set; }
 

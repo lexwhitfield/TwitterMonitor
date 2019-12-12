@@ -32,5 +32,19 @@ namespace TwitterMonitor.Services
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<MemberViewModel>> GetAllWithTwitter(string name, int? partyId, string constituencyName)
+        {
+            try
+            {
+                var members = await _memberRepository.GetAllWithTwitter(name, partyId, constituencyName);
+                var viewModels = members.Select(ModelTransformer.MemberToMemberViewModel);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

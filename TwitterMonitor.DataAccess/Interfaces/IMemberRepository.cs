@@ -11,5 +11,6 @@ namespace TwitterMonitor.DataAccess.Interfaces
         Task<bool> Delete(int id);
         Task<Member> Add(Member member);
         Task<Member> Update(int id, Member member);
+        Task<IEnumerable<Member>> GetAllWithTwitter(string name, int? partyId, string constituencyName);
     }
 }

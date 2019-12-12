@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels.Sqlite;
@@ -199,6 +200,21 @@ namespace TwitterMonitor.DataAccess.Repositories
         public async Task<List<Title>> GetTitles()
         {
             return await _context.Titles.ToListAsync();
+        }
+
+        public  async Task<List<int>> GetMemberIds()
+        {
+            return await _context.Members.Select(m => m.Id).ToListAsync();
+        }
+
+        public async void AddTwitterUser(int memberId, TwitterUser twitterUser)
+        {
+            var member = await _context.Members.FindAsync(memberId);
+            member.TwitterUserId = twitterUser.Id;
+
+            _context.TwitterUsers.Add(twitterUser);
+
+            _context.SaveChanges();
         }
     }
 }

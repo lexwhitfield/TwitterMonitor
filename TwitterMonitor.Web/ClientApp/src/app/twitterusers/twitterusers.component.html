@@ -1,0 +1,40 @@
+<div class="container-contents">
+  <h3>Members on Twitter</h3>
+
+  <table class="table table-sm table-hover table-bordered table-members">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Party</th>
+        <th>Constituency</th>
+        <th>Twitter Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="filters"><input type="text" id="member-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadMembers()" /></td>
+        <td class="filters">
+          <select id="member-party-filter" class="form-control" [(ngModel)]="partyFilter" (change)="loadMembers()">
+            <option value="">-- Filter --</option>
+            <option *ngFor="let party of (parties$ | async)" value="{{ party.id }}">{{ party.name }}</option>
+          </select>
+        </td>
+        <td class="filters"><input type="text" id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let member of pageOfMembers; let i = index">
+        <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
+        <td>{{ member.latestPartyName }}</td>
+        <td>{{ member.latestConstituencyName }}</td>
+        <td>{{ member.twitterUserName }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <jw-pagination [items]="members" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -19,6 +19,7 @@ import { PartyService } from './services/party.service';
 import { MemberService } from './services/member.service';
 import { EventsComponent } from './events/events.component';
 import { ElectionsComponent } from './elections/elections.component';
+import { TwitterusersComponent } from './twitterusers/twitterusers.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { ElectionsComponent } from './elections/elections.component';
         MemberAddEditComponent,
         JwPaginationComponent,
         EventsComponent,
-        ElectionsComponent
+        ElectionsComponent,
+        TwitterusersComponent
     ],
     imports: [
         BrowserModule,

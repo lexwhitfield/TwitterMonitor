@@ -15,6 +15,8 @@ export class Member {
     dateOfBirth?: Date;
     dateOfDeath?: Date;
 
+    twitterUserName: string;
+
     latestHouseId?: number;
     latestHouseName?: string;
 

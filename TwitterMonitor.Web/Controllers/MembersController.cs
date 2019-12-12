@@ -26,5 +26,12 @@ namespace WebApp.Controllers
         {
             return await _memberService.GetAll(name, partyId, constituencyName);
         }
+
+        [HttpGet]
+        [Route("twittermembers")]
+        public async Task<IEnumerable<MemberViewModel>> GetAllWithTwitter(string name, int? partyId, string constituencyName)
+        {
+            return await _memberService.GetAllWithTwitter(name, partyId, constituencyName);
+        }
     }
 }

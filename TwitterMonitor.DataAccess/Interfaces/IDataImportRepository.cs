@@ -44,5 +44,7 @@ namespace TwitterMonitor.DataAccess.Interfaces
 
 
         Task<List<Title>> GetTitles();
+        Task<List<int>> GetMemberIds();
+        void AddTwitterUser(int memberId, TwitterUser twitterUser);
     }
 }

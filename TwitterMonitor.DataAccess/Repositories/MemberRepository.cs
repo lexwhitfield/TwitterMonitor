@@ -42,6 +42,36 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             dbQuery = dbQuery.Include(m => m.Title);
             dbQuery = dbQuery.Include(m => m.Gender);
+            dbQuery = dbQuery.Include(m => m.TwitterUser);
+            dbQuery = dbQuery.Include(m => m.Constituencies).ThenInclude(cm => cm.Constituency);
+            dbQuery = dbQuery.Include(m => m.Committees).ThenInclude(cm => cm.Committee);
+            dbQuery = dbQuery.Include(m => m.GovernmentPosts);
+            dbQuery = dbQuery.Include(m => m.OppositionPosts);
+            dbQuery = dbQuery.Include(m => m.ParliamentaryPosts);
+            dbQuery = dbQuery.Include(m => m.Parties).ThenInclude(pm => pm.Party);
+            dbQuery = dbQuery.Include(m => m.Houses).ThenInclude(hm => hm.House);
+
+            return await dbQuery.OrderBy(m => m.Surname).ThenBy(m => m.Forename).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Member>> GetAllWithTwitter(string name, int? partyId, string constituencyName)
+        {
+            IQueryable<Member> dbQuery = _context.Members.AsQueryable();
+            dbQuery = dbQuery.Where(m => m.TwitterUserId.HasValue);
+
+            if (!string.IsNullOrEmpty(name))
+                dbQuery = dbQuery.Where(m => m.Forename.Contains(name) || m.Surname.Contains(name));
+            //|| (m.Forename + m.Surname).Contains(name, StringComparison.InvariantCultureIgnoreCase));
+
+            if (partyId.HasValue)
+                dbQuery = dbQuery.Where(m => m.Parties.Any(p => p.PartyId == partyId.Value));
+
+            if (!string.IsNullOrEmpty(constituencyName))
+                dbQuery = dbQuery.Where(m => m.Constituencies.Any(c => c.Constituency.Name.Contains(constituencyName)));
+
+            dbQuery = dbQuery.Include(m => m.Title);
+            dbQuery = dbQuery.Include(m => m.Gender);
+            dbQuery = dbQuery.Include(m => m.TwitterUser);
             dbQuery = dbQuery.Include(m => m.Constituencies).ThenInclude(cm => cm.Constituency);
             dbQuery = dbQuery.Include(m => m.Committees).ThenInclude(cm => cm.Committee);
             dbQuery = dbQuery.Include(m => m.GovernmentPosts);
@@ -87,5 +117,6 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             return true;
         }
+
     }
 }

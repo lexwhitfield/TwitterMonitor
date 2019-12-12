@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
+using Tweetinvi;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
 using TwitterMonitor.DataModels.Sqlite.Models;
@@ -814,15 +815,6 @@ namespace TwitterMonitor.Services.Services
                         EndDate = endDate
                     });
                 }
-
-                // twitter names
-                //var temp = memberElement.SelectNodes("/Addresses/Address[@Type_Id=7]");
-                //var twitterNode = temp.Count > 0 ? temp.Item(0) : null;
-
-                //if (twitterNode != null)
-                //{
-
-                //}
             }
 
             _dataImportRepository.AddMembers(members);
@@ -833,6 +825,44 @@ namespace TwitterMonitor.Services.Services
             _dataImportRepository.AddOppositionPostMembers(oppositionPostMembers);
             _dataImportRepository.AddParliamentaryPostMembers(parliamentaryPostMembers);
             _dataImportRepository.AddPartyMembers(parties);
+        }
+
+        public async void ImportTwitter()
+        {
+            string consumerKey = "RDaLBut56yuG3lloMC2yjZIGv";
+            string consumerSecret = "EsLEBBcQJppNFWbLfHx3Auh5F032OCpCEsQAVMQfckJeQsoDdw";
+            string accessToken = "3135075776-KroVu87rgSFVfAWh3ALZkTlvCYlXuTIQHEAdbF9";
+            string accessTokenSecret = "axHvrtykhYyRCGTA61GZMqg1gScIKznZjU3ROGdVEwAje";
+
+            Auth.SetUserCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+
+            var memberIds = _dataImportRepository.GetMemberIds().Result;
+
+            foreach (var id in memberIds)
+            {
+                var memberElement = (await GetXmlElements($"http://data.parliament.uk/membersdataplatform/services/mnis/members/query/id={id}/Addresses", "Member")).Item(0);
+
+                var twitterElement = memberElement.SelectSingleNode("Addresses/Address[@Type_Id=7]");
+
+                if (twitterElement != null)
+                {
+                    var twitterScreenName = twitterElement.SelectSingleNode("Address1").InnerText.Split('/').Last();
+
+                    var user = User.GetUserFromScreenName(twitterScreenName);
+
+                    if (user != null)
+                    {
+                        TwitterUser twitterUser = new TwitterUser
+                        {
+                            Id = user.Id,
+                            ScreenName = twitterScreenName,
+                            CreatedAt = user.CreatedAt
+                        };
+
+                        _dataImportRepository.AddTwitterUser(id, twitterUser);
+                    }
+                }
+            }
         }
 
         public static int? ToNullableInt(string s)
