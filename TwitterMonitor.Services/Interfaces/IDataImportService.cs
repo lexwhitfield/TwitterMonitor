@@ -4,6 +4,7 @@
     {
         void ImportReferences();
         void ImportData();
+        void UpdateData();
         void ImportJoins();
         void ImportMembers();
         void ImportTwitter();

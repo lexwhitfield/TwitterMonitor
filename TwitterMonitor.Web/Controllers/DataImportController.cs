@@ -31,6 +31,13 @@ namespace TwitterMonitor.Web.Controllers
         }
 
         [HttpGet]
+        [Route("updatedata")]
+        public void UpdateData()
+        {
+            _dataImportService.UpdateData();
+        }
+
+        [HttpGet]
         [Route("importjoins")]
         public void ImportJoins()
         {

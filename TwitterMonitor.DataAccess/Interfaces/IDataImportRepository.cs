@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TwitterMonitor.DataModels.Sqlite.Models;
 
@@ -41,10 +42,22 @@ namespace TwitterMonitor.DataAccess.Interfaces
         void AddOppositionPostDepartments(List<OppositionPostDepartment> oppositionPostDepartments);
         void AddParliamentaryPostMembers(List<ParliamentaryPostMember> parliamentaryPostMembers);
         void AddPartyMembers(List<PartyMember> partyMembers);
+        void AddTwitterUser(int memberId, TwitterUser twitterUser);
 
 
         Task<List<Title>> GetTitles();
-        Task<List<int>> GetMemberIds();
-        void AddTwitterUser(int memberId, TwitterUser twitterUser);
+        Task<List<int>> GetMemberIds();        
+        Task<List<int>> GetElectionIds();
+        Task<List<int>> GetPartyIds();
+        Task<List<int>> GetCommitteeIds();
+        Task<Member> GetMember(int memberId);
+        Task<HouseMember> GetHouseMember(int memberId, int houseId);
+        Task<ConstituencyMember> GetConstituencyMember(int memberId, int constituencyId, int electionId);
+        Task<CommitteeMember> GetCommitteeMember(int memberId, int committeeId);
+        Task<GovernmentPostMember> GetGovernmentPostMember(int memberId, int governmentPostId);
+        Task<OppositionPostMember> GetOppositionPostMember(int memberId, int oppositionPostId);
+        Task<ParliamentaryPostMember> GetParliamentaryPostMember(int memberId, int parliamentaryPostId);
+        Task<PartyMember> GetPartyMember(int memberId, int partyId);
+        void SaveUpdates();
     }
 }

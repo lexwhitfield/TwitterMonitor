@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels.Sqlite;
 using TwitterMonitor.DataModels.Sqlite.Models;
+using Z.EntityFramework.Plus;
 
 namespace TwitterMonitor.DataAccess.Repositories
 {
@@ -26,7 +27,7 @@ namespace TwitterMonitor.DataAccess.Repositories
             return member;
         }
 
-        public async Task<IEnumerable<Member>> GetAll(string name, int? partyId, string constituencyName)
+        public async Task<IEnumerable<Member>> GetAll(string name, int? partyId, string constituencyName, int? electionId, int? constituencyId)
         {
             IQueryable<Member> dbQuery = _context.Members.AsQueryable();
 
@@ -40,16 +41,46 @@ namespace TwitterMonitor.DataAccess.Repositories
             if (!string.IsNullOrEmpty(constituencyName))
                 dbQuery = dbQuery.Where(m => m.Constituencies.Any(c => c.Constituency.Name.Contains(constituencyName)));
 
-            dbQuery = dbQuery.Include(m => m.Title);
-            dbQuery = dbQuery.Include(m => m.Gender);
-            dbQuery = dbQuery.Include(m => m.TwitterUser);
-            dbQuery = dbQuery.Include(m => m.Constituencies).ThenInclude(cm => cm.Constituency);
-            dbQuery = dbQuery.Include(m => m.Committees).ThenInclude(cm => cm.Committee);
-            dbQuery = dbQuery.Include(m => m.GovernmentPosts);
-            dbQuery = dbQuery.Include(m => m.OppositionPosts);
-            dbQuery = dbQuery.Include(m => m.ParliamentaryPosts);
-            dbQuery = dbQuery.Include(m => m.Parties).ThenInclude(pm => pm.Party);
-            dbQuery = dbQuery.Include(m => m.Houses).ThenInclude(hm => hm.House);
+            if (electionId.HasValue)
+                dbQuery = dbQuery.Where(m => m.Constituencies.Any(c => c.ElectionId == electionId));
+
+            if (constituencyId.HasValue)
+                dbQuery = dbQuery.Where(m => m.Constituencies.Any(c => c.ConstituencyId == constituencyId));
+
+            dbQuery = dbQuery.IncludeFilter(m => m.Title);
+            dbQuery = dbQuery.IncludeFilter(m => m.Gender);
+            dbQuery = dbQuery.IncludeFilter(m => m.TwitterUser);
+            dbQuery = dbQuery.IncludeFilter(m => m.GovernmentPosts.Select(gpm => gpm));
+            dbQuery = dbQuery.IncludeFilter(m => m.OppositionPosts.Select(opm => opm));
+            dbQuery = dbQuery.IncludeFilter(m => m.ParliamentaryPosts.Select(ppm => ppm));
+
+            if (electionId.HasValue || constituencyId.HasValue)
+            {
+                if (electionId.HasValue && constituencyId.HasValue)
+                    dbQuery = dbQuery
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId && cm.ConstituencyId == constituencyId))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId && cm.ConstituencyId == constituencyId).Select(c => c.Constituency))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId && cm.ConstituencyId == constituencyId).Select(cm => cm.Election));
+                else if (electionId.HasValue)
+                    dbQuery = dbQuery
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId).Select(c => c.Constituency))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ElectionId == electionId).Select(cm => cm.Election));
+                else
+                    dbQuery = dbQuery
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ConstituencyId == constituencyId))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ConstituencyId == constituencyId).Select(c => c.Constituency))
+                        .IncludeFilter(m => m.Constituencies.Where(cm => cm.ConstituencyId == constituencyId).Select(cm => cm.Election));
+            }
+            else
+                dbQuery = dbQuery
+                    .IncludeFilter(m => m.Constituencies.Select(c => c))
+                    .IncludeFilter(m => m.Constituencies.Select(cm => cm.Constituency))
+                    .IncludeFilter(m => m.Constituencies.Select(cm => cm.Election));
+
+            dbQuery = dbQuery.IncludeFilter(m => m.Committees.Select(cm => cm)).IncludeFilter(m => m.Committees.Select(cm => cm.Committee));            
+            dbQuery = dbQuery.IncludeFilter(m => m.Parties.Select(pm => pm)).IncludeFilter(m => m.Parties.Select(pm => pm.Party));
+            dbQuery = dbQuery.IncludeFilter(m => m.Houses.Select(hm => hm)).IncludeFilter(m => m.Houses.Select(hm => hm.House));
 
             return await dbQuery.OrderBy(m => m.Surname).ThenBy(m => m.Forename).ToListAsync();
         }

@@ -22,9 +22,9 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<MemberViewModel>> GetAll(string name, int? partyId, string constituencyName)
+        public async Task<IEnumerable<MemberViewModel>> GetAll(string name, int? partyId, string constituencyName, int? electionId, int? constituencyId)
         {
-            return await _memberService.GetAll(name, partyId, constituencyName);
+            return await _memberService.GetAll(name, partyId, constituencyName, electionId, constituencyId);
         }
 
         [HttpGet]

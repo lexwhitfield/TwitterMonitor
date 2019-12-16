@@ -7,6 +7,7 @@
         <th>Type</th>
         <th>Date</th>
         <th>Members</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -20,17 +21,19 @@
         </td>
         <td></td>
         <td></td>
+        <td></td>
       </tr>
       <tr *ngFor="let election of pageOfElections">
         <td>{{ election.name }}</td>
         <td>{{ election.electionTypeName }}</td>
         <td>{{ election.electionDate | date: 'shortDate' }}</td>
         <td>{{ election.membersElected }}</td>
+        <td><a [routerLink]="['/members']" [queryParams]="{ electionId: election.id }" class="btn btn-primary btn-sm">View Members</a></td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="4">
+        <td colspan="5">
           <jw-pagination [items]="elections" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
         </td>
       </tr>

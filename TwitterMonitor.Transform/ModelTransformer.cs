@@ -19,9 +19,9 @@ namespace TwitterMonitor.Transform
 
         public static MemberViewModel MemberToMemberViewModel(Member member)
         {
-            var house = member.Houses.FirstOrDefault().House;
-            var party = member.Parties.FirstOrDefault().Party;
-            var constituency = member.Constituencies.FirstOrDefault().Constituency;
+            var house = member.Houses.OrderBy(hm => hm.StartDate).LastOrDefault().House;
+            var party = member.Parties.OrderBy(pm => pm.StartDate).LastOrDefault().Party;
+            var constituencyMember = member.Constituencies.Count > 0 ? member.Constituencies.OrderBy(c => c.StartDate).LastOrDefault() : null;
 
             return new MemberViewModel
             {
@@ -46,8 +46,11 @@ namespace TwitterMonitor.Transform
                 LatestHouseId = house.Id,
                 LatestHouseName = house.Name,
 
-                LatestConstituencyId = constituency.Id,
-                LatestConstituencyName = constituency.Name,
+                LatestConstituencyId = constituencyMember.Constituency != null ? constituencyMember.Constituency.Id : (int?)null,
+                LatestConstituencyName = constituencyMember.Constituency != null ? constituencyMember.Constituency.Name : string.Empty,
+
+                LatestElectionId = constituencyMember.Election != null ? constituencyMember.Election.Id : (int?)null,
+                LatestElectionName = constituencyMember.Election != null ? constituencyMember.Election.Name : string.Empty,
 
                 LatestPartyId = party.Id,
                 LatestPartyName = party.Name,

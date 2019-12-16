@@ -1,35 +1,38 @@
 export class Member {
-    id?: number;
-    dodsId?: number;
-    pimsId?: number;
-    clerksId?: number;
+  id?: number;
+  dodsId?: number;
+  pimsId?: number;
+  clerksId?: number;
 
-    titleId?: number;
-    titleName?: string;
-    forename: string;
-    surname: string;
+  titleId?: number;
+  titleName?: string;
+  forename: string;
+  surname: string;
 
-    genderId?: number;
-    genderName?: string;
+  genderId?: number;
+  genderName?: string;
 
-    dateOfBirth?: Date;
-    dateOfDeath?: Date;
+  dateOfBirth?: Date;
+  dateOfDeath?: Date;
 
-    twitterUserName: string;
+  twitterUserName: string;
 
-    latestHouseId?: number;
-    latestHouseName?: string;
+  latestHouseId?: number;
+  latestHouseName?: string;
 
-    latestConstituencyId?: number;
-    latestConstituencyName?: string;
+  latestConstituencyId?: number;
+  latestConstituencyName?: string;
 
-    latestPartyId?: number;
-    latestPartyName?: string;
-    latestPartyBgColour?: string;
-    latestPartyTextColour?: string;
+  latestElectionId?: number;
+  latestElectionName?: string;
 
-    numberOfGovernmentPosts?: number;
-    numberOfOppositionPosts?: number;
-    numberOfParliamentaryPosts?: number;
-    numberOfCommittees?: number;
+  latestPartyId?: number;
+  latestPartyName?: string;
+  latestPartyBgColour?: string;
+  latestPartyTextColour?: string;
+
+  numberOfGovernmentPosts?: number;
+  numberOfOppositionPosts?: number;
+  numberOfParliamentaryPosts?: number;
+  numberOfCommittees?: number;
 }

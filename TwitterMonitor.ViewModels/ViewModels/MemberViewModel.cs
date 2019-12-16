@@ -28,6 +28,9 @@ namespace TwitterMonitor.ViewModels.ViewModels
         public int? LatestConstituencyId { get; set; }
         public string LatestConstituencyName { get; set; }
 
+        public int? LatestElectionId { get; set; }
+        public string LatestElectionName { get; set; }
+
         public int? LatestPartyId { get; set; }
         public string LatestPartyName { get; set; }
         public string LatestPartyBgColour { get; set; }

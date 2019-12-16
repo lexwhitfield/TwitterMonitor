@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Party</th>
         <th>Constituency</th>
+        <th>Election</th>
         <th></th>
         <th></th>
       </tr>
@@ -25,12 +26,14 @@
         <td class="filters"><input type="text" id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
         <td></td>
         <td></td>
+        <td></td>
       </tr>
       <tr *ngFor="let member of pageOfMembers; let i = index">
         <td>{{ member.id }}</td>
         <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
         <td>{{ member.latestPartyName }}</td>
         <td>{{ member.latestConstituencyName }}</td>
+        <td>{{ member.latestElectionName }}</td>
         <td><a [routerLink]="['/member/edit/', member.id]" class="btn btn-primary btn-sm float-right">Edit</a></td>
         <td><a [routerLink]="" (click)="delete(member.id)" class="btn btn-danger btn-sm float-left">Delete</a></td>
       </tr>

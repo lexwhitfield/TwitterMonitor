@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -202,9 +203,69 @@ namespace TwitterMonitor.DataAccess.Repositories
             return await _context.Titles.ToListAsync();
         }
 
-        public  async Task<List<int>> GetMemberIds()
+        public async Task<List<int>> GetMemberIds()
         {
             return await _context.Members.Select(m => m.Id).ToListAsync();
+        }
+
+        public async Task<List<int>> GetElectionIds()
+        {
+            return await _context.Elections.Select(e => e.Id).ToListAsync();
+        }
+
+        public async Task<List<int>> GetPartyIds()
+        {
+            return await _context.Parties.Select(p => p.Id).ToListAsync();
+        }
+
+        public async Task<List<int>> GetCommitteeIds()
+        {
+            return await _context.Committees.Select(c => c.Id).ToListAsync();
+        }
+
+        public async Task<Member> GetMember(int memberId)
+        {
+            return await _context.Members.FindAsync(memberId);
+        }
+
+        public async Task<HouseMember> GetHouseMember(int memberId, int houseId)
+        {
+            return await _context.HouseMembers.FirstOrDefaultAsync(hm => hm.MemberId == memberId && hm.HouseId == houseId);
+        }
+
+        public async Task<ConstituencyMember> GetConstituencyMember(int memberId, int constituencyId, int electionId )
+        {
+            return await _context.ConstituencyMembers.FirstOrDefaultAsync(cm => cm.MemberId == memberId && cm.ConstituencyId == constituencyId && cm.ElectionId == electionId);
+        }
+
+        public async Task<CommitteeMember> GetCommitteeMember(int memberId, int committeeId)
+        {
+            return await _context.CommitteeMembers.FirstOrDefaultAsync(cm => cm.MemberId == memberId && cm.CommitteeId == committeeId);
+        }
+
+        public async Task<GovernmentPostMember> GetGovernmentPostMember(int memberId, int governmentPostId)
+        {
+            return await _context.GovernmentPostMembers.FirstOrDefaultAsync(gpm => gpm.MemberId == memberId && gpm.GovernmentPostId == governmentPostId);
+        }
+
+        public async Task<OppositionPostMember> GetOppositionPostMember(int memberId, int oppositionPostId)
+        {
+            return await _context.OppositionPostMembers.FirstOrDefaultAsync(opm => opm.MemberId == memberId && opm.OppositionPostId == oppositionPostId);
+        }
+
+        public async Task<ParliamentaryPostMember> GetParliamentaryPostMember(int memberId, int parliamentaryPostId)
+        {
+            return await _context.ParliamentaryPostMembers.FirstOrDefaultAsync(ppm => ppm.MemberId == memberId && ppm.ParliamentaryPostId == parliamentaryPostId);
+        }
+
+        public async Task<PartyMember> GetPartyMember(int memberId, int partyId)
+        {
+            return await _context.PartyMembers.FirstOrDefaultAsync(pm => pm.MemberId == memberId && pm.PartyId == partyId);
+        }
+
+        public void SaveUpdates()
+        {
+            _context.SaveChanges();
         }
 
         public async void AddTwitterUser(int memberId, TwitterUser twitterUser)
