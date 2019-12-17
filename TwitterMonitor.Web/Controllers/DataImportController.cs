@@ -57,5 +57,12 @@ namespace TwitterMonitor.Web.Controllers
         {
             _dataImportService.ImportTwitter();
         }
+
+        [HttpGet]
+        [Route("tweet")]
+        public void Tweet()
+        {
+            _dataImportService.Tweet();
+        }
     }
 }

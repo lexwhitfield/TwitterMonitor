@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataModels.Sqlite;
@@ -61,6 +63,21 @@ namespace TwitterMonitor.DataAccess.Repositories
             await _context.SaveChangesAsync();
 
             return twitterStats;
+        }
+
+        public async Task<List<Tweet>> GetTweets(int memberId)
+        {
+            var tweets = _context.Tweets
+                .Include(t => t.Hashtags)
+                .ThenInclude(th => th.Hashtag)
+                .Include(t => t.UserMentions)
+                .ThenInclude(um => um.UserMention)
+                .Include(t => t.Urls)
+                .Include(t => t.TwitterUser)
+                .ThenInclude(tu => tu.Member)
+                .Where(t => t.TwitterUser.Member.Id == memberId);
+
+            return  await tweets.ToListAsync();
         }
     }
 }

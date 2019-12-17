@@ -11,6 +11,7 @@
     <None Remove="ClientApp\src\app\models\KeyValue.ts" />
     <None Remove="ClientApp\src\app\models\Member.ts" />
     <None Remove="ClientApp\src\app\models\Party.ts" />
+    <None Remove="ClientApp\src\app\models\Tweet.ts" />
     <None Remove="ClientApp\src\app\models\TwitterUser.ts" />
   </ItemGroup>
 

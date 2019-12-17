@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TwitterUser } from '../models/TwitterUser';
+import { Tweet } from '../models/Tweet';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +34,14 @@ export class TweetService {
 
     updateTweetUser(userId: number): Observable<TwitterUser> {
         return this.http.post<TwitterUser>(this.myAppUrl + this.myApiUrl, userId)
+            .pipe(
+                retry(1),
+                catchError(this.errorHandler)
+            );
+    }
+
+    getTweets(memberId: number): Observable<Tweet[]> {
+        return this.http.get<Tweet[]>(this.myAppUrl + this.myApiUrl + "tweets/" + memberId)
             .pipe(
                 retry(1),
                 catchError(this.errorHandler)

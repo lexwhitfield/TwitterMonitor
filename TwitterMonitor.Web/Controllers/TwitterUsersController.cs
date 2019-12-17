@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TwitterMonitor.Services;
 using TwitterMonitor.Services.Interfaces;
+using TwitterMonitor.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -29,6 +31,14 @@ namespace WebApp.Controllers
         {
             var viewModel = await _twitterService.NewOrUpdatedTwitterDetails(string.Empty, id, true);
             return Ok(viewModel);
+        }
+
+        [HttpGet("{id}")]
+        [Route("tweets")]
+        public IEnumerable<TweetViewModel> GetTweets(int memberId)
+        {
+            var tweets = _twitterService.GetTweets(memberId).Result;
+            return tweets;
         }
     }
 }

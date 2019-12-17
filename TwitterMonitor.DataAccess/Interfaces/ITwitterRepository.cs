@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TwitterMonitor.DataModels.Sqlite.Models;
 
 namespace TwitterMonitor.DataAccess.Interfaces
@@ -11,5 +12,6 @@ namespace TwitterMonitor.DataAccess.Interfaces
         Task<TwitterStats> AddStats(TwitterStats twitterStats);
         Task<TwitterUser> UpdateUser(TwitterUser twitterUser);
         Task<TwitterStats> UpdateStats(TwitterStats twitterStats);
+        Task<List<Tweet>> GetTweets(int memberId);
     }
 }

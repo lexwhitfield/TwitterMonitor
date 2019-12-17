@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -233,7 +232,7 @@ namespace TwitterMonitor.DataAccess.Repositories
             return await _context.HouseMembers.FirstOrDefaultAsync(hm => hm.MemberId == memberId && hm.HouseId == houseId);
         }
 
-        public async Task<ConstituencyMember> GetConstituencyMember(int memberId, int constituencyId, int electionId )
+        public async Task<ConstituencyMember> GetConstituencyMember(int memberId, int constituencyId, int electionId)
         {
             return await _context.ConstituencyMembers.FirstOrDefaultAsync(cm => cm.MemberId == memberId && cm.ConstituencyId == constituencyId && cm.ElectionId == electionId);
         }

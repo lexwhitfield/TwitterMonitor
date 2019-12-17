@@ -78,7 +78,7 @@ namespace TwitterMonitor.DataAccess.Repositories
                     .IncludeFilter(m => m.Constituencies.Select(cm => cm.Constituency))
                     .IncludeFilter(m => m.Constituencies.Select(cm => cm.Election));
 
-            dbQuery = dbQuery.IncludeFilter(m => m.Committees.Select(cm => cm)).IncludeFilter(m => m.Committees.Select(cm => cm.Committee));            
+            dbQuery = dbQuery.IncludeFilter(m => m.Committees.Select(cm => cm)).IncludeFilter(m => m.Committees.Select(cm => cm.Committee));
             dbQuery = dbQuery.IncludeFilter(m => m.Parties.Select(pm => pm)).IncludeFilter(m => m.Parties.Select(pm => pm.Party));
             dbQuery = dbQuery.IncludeFilter(m => m.Houses.Select(hm => hm)).IncludeFilter(m => m.Houses.Select(hm => hm.House));
 

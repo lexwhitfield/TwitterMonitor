@@ -7,7 +7,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
     {
         public TwitterUser()
         {
-            Member = new HashSet<Member>();
             TwitterFriendsFriend = new HashSet<TwitterFriends>();
             TwitterFriendsUser = new HashSet<TwitterFriends>();
         }
@@ -17,7 +16,7 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public DateTime? CreatedAt { get; set; }
 
         public TwitterStats TwitterStats { get; set; }
-        public ICollection<Member> Member { get; set; }
+        public Member Member { get; set; }
         public ICollection<TwitterFriends> TwitterFriendsFriend { get; set; }
         public ICollection<TwitterFriends> TwitterFriendsUser { get; set; }
     }

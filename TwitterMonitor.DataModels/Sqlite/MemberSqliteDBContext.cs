@@ -46,9 +46,17 @@ namespace TwitterMonitor.DataModels.Sqlite
 
         public DbSet<Events> Events { get; set; }
 
+        // Twitter
+
         public DbSet<TwitterUser> TwitterUsers { get; set; }
         public DbSet<TwitterStats> TwitterStats { get; set; }
         public DbSet<TwitterFriends> TwitterFriends { get; set; }
+        public DbSet<Tweet> Tweets { get; set; }
+        public DbSet<Hashtag> Hashtags { get; set; }
+        public DbSet<TweetHashtag> TweetHashtags { get; set; }
+        public DbSet<TweetUrl> TweetUrls { get; set; }
+        public DbSet<UserMention> UserMentions { get; set; }
+        public DbSet<TweetUserMention> TweetUserMentions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

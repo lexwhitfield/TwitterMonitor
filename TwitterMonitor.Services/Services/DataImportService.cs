@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using Tweetinvi;
+using Tweetinvi.Models;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
 using TwitterMonitor.DataModels.Sqlite.Models;
@@ -1059,7 +1060,7 @@ namespace TwitterMonitor.Services.Services
                     {
                         var constituencyId = Convert.ToInt32(node.Attributes["Id"].InnerText);
                         XmlNode electionNode = node.SelectSingleNode("Election");
-                        var electionId = Convert.ToInt32(electionNode.Attributes["Id"].InnerText);                        
+                        var electionId = Convert.ToInt32(electionNode.Attributes["Id"].InnerText);
 
                         var constituencyMember = _dataImportRepository.GetConstituencyMember(memberId, constituencyId, electionId).Result;
 
@@ -1069,7 +1070,7 @@ namespace TwitterMonitor.Services.Services
                             DateTime? endDate = null;
                             if (!string.IsNullOrEmpty(node.SelectSingleNode("EndDate").InnerText))
                                 endDate = Convert.ToDateTime(node.SelectSingleNode("EndDate").InnerText);
-                              
+
 
                             var endReason = node.SelectSingleNode("EndReason").InnerText;
                             var entryType = node.SelectSingleNode("EntryType").InnerText;
@@ -1297,9 +1298,9 @@ namespace TwitterMonitor.Services.Services
                 {
                     throw e;
                 }
-            }            
+            }
         }
-        
+
         public async void ImportTwitter()
         {
             string consumerKey = "RDaLBut56yuG3lloMC2yjZIGv";
@@ -1336,6 +1337,23 @@ namespace TwitterMonitor.Services.Services
                     }
                 }
             }
+        }
+
+        public void Tweet()
+        {
+            string consumerKey = "RDaLBut56yuG3lloMC2yjZIGv";
+            string consumerSecret = "EsLEBBcQJppNFWbLfHx3Auh5F032OCpCEsQAVMQfckJeQsoDdw";
+            string accessToken = "3135075776-KroVu87rgSFVfAWh3ALZkTlvCYlXuTIQHEAdbF9";
+            string accessTokenSecret = "axHvrtykhYyRCGTA61GZMqg1gScIKznZjU3ROGdVEwAje";
+
+            Auth.SetUserCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+
+            var user = User.GetUserFromScreenName("LexWhitfield");
+
+            var tweets = Tweetinvi.Timeline.GetUserTimeline(user.Id, 200);
+            ITweet t = tweets.First();
+
+            var c = tweets.Count();
         }
 
         public static int? ToNullableInt(string s)

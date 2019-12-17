@@ -8,5 +8,6 @@
         void ImportJoins();
         void ImportMembers();
         void ImportTwitter();
+        void Tweet();
     }
 }

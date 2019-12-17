@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Tweetinvi;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
@@ -94,6 +96,12 @@ namespace TwitterMonitor.Services
 
                 return ModelTransformer.TwitterUserToTwitterUserViewModel(twitterUser, twitterStats);
             }
+        }
+
+        public async Task<List<TweetViewModel>> GetTweets(int memberId)
+        {
+            var tweets = await _twitterRepository.GetTweets(memberId);
+            return tweets.Select(ModelTransformer.TweetToTweetViewModel).ToList();
         }
     }
 }

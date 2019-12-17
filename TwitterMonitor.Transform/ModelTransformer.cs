@@ -42,6 +42,7 @@ namespace TwitterMonitor.Transform
                 DateOfDeath = member.DateOfDeath,
 
                 TwitterUserName = member.TwitterUser != null ? member.TwitterUser.ScreenName : string.Empty,
+                TwitterId = member.TwitterUserId,
 
                 LatestHouseId = house.Id,
                 LatestHouseName = house.Name,
@@ -161,6 +162,22 @@ namespace TwitterMonitor.Transform
         public static TwitterUserViewModel TwitterUserToTwitterUserViewModel(TwitterUser twitterUser, TwitterStats twitterStats)
         {
             throw new NotImplementedException();
+        }
+
+        public static TweetViewModel TweetToTweetViewModel(Tweet tweet)
+        {
+            return new TweetViewModel
+            {
+                Id = tweet.Id,
+                FullText = tweet.FullText,
+                CreatedAt = tweet.CreatedAt,
+                IsRetweet = tweet.IsRetweet,
+                HashtagCount = tweet.Hashtags.Count,
+                Hashtags = string.Join(", ", tweet.Hashtags.Select(h => h.Hashtag.Tag)),
+                UserMentionCount = tweet.UserMentions.Count,
+                UserMentions = string.Join(", ", tweet.UserMentions.Select(um => um.UserMention.ScreenName)),
+                UrlCount = tweet.Urls.Count
+            };
         }
     }
 }

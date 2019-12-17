@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TwitterMonitor.DataModels.Sqlite.Models;
 
@@ -46,7 +45,7 @@ namespace TwitterMonitor.DataAccess.Interfaces
 
 
         Task<List<Title>> GetTitles();
-        Task<List<int>> GetMemberIds();        
+        Task<List<int>> GetMemberIds();
         Task<List<int>> GetElectionIds();
         Task<List<int>> GetPartyIds();
         Task<List<int>> GetCommitteeIds();
