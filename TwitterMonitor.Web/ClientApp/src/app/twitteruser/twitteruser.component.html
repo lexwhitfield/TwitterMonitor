@@ -1,43 +1,33 @@
-<p>twitteruser works!</p>
-
-<p>Button to get last 200 tweets</p>
-<p>Date filters</p>
-
 <div class="container-contents">
-  <h3>Tweets for {{ memberName }}</h3>
+  <h3>Tweets for {{ (memberName | async) }}</h3>
 
   <table class="table table-sm table-hover table-bordered table-members">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Party</th>
-        <th>Constituency</th>
-        <th>Twitter Name</th>
+        <th>Date/Time</th>
+        <th>Text</th>
+        <th>RT</th>
+        <th><a (click)="getLatestTweets()" class="btn btn-sm btn-info">Get Latest</a></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="filters"><input type="text" id="member-name-filter" class="form-control" [(ngModel)]="nameFilter" (keyup)="loadMembers()" /></td>
-        <td class="filters">
-          <select id="member-party-filter" class="form-control" [(ngModel)]="partyFilter" (change)="loadMembers()">
-            <option value="">-- Filter --</option>
-            <option *ngFor="let party of (parties$ | async)" value="{{ party.id }}">{{ party.name }}</option>
-          </select>
-        </td>
-        <td class="filters"><input type="text" id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
-        <td></td>
+        <td class="filters"></td>
+        <td class="filters"></td>
+        <td class="filters"></td>
+        <td class="filters"></td>
       </tr>
-      <tr *ngFor="let member of pageOfMembers; let i = index">
-        <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
-        <td>{{ member.latestPartyName }}</td>
-        <td>{{ member.latestConstituencyName }}</td>
-        <td>{{ member.twitterUserName }}</td>
+      <tr *ngFor="let tweet of (tweets$ | async)">
+        <td>{{ tweet.createdAt }}</td>
+        <td>{{ tweet.fullText }}</td>
+        <td>{{ tweet.isRetweet }}</td>
+        <td></td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="4">
-          <jw-pagination [items]="members" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+          <!--<jw-pagination [items]="members" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>-->
         </td>
       </tr>
     </tfoot>

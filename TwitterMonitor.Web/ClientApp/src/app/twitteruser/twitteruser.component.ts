@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TweetService } from '../services/tweet.service';
 import { MemberService } from '../services/member.service';
 import { Tweet } from '../models/Tweet';
@@ -31,15 +31,19 @@ export class TwitteruserComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        this.memberService.getMember(this.memberId)
-            .subscribe(data => {
-                this.memberName = data.forename + ' ' + data.surname;
-                this.screenName = data.twitterUserName;
-                this.twitterId = data.twitterId;
-            });
+        //this.memberService.getMember(this.memberId)
+        //    .subscribe(data => {
+        //        this.memberName = data.forename + ' ' + data.surname;
+        //        this.screenName = data.twitterUserName;
+        //        this.twitterId = data.twitterId;
+        //    });
 
         this.tweets$ = this.tweetService.getTweets(this.memberId);
+    }
+
+    getLatestTweets() {
+        var success = this.tweetService.getLatestTweets(this.memberId);
+            
     }
 
 }

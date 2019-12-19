@@ -79,5 +79,73 @@ namespace TwitterMonitor.DataAccess.Repositories
 
             return  await tweets.ToListAsync();
         }
+
+        public long GetTwitterIdForMember(int memberId)
+        {
+            return _context.Members.Find(memberId).TwitterUserId ?? -1;
+        }
+
+        public void AddTweet(Tweet newTweet)
+        {
+            _context.Tweets.Add(newTweet);
+            _context.SaveChanges();
+        }
+
+        public long AddHashtag(string text)
+        {
+            var hashtag = _context.Hashtags.FirstOrDefault(h => h.Tag.Equals(text, System.StringComparison.InvariantCultureIgnoreCase));
+
+            if (hashtag == null)
+            {
+                var newHashtag = new Hashtag
+                {
+                    Tag = text
+                };
+
+                _context.Hashtags.Add(newHashtag);
+                _context.SaveChanges();
+
+                return newHashtag.Id.Value;
+            }
+            else
+            {
+                return hashtag.Id.Value;
+            }
+        }
+
+        public void AddTweetHashtags(List<TweetHashtag> tweethashtags)
+        {
+            _context.TweetHashtags.AddRange(tweethashtags);
+            _context.SaveChanges();
+        }
+
+        public long AddUserMention(UserMention userMention)
+        {
+            var user = _context.UserMentions.FirstOrDefault(um => um.Id == userMention.Id);
+
+            if (user == null)
+            {
+                _context.UserMentions.Add(userMention);
+                _context.SaveChanges();
+
+                return userMention.Id;
+            }
+            else
+            {
+                return user.Id;
+            }
+        }
+
+        public void AddTweetUserMentions(List<TweetUserMention> tweetMentions)
+        {
+            _context.TweetUserMentions.AddRange(tweetMentions);
+            _context.SaveChanges();
+        }
+
+        public void AddTweetUrs(List<TweetUrl> tweetUrls)
+        {
+            _context.TweetUrls.AddRange(tweetUrls);
+            _context.SaveChanges();
+        }
     }
 }

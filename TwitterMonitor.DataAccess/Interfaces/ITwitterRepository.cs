@@ -13,5 +13,12 @@ namespace TwitterMonitor.DataAccess.Interfaces
         Task<TwitterUser> UpdateUser(TwitterUser twitterUser);
         Task<TwitterStats> UpdateStats(TwitterStats twitterStats);
         Task<List<Tweet>> GetTweets(int memberId);
+        long GetTwitterIdForMember(int memberId);
+        void AddTweet(Tweet newTweet);
+        long AddHashtag(string text);
+        void AddTweetHashtags(List<TweetHashtag> tweethashtags);
+        long AddUserMention(UserMention userMention);
+        void AddTweetUserMentions(List<TweetUserMention> tweetMentions);
+        void AddTweetUrs(List<TweetUrl> tweetUrls);
     }
 }

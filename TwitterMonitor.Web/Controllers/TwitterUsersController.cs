@@ -33,12 +33,20 @@ namespace WebApp.Controllers
             return Ok(viewModel);
         }
 
-        [HttpGet("{id}")]
-        [Route("tweets")]
+        [HttpGet]
+        [Route("tweets/{memberId}")]
         public IEnumerable<TweetViewModel> GetTweets(int memberId)
         {
             var tweets = _twitterService.GetTweets(memberId).Result;
             return tweets;
+        }
+
+        [HttpGet]
+        [Route("getlatesttweets/{memberId}")]
+        public bool GetLatestTweets(int memberId)
+        {
+            _twitterService.GetLatestTweets(memberId);
+            return true;
         }
     }
 }

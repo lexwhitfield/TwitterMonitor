@@ -9,6 +9,7 @@ import { MemberComponent } from './member/member.component';
 import { MemberAddEditComponent } from './member-add-edit/member-add-edit.component';
 import { ElectionsComponent } from './elections/elections.component';
 import { TwitterusersComponent } from './twitterusers/twitterusers.component';
+import { TwitteruserComponent } from './twitteruser/twitteruser.component';
 
 const routes: Routes = [
     { path: 'members', component: MembersComponent, pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
     { path: 'parties/edit/:id', component: PartyAddEditComponent },
     { path: 'elections', component: ElectionsComponent },
     { path: 'twitterusers', component: TwitterusersComponent },
+    { path: 'twitteruser/:id', component: TwitteruserComponent },
     { path: '**', redirectTo: '/members' }
 ];
 

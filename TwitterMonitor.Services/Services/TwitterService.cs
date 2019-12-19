@@ -103,5 +103,80 @@ namespace TwitterMonitor.Services
             var tweets = await _twitterRepository.GetTweets(memberId);
             return tweets.Select(ModelTransformer.TweetToTweetViewModel).ToList();
         }
+
+        public void GetLatestTweets(int memberId)
+        {
+            Auth.SetUserCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+
+            var twitterId = _twitterRepository.GetTwitterIdForMember(memberId);
+
+            var latestTweets = Timeline.GetUserTimeline(twitterId, 200);
+
+            foreach (var tweet in latestTweets)
+            {
+                DataModels.Sqlite.Models.Tweet newTweet = new DataModels.Sqlite.Models.Tweet
+                {
+                    Id = tweet.Id,
+                    TwitterUserId = tweet.CreatedBy.Id,
+                    FullText = tweet.FullText,
+                    CreatedAt = tweet.CreatedAt,
+                    InReplyToScreenName = tweet.InReplyToScreenName,
+                    InReplyToStatusId = tweet.InReplyToStatusId,
+                    InReplyToUserId = tweet.InReplyToUserId,
+                    QuotedStatusId = tweet.QuotedStatusId
+                };
+
+                _twitterRepository.AddTweet(newTweet);
+
+                // hashtags
+                List<TweetHashtag> tweethashtags = new List<TweetHashtag>();
+
+                foreach (var hashtag in tweet.Hashtags)
+                {
+                    long hashtagId = _twitterRepository.AddHashtag(hashtag.Text);
+
+                    tweethashtags.Add(new TweetHashtag
+                    {
+                        TweetId = tweet.Id,
+                        HashtagId = hashtagId
+                    });
+                }
+
+                if (tweethashtags.Count > 0)
+                    _twitterRepository.AddTweetHashtags(tweethashtags);
+
+                // mentions
+                List<TweetUserMention> tweetMentions = new List<TweetUserMention>();
+
+                foreach (var mention in tweet.UserMentions)
+                {
+                    long userId = _twitterRepository.AddUserMention(new UserMention { Id = mention.Id ?? -1, ScreenName = mention.ScreenName });
+
+                    tweetMentions.Add(new TweetUserMention
+                    {
+                        TweetId = tweet.Id,
+                        UserMentionId = userId
+                    });
+                }
+
+                if (tweetMentions.Count > 0)
+                    _twitterRepository.AddTweetUserMentions(tweetMentions);
+
+                // urls
+                List<TweetUrl> tweetUrls = new List<TweetUrl>();
+
+                foreach (var url in tweet.Urls)
+                {
+                    tweetUrls.Add(new TweetUrl
+                    {
+                        TweetId = tweet.Id,
+                        Url = url.ExpandedURL
+                    });
+                }
+
+                if (tweetUrls.Count > 0)
+                    _twitterRepository.AddTweetUrs(tweetUrls);
+            }
+        }
     }
 }

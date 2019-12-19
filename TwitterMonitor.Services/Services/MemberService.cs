@@ -33,6 +33,19 @@ namespace TwitterMonitor.Services
             }
         }
 
+        public async Task<MemberViewModel> GetById(int memberId)
+        {
+            try
+            {
+                var member = await _memberRepository.GetById(memberId);
+                return ModelTransformer.MemberToMemberViewModel(member);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IEnumerable<MemberViewModel>> GetAllWithTwitter(string name, int? partyId, string constituencyName)
         {
             try

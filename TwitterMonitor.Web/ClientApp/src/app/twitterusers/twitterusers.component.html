@@ -8,6 +8,7 @@
         <th>Party</th>
         <th>Constituency</th>
         <th>Twitter Name</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -21,12 +22,14 @@
         </td>
         <td class="filters"><input type="text" id="member-constituency-filter" class="form-control" [(ngModel)]="constituencyFilter" (keyup)="loadMembers()" /></td>
         <td></td>
+        <td></td>
       </tr>
       <tr *ngFor="let member of pageOfMembers; let i = index">
         <td><a [routerLink]="['/member/', member.id]">{{ member.forename + ' ' + member.surname }}</a></td>
         <td>{{ member.latestPartyName }}</td>
         <td>{{ member.latestConstituencyName }}</td>
         <td>{{ member.twitterUserName }}</td>
+        <td><a [routerLink]="['/twitteruser/', member.id]" class="btn btn-sm btn-primary">Tweets</a></td>
       </tr>
     </tbody>
     <tfoot>

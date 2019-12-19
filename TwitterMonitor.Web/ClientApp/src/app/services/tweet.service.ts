@@ -48,6 +48,15 @@ export class TweetService {
             );
     }
 
+    getLatestTweets(memberId: number) {
+        var url = this.myAppUrl + this.myApiUrl + "getlatesttweets/" + memberId;
+        this.http.get<boolean>(url)
+            .pipe(
+                retry(1),
+                catchError(this.errorHandler)
+            );
+    }
+ 
     errorHandler(error) {
         let errorMessage = '';
 
