@@ -20,5 +20,6 @@ namespace TwitterMonitor.DataAccess.Interfaces
         long AddUserMention(UserMention userMention);
         void AddTweetUserMentions(List<TweetUserMention> tweetMentions);
         void AddTweetUrs(List<TweetUrl> tweetUrls);
+        long GetLatestTweetId(long twitterUserId);
     }
 }

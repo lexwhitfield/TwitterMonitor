@@ -147,5 +147,14 @@ namespace TwitterMonitor.DataAccess.Repositories
             _context.TweetUrls.AddRange(tweetUrls);
             _context.SaveChanges();
         }
+
+        public long GetLatestTweetId(long twitterUserId)
+        {
+            var tweets = _context.Tweets.Where(t => t.TwitterUserId == twitterUserId);
+            if (tweets.Count() > 0) {
+                return tweets.Max(t => t.Id);
+            }
+            return -1;
+        }
     }
 }

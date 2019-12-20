@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Tweetinvi;
+using Tweetinvi.Parameters;
 using TwitterMonitor.DataAccess.Interfaces;
 using TwitterMonitor.DataAccess.Repositories;
 using TwitterMonitor.DataModels.Sqlite.Models;
@@ -19,10 +20,12 @@ namespace TwitterMonitor.Services
         private const string accessTokenSecret = "axHvrtykhYyRCGTA61GZMqg1gScIKznZjU3ROGdVEwAje";
 
         private readonly ITwitterRepository _twitterRepository;
+        private readonly IMemberRepository _memberRepository;
 
         public TwitterService()
         {
             _twitterRepository = new TwitterRepository();
+            _memberRepository = new MemberRepository();
         }
 
         public async Task<TwitterUserViewModel> GetById(long id)
@@ -104,13 +107,36 @@ namespace TwitterMonitor.Services
             return tweets.Select(ModelTransformer.TweetToTweetViewModel).ToList();
         }
 
-        public void GetLatestTweets(int memberId)
+        public void GetAllLatestTweets()
         {
             Auth.SetUserCredentials(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
-            var twitterId = _twitterRepository.GetTwitterIdForMember(memberId);
+            var membersOnTwitter = _memberRepository.GetAllWithTwitter(null, null, null).Result.OrderBy(m => m.Id);
 
-            var latestTweets = Timeline.GetUserTimeline(twitterId, 200);
+            foreach (var member in membersOnTwitter)
+            {
+                // 437
+                var latestTweetId = _twitterRepository.GetLatestTweetId(member.TwitterUserId.Value);
+                GetLatestTweets(member.TwitterUserId.Value, latestTweetId);
+            }
+        }
+
+        public void GetLatestTweets(long twitterId, long latestTweetId)
+        {
+             UserTimelineParameters utp = new UserTimelineParameters
+            {
+                MaximumNumberOfTweetsToRetrieve = 200
+            };
+
+            if (latestTweetId > 0)
+            {
+                utp.SinceId = latestTweetId;
+            }
+
+            var latestTweets = Timeline.GetUserTimeline(twitterId, utp);
+
+            if (latestTweets.Count() == 0)
+                return;
 
             foreach (var tweet in latestTweets)
             {

@@ -19,5 +19,6 @@ namespace TwitterMonitor.DataModels.Sqlite.Models
         public Member Member { get; set; }
         public ICollection<TwitterFriends> TwitterFriendsFriend { get; set; }
         public ICollection<TwitterFriends> TwitterFriendsUser { get; set; }
+        public ICollection<Tweet> Tweets { get; set; }
     }
 }

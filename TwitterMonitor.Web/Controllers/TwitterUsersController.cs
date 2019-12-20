@@ -45,7 +45,15 @@ namespace WebApp.Controllers
         [Route("getlatesttweets/{memberId}")]
         public bool GetLatestTweets(int memberId)
         {
-            _twitterService.GetLatestTweets(memberId);
+            //_twitterService.GetLatestTweets(memberId);
+            return true;
+        }
+
+        [HttpGet]
+        [Route("getalllatesttweets")]
+        public bool GetAllLatestTweets()
+        {
+            _twitterService.GetAllLatestTweets();
             return true;
         }
     }
